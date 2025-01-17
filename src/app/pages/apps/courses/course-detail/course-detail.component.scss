@@ -82,103 +82,59 @@
       color: #333;
     }
 
-    .add-announcement-section {
-      margin-bottom: 12px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+    .add-post-section {
+      max-height: 0;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: max-height 0.3s ease;
 
-      .add-announcement-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        background-color: #f5f5f5;
-        cursor: pointer;
-
-        h3 {
-          margin: 0;
-          font-size: 0.875rem;
-          font-weight: 500;
-          color: #333;
-        }
-
-        mat-icon {
-          color: #666;
-        }
-      }
-
-      .announcement-form-container {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease, padding 0.3s ease;
-
-        &.open {
-          max-height: 400px;
-          padding: 12px;
-        }
-      }
-
-      .announcement-form {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        mat-form-field {
-          width: 100%;
-
-          textarea {
-            min-height: 80px;
-          }
-        }
-
-        button[mat-flat-button] {
-          align-self: flex-start;
-          padding: 6px 16px;
-          font-weight: 500;
-          font-size: 0.875rem;
-        }
+      &.open {
+        max-height: 500px;
       }
     }
 
-    .announcement-list {
-      margin-top: 12px;
+    .post-form-container {
+      padding: 16px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
 
-      .announcement-item {
-        margin-bottom: 8px;
-        padding: 8px;
+    .post-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      button[mat-flat-button] {
+        align-self: flex-start;
+      }
+    }
+
+    .post-list {
+      margin-top: 12px;
+    
+      .post-item {
+        margin-bottom: 4px; // Réduire la marge entre les posts
+        padding: 4px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         background-color: #f9f9f9;
-
-        h4 {
-          font-size: 0.875rem;
-          font-weight: bold;
-          margin: 0 0 4px;
-        }
-
+    
         p {
-          font-size: 0.75rem;
-          color: #666;
+          font-size: 0.875rem;
+          color: #333;
           margin: 0 0 4px;
         }
-
-        .announcement-date {
+    
+        .post-date {
           font-size: 0.625rem;
           color: #999;
           display: block;
         }
       }
-    }
-
-    .no-announcements-message {
-      font-size: 0.875rem;
-      color: #666;
-      text-align: center;
-      padding: 12px;
-      background-color: #f9f9f9;
-      border-radius: 8px;
     }
   }
 }
@@ -236,6 +192,17 @@
   }
 }
 
+/* Styles pour le bouton "+" et le formulaire d'ajout de post */
+.add-post-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.add-post-button {
+  margin: 16px 0;
+}
+
 /* Styles pour le bouton "+" et le formulaire d'ajout de devoir */
 .add-homework-button-container {
   display: flex;
@@ -253,7 +220,7 @@
   transition: max-height 0.3s ease;
 
   &.open {
-    max-height: 500px; /* Ajustez cette valeur en fonction de la hauteur de votre formulaire */
+    max-height: 500px;
   }
 }
 
@@ -277,20 +244,19 @@
     align-self: flex-start;
   }
 }
+
 /* Conteneur pour les champs de date et d'heure */
 .date-time-container {
   display: flex;
-  gap: 16px; 
-  align-items: center; 
-  margin-bottom: 16px; 
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-/* Style pour les champs de date et d'heure */
 .small-field {
-  flex: 1; 
+  flex: 1;
 }
 
-/* Style pour le champ de l'heure */
 .small-field input[type="time"] {
   width: 100%;
 }
@@ -302,21 +268,21 @@
   gap: 16px;
 }
 
-
 /* Style pour le conteneur du formulaire */
 .homework-form-container {
-  position: relative; /* Pour positionner le bouton de fermeture */
+  position: relative;
   padding: 16px;
   background-color: #f9f9f9;
   border-radius: 8px;
   margin-top: 16px;
 }
+
 /* Conteneur pour les boutons (croix et soumission) */
 .form-buttons-container {
   display: flex;
-  justify-content: space-between; /* Alignement des éléments aux extrémités */
-  align-items: center; /* Alignement vertical */
-  margin-top: 16px; /* Espacement au-dessus des boutons */
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
 }
 
 /* Style pour le bouton de fermeture */
@@ -326,26 +292,83 @@
   cursor: pointer;
 
   mat-icon {
-    color: #666; /* Couleur de l'icône */
-    font-size: 24px; /* Taille de l'icône */
+    color: #666;
+    font-size: 24px;
   }
 
   &:hover mat-icon {
-    color: #333; /* Couleur au survol */
+    color: #333;
   }
 }
 
 /* Style pour le bouton de soumission */
 button[mat-flat-button] {
-  margin-right: 0; /* Alignement à droite */
+  margin-right: 0;
 }
-/* Styles pour la liste des posts */
+
+/* Styles pour l'en-tête du flux */
+.stream-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.stream-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.add-post-button-container {
+  margin-left: auto;
+}
+
+.add-post-button {
+  margin: 0;
+}
+
+/* Styles pour la section d'ajout de post */
+.add-post-section {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+
+  &.open {
+    max-height: 500px;
+  }
+}
+
+.post-form-container {
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  button[mat-flat-button] {
+    align-self: flex-start;
+  }
+}
+
+/* Liste des posts */
 .post-list {
   margin-top: 12px;
 
   .post-item {
     margin-bottom: 8px;
-    padding: 8px;
+    padding: 4px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -360,6 +383,88 @@ button[mat-flat-button] {
       font-size: 0.625rem;
       color: #999;
       display: block;
+    }
+  }
+}
+
+.add-post-button-container {
+  margin-left: auto;
+  margin-top: -8px;
+}
+
+.add-post-button {
+  margin: 0;
+  transform: scale(0.8);
+}
+
+/* Styles pour la section des commentaires */
+.comment-section {
+  margin-top: 4px; // Réduire la marge entre les posts et les commentaires
+  padding: 4px;
+  border-top: 1px solid #e0e0e0;
+
+  button {
+    margin-right: 8px;
+  }
+}
+
+.add-comment-section {
+  margin-top: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  mat-form-field {
+    flex: 1;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0; /* Supprimer l'espace en bas */
+    }
+
+    textarea {
+      min-height: 40px; /* Réduire la hauteur du champ de texte */
+      font-size: 0.875rem; /* Réduire la taille de la police */
+      padding: 8px; /* Ajouter un padding pour un meilleur espacement */
+    }
+  }
+
+  button[mat-flat-button] {
+    height: 32px; /* Réduire la hauteur du bouton */
+    font-size: 0.875rem; /* Réduire la taille de la police */
+    padding: 0 12px; /* Ajuster le padding du bouton */
+  }
+}
+
+.comment-list {
+  margin-top: 4px;
+
+  .comment-item {
+    margin-bottom: 4px; // Réduire la marge entre les commentaires
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    p {
+      font-size: 0.875rem;
+      color: #333;
+      margin: 0 0 4px;
+      flex: 1;
+    }
+
+    .comment-date {
+      font-size: 0.625rem;
+      color: #999;
+      display: block;
+    }
+
+    .delete-comment-button {
+      margin-left: 8px;
+      margin-top: 0;
+      margin-right: 0;
     }
   }
 }

@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
   private tokenKey = 'authToken'; // Clé pour stocker le token dans le localStorage
-  private hardcodedToken : string | null = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwN2ZjZGE2LWViZmMtNDEzNS1hMWRkLWUxMDAzZTYwODYxOSIsImZpcnN0TmFtZSI6InRlYWNoZXIxIiwibGFzdE5hbWUiOiJCZW4gZm91bGVuIiwidHlwZSI6InRlYWNoZXIiLCJpYXQiOjE3MzcxMjY1NTEsImV4cCI6MTc0OTEyNjU1MX0.l88VGqNw6NX1_wobU2sima0vqjWiAZ74IEtOqLwBFRg'; // Token codé en dur
+  private hardcodedToken : string | null = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwN2ZjZGE2LWViZmMtNDEzNS1hMWRkLWUxMDAzZTYwODYxOSIsImZpcnN0TmFtZSI6InRlYWNoZXIxIiwibGFzdE5hbWUiOiJCZW4gZm91bGVuIiwidHlwZSI6InRlYWNoZXIiLCJpYXQiOjE3MzcxMzkyNjcsImV4cCI6MTc0OTEzOTI2N30.T8qYRnD9XP0Y8MyTVOzDtwu5DBpi9hFFMtOexWTfhHU'; // Token codé en dur
 
   // Récupérer le token
   getToken(): string | null {
