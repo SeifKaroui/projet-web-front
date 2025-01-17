@@ -89,13 +89,15 @@
                 <!-- Liste des commentaires -->
                 <div class="comment-list mt-2" *ngIf="showComments[post.id] && comments[post.id] && comments[post.id].length > 0">
                   <div *ngFor="let comment of comments[post.id]" class="comment-item">
-                    <p>{{ comment.content }}</p>
+                    <div class="comment-content-container">
+                      <p>{{ comment.content }}</p>
+                      <button *ngIf="isTeacher" mat-icon-button class="delete-comment-button" (click)="deleteComment(post.id, comment.id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                     <small class="comment-date">
                       Par {{ comment.author.firstName }} {{ comment.author.lastName }} le {{ comment.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
                     </small>
-                    <button *ngIf="isTeacher" mat-icon-button class="delete-comment-button" (click)="deleteComment(post.id, comment.id)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
                   </div>
                 </div>
 

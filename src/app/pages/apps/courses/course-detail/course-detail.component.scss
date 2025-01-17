@@ -72,14 +72,32 @@
 .stream-card {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 12px;
+  padding: 16px;
 
   .stream-section {
-    .stream-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #333;
+    .stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+
+      .stream-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+      }
+
+      .add-post-button-container {
+        margin-left: auto;
+      }
+
+      .add-post-button {
+        margin: 0;
+        transform: scale(0.8);
+        width: 40px;
+        height: 40px;
+      }
     }
 
     .add-post-section {
@@ -115,24 +133,132 @@
 
     .post-list {
       margin-top: 12px;
-    
+
       .post-item {
-        margin-bottom: 4px; // Réduire la marge entre les posts
-        padding: 4px;
+        margin-bottom: 16px;
+        padding: 16px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
-        background-color: #f9f9f9;
-    
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
         p {
           font-size: 0.875rem;
           color: #333;
-          margin: 0 0 4px;
+          margin: 0 0 8px;
+          line-height: 1.5;
         }
-    
+
         .post-date {
-          font-size: 0.625rem;
-          color: #999;
+          font-size: 0.75rem;
+          color: #666;
           display: block;
+          margin-bottom: 12px;
+        }
+
+        .comment-section {
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid #e0e0e0;
+        
+          h4 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 3px; // Réduire la marge en bas
+            margin-top: -1px ;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        
+            .delete-comment-button {
+              margin-left: 8px;
+              margin-top: 0;
+              margin-right: 0;
+              color: #666;
+              transition: color 0.3s ease;
+        
+              &:hover {
+                color: #333;
+              }
+            }
+          }
+        
+          .add-comment-section {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        
+            mat-form-field {
+              flex: 1;
+        
+              .mat-form-field-wrapper {
+                padding-bottom: 0;
+              }
+        
+              textarea {
+                min-height: 40px; // Hauteur réduite
+                font-size: 0.875rem; // Taille de police réduite
+                padding: 6px; // Padding réduit
+                line-height: 1.4; // Interligne ajusté
+              }
+            }
+        
+            button[mat-flat-button] {
+              height: 36px;
+              font-size: 0.875rem;
+              padding: 0 12px;
+            }
+          }
+        
+          .comment-list {
+            margin-top: 8px;
+        
+            .comment-item {
+              margin-bottom: 8px;
+              padding: 12px;
+              border: 1px solid #e0e0e0;
+              border-radius: 8px;
+              background-color: #ffffff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            
+              .comment-content-container {
+                display: flex;
+                align-items: center; // Aligner le texte et l'icône verticalement
+                justify-content: space-between; // Espacer le texte et l'icône
+                gap: 8px; // Espace entre le texte et l'icône
+            
+                p {
+                  font-size: 0.875rem;
+                  color: #444;
+                  margin: 0;
+                  line-height: 1.4;
+                  flex: 1; // Permettre au texte de prendre tout l'espace disponible
+                }
+            
+                .delete-comment-button {
+                  margin-left: auto; // Aligner l'icône à droite
+                  margin-top: 0;
+                  margin-right: 0;
+                  color: #666;
+                  transition: color 0.3s ease;
+            
+                  &:hover {
+                    color: #333;
+                  }
+                }
+              }
+            
+              .comment-date {
+                font-size: 0.75rem;
+                color: #777;
+                display: block;
+              }
+            }
+          }
         }
       }
     }
@@ -143,12 +269,12 @@
 .homework-card {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 12px;
+  padding: 16px;
 
   .homework-title {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: #333;
   }
 
@@ -156,27 +282,28 @@
     margin-top: 12px;
 
     .homework-item {
-      margin-bottom: 8px;
-      padding: 8px;
+      margin-bottom: 12px;
+      padding: 12px;
       border: 1px solid #e0e0e0;
       border-radius: 8px;
-      background-color: #f9f9f9;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
       h4 {
         font-size: 0.875rem;
         font-weight: bold;
-        margin: 0 0 4px;
+        margin: 0 0 8px;
       }
 
       p {
         font-size: 0.75rem;
         color: #666;
-        margin: 0 0 4px;
+        margin: 0 0 8px;
       }
 
       .homework-date {
-        font-size: 0.625rem;
-        color: #999;
+        font-size: 0.75rem;
+        color: #666;
         display: block;
       }
     }
@@ -304,167 +431,4 @@
 /* Style pour le bouton de soumission */
 button[mat-flat-button] {
   margin-right: 0;
-}
-
-/* Styles pour l'en-tête du flux */
-.stream-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  margin-bottom: 8px;
-}
-
-.stream-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-.add-post-button-container {
-  margin-left: auto;
-}
-
-.add-post-button {
-  margin: 0;
-}
-
-/* Styles pour la section d'ajout de post */
-.add-post-section {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-
-  &.open {
-    max-height: 500px;
-  }
-}
-
-.post-form-container {
-  padding: 16px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 16px;
-}
-
-.post-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  mat-form-field {
-    width: 100%;
-  }
-
-  button[mat-flat-button] {
-    align-self: flex-start;
-  }
-}
-
-/* Liste des posts */
-.post-list {
-  margin-top: 12px;
-
-  .post-item {
-    margin-bottom: 8px;
-    padding: 4px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-
-    p {
-      font-size: 0.875rem;
-      color: #333;
-      margin: 0 0 4px;
-    }
-
-    .post-date {
-      font-size: 0.625rem;
-      color: #999;
-      display: block;
-    }
-  }
-}
-
-.add-post-button-container {
-  margin-left: auto;
-  margin-top: -8px;
-}
-
-.add-post-button {
-  margin: 0;
-  transform: scale(0.8);
-}
-
-/* Styles pour la section des commentaires */
-.comment-section {
-  margin-top: 4px; // Réduire la marge entre les posts et les commentaires
-  padding: 4px;
-  border-top: 1px solid #e0e0e0;
-
-  button {
-    margin-right: 8px;
-  }
-}
-
-.add-comment-section {
-  margin-top: 4px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-
-  mat-form-field {
-    flex: 1;
-
-    .mat-form-field-wrapper {
-      padding-bottom: 0; /* Supprimer l'espace en bas */
-    }
-
-    textarea {
-      min-height: 40px; /* Réduire la hauteur du champ de texte */
-      font-size: 0.875rem; /* Réduire la taille de la police */
-      padding: 8px; /* Ajouter un padding pour un meilleur espacement */
-    }
-  }
-
-  button[mat-flat-button] {
-    height: 32px; /* Réduire la hauteur du bouton */
-    font-size: 0.875rem; /* Réduire la taille de la police */
-    padding: 0 12px; /* Ajuster le padding du bouton */
-  }
-}
-
-.comment-list {
-  margin-top: 4px;
-
-  .comment-item {
-    margin-bottom: 4px; // Réduire la marge entre les commentaires
-    padding: 8px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    p {
-      font-size: 0.875rem;
-      color: #333;
-      margin: 0 0 4px;
-      flex: 1;
-    }
-
-    .comment-date {
-      font-size: 0.625rem;
-      color: #999;
-      display: block;
-    }
-
-    .delete-comment-button {
-      margin-left: 8px;
-      margin-top: 0;
-      margin-right: 0;
-    }
-  }
 }
