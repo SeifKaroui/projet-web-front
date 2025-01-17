@@ -83,16 +83,9 @@ export class FullComponent implements OnInit {
 
   // for mobile app sidebar
   apps: apps[] = [
+
     {
       id: 1,
-      icon: 'solar:chat-line-line-duotone',
-      color: 'primary',
-      title: 'Chat Application',
-      subtitle: 'Messages & Emails',
-      link: '/apps/chat',
-    },
-    {
-      id: 2,
       icon: 'solar:checklist-minimalistic-line-duotone',
       color: 'accent',
       title: 'Todo App',
@@ -100,15 +93,7 @@ export class FullComponent implements OnInit {
       link: '/apps/todo',
     },
     {
-      id: 3,
-      icon: 'solar:bill-list-line-duotone',
-      color: 'success',
-      title: 'Invoice App',
-      subtitle: 'Get latest invoice',
-      link: '/apps/invoice',
-    },
-    {
-      id: 4,
+      id: 2,
       icon: 'solar:calendar-line-duotone',
       color: 'error',
       title: 'Calendar App',
@@ -116,31 +101,7 @@ export class FullComponent implements OnInit {
       link: '/apps/calendar',
     },
     {
-      id: 5,
-      icon: 'solar:smartphone-2-line-duotone',
-      color: 'warning',
-      title: 'Contact Application',
-      subtitle: '2 Unsaved Contacts',
-      link: '/apps/contacts',
-    },
-    {
-      id: 6,
-      icon: 'solar:ticket-line-duotone',
-      color: 'primary',
-      title: 'Tickets App',
-      subtitle: 'Create new ticket',
-      link: '/apps/tickets',
-    },
-    {
-      id: 7,
-      icon: 'solar:letter-line-duotone',
-      color: 'accent',
-      title: 'Email App',
-      subtitle: 'Get new emails',
-      link: '/apps/email/inbox',
-    },
-    {
-      id: 8,
+      id: 3,
       icon: 'solar:book-2-line-duotone',
       color: 'warning',
       title: 'Courses',
