@@ -1,501 +1,159 @@
-<mat-card class="cardWithShadow overflow-hidden">
-  <mat-card-content
-    class="bg-{{ courseDetail.courseType }} text-white p-y-10"
-  >
-    <mat-card-title class="d-flex align-items-center">
-      <a
-        routerLink="/apps/courses"
-        mat-icon-button
-        class="text-white d-flex justify-content-center m-r-10"
-      >
-        <i-tabler name="chevron-left" class="icon-18 d-flex"></i-tabler>
-      </a>
-      {{ courseDetail.courseName }}
-    </mat-card-title>
+<mat-card class="course-header-card overflow-hidden">
+  <mat-card-content [ngStyle]="{ 'background': headerGradient }" class="text-white p-16">
+    <div class="header-content" style="margin-left: 16px;">
+      <!-- Bouton Retour -->
+      <button mat-icon-button class="back-button" (click)="goBack()">
+        <i-tabler name="chevron-left" class="icon-18"></i-tabler>
+      </button>
+
+      <!-- Titre du cours -->
+      <div class="course-title">
+        <h1 class="mat-headline">{{ courseDetail?.title }}</h1>
+        <p class="mat-caption">{{ courseDetail?.description }}</p>
+      </div>
+
+      <!-- Informations supplémentaires -->
+      <div class="course-info">
+        <div class="info-item">
+          <mat-icon class="info-icon">calendar_today</mat-icon>
+          <span>Date de début : {{ courseDetail?.startDate | date }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon class="info-icon">school</mat-icon>
+          <span>Enseignant : {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}</span>
+        </div>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>
 
-<mat-card class="cardWithShadow">
-  <mat-card-content>
-    <mat-vertical-stepper #stepper>
-      <mat-step>
-        <ng-template matStepLabel>Introduction</ng-template>
-        <h3>Step 1 - Introduction</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+<!-- Barre de navigation avec onglets -->
+<mat-tab-group>
+  <!-- Onglet Flux -->
+  <mat-tab label="Flux">
+    <mat-card class="stream-card mt-3">
+      <mat-card-content>
+        <!-- Section Stream pour les annonces -->
+        <div class="stream-section">
+          <h3 class="stream-title">Stream</h3>
 
-      <mat-step>
-        <ng-template matStepLabel>Get the sample code</ng-template>
-        <h3>Step 2 - Get the sample code</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+          <!-- Section d'ajout d'annonce (réduite par défaut) -->
+          <div *ngIf="isTeacher" class="add-announcement-section">
+            <div class="add-announcement-header" (click)="toggleAnnouncementForm()">
+              <h3>Créer une nouvelle annonce</h3>
+              <mat-icon>{{ isAnnouncementFormOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </div>
 
-      <mat-step>
-        <ng-template matStepLabel>
-          Create a Firebase project and Set up your app</ng-template
-        >
-        <h3>Step 3 - Create a Firebase project and Set up your app</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+            <!-- Formulaire (développé lorsqu'ouvert) -->
+            <div class="announcement-form-container" [class.open]="isAnnouncementFormOpen">
+              <form (ngSubmit)="onSubmit()" class="announcement-form">
+                <mat-form-field appearance="outline" class="full-width">
+                  <input matInput [(ngModel)]="newAnnouncement.title" name="title" placeholder="Titre" required />
+                </mat-form-field>
 
-      <mat-step>
-        <ng-template matStepLabel
-          >Install the Firebase Command Line Interface</ng-template
-        >
-        <h3>Step 4 - Install the Firebase Command Line Interface</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+                <mat-form-field appearance="outline" class="full-width">
+                  <textarea matInput [(ngModel)]="newAnnouncement.description" name="description" placeholder="Description" required></textarea>
+                </mat-form-field>
 
-      <mat-step>
-        <ng-template matStepLabel>Deploy and run the web app</ng-template>
-        <h3>Step 5 - Deploy and run the web app</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+                <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'En cours...' : 'Poster l\'annonce' }}
+                </button>
+              </form>
+            </div>
+          </div>
 
-      <mat-step>
-        <ng-template matStepLabel>The Functions Directory</ng-template>
-        <h3>Step 6 - The Functions Directory</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
+          <!-- Liste des annonces avec espacement réduit -->
+          <div class="announcement-list mt-2" *ngIf="announcements.length > 0">
+            <div *ngFor="let announcement of announcements" class="announcement-item">
+              <h4>{{ announcement.title }}</h4>
+              <p>{{ announcement.description }}</p>
+              <small class="announcement-date">Posté le {{ announcement.date | date: 'dd/MM/yyyy à HH:mm' }}</small>
+            </div>
+          </div>
         </div>
-      </mat-step>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
 
-      <mat-step>
-        <ng-template matStepLabel
-          >Import the Cloud Functions and Firebase Admin modules</ng-template
-        >
-        <h3>Step 7 -Import the Cloud Functions and Firebase Admin modules</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+  <!-- Onglet Travaux et devoirs -->
+  <mat-tab label="Travaux et devoirs">
+    <mat-card class="homework-card mt-3">
+      <mat-card-content>
+        <h3 class="homework-title">Devoirs</h3>
 
-      <mat-step>
-        <ng-template matStepLabel>Welcome New Users</ng-template>
-        <h3>Step 8 - Welcome New Users</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+        <!-- Bouton "Plus" pour ajouter un devoir -->
+        <div *ngIf="isTeacher" class="add-homework-section">
+          <div class="add-homework-header" (click)="toggleHomeworkForm()">
+            <h3>Ajouter un devoir</h3>
+            <mat-icon>{{ isHomeworkFormOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </div>
 
-      <mat-step>
-        <ng-template matStepLabel>Images moderation</ng-template>
-        <h3>Step 9 - Images moderation</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+          <!-- Formulaire (développé lorsqu'ouvert) -->
+          <div class="homework-form-container" [class.open]="isHomeworkFormOpen">
+            <form (ngSubmit)="onHomeworkSubmit()" class="homework-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput [(ngModel)]="newHomework.title" name="title" placeholder="Titre du devoir" required />
+              </mat-form-field>
 
-      <mat-step>
-        <ng-template matStepLabel>New Message Notifications</ng-template>
-        <h3>Step 10 - New Message Notifications</h3>
-        <p>
-          This is an example step of the course. You can put anything in here
-          from example codes to videos.
-        </p>
-        <p>
-          To install the CLI you need to have installed npm which typically
-          comes with NodeJS.To install or upgrade the CLI run the following npm
-          command:
-        </p>
-        <p>npm -g install &#64;angular/cli</p>
-        <p>
-          To verify that the CLI has been installed correctly, open a console
-          and run:
-        </p>
-        <p>ng version</p>
-        <h3>Install dependencies</h3>
-        <p>To moderate the images we'll need a few Node.js packages:</p>
-        The Google Cloud Vision Client Library for Node.js: &#64;google-cloud/vision
-        to run the image through the Cloud Vision API to detect inappropriate
-        images. The Google Cloud Storage Client Library for Node.js:
-        &#64;google-cloud/storage to download and upload the images from Cloud
-        Storage. A Node.js library allowing us to run processes:
-        child-process-promise to run ImageMagick since the ImageMagick
-        command-line tool comes pre-installed on all Functions instances.
-        <p>
-          To install these three packages into your Cloud Functions app, run the
-          following npm install --save command. Make sure that you do this from
-          the functions directory.
-        </p>
-        <p>
-          npm install --save &#64;google-cloud/vision &#64;google-cloud/storage
-          child-process-promise
-        </p>
-        <p>
-          This will install the three packages locally and add them as declared
-          dependencies in your package.js file.
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
-        </div>
-      </mat-step>
+              <mat-form-field appearance="outline" class="full-width">
+                <textarea matInput [(ngModel)]="newHomework.description" name="description" placeholder="Description du devoir" required></textarea>
+              </mat-form-field>
 
-      <mat-step>
-        <ng-template matStepLabel>Congratulations!</ng-template>
-        <h3>Step 11 - Congratulations!</h3>
-        <p>
-          You've built a full-fidelity, offline-capable progressive web app by
-          leveraging the power of reusable Web Components and Firebase. Why
-          bother with a native app when you know how to do all that?!
-        </p>
-        <div>
-          <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button (click)="stepper.reset()">Reset</button>
+              <!-- Conteneur pour les champs de date et d'heure -->
+              <div class="date-time-container">
+                <!-- Champ Jour -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.day" name="day" type="number" placeholder="Jour (JJ)" min="1" max="31" required />
+                </mat-form-field>
+
+                <!-- Champ Mois -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.month" name="month" type="number" placeholder="Mois (MM)" min="1" max="12" required />
+                </mat-form-field>
+
+                <!-- Champ Année -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.year" name="year" type="number" placeholder="Année (AAAA)" min="2023" required />
+                </mat-form-field>
+
+                <!-- Champ Heure -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.time" name="time" type="time" placeholder="Heure (HH:MM)" required />
+                </mat-form-field>
+              </div>
+
+              <button mat-flat-button type="submit" color="primary" [disabled]="isHomeworkSubmitting">
+                {{ isHomeworkSubmitting ? 'En cours...' : 'Créer le devoir' }}
+              </button>
+            </form>
+          </div>
         </div>
-      </mat-step>
-    </mat-vertical-stepper>
-  </mat-card-content>
-</mat-card>
+
+        <!-- Liste des devoirs -->
+        <div class="homework-list mt-2" *ngIf="homeworks.length > 0; else noHomeworks">
+          <div *ngFor="let homework of homeworks" class="homework-item">
+            <h4>{{ homework.title }}</h4>
+            <p>{{ homework.description }}</p>
+            <small class="homework-date">À rendre pour le {{ homework.deadline | customDate }}</small>
+            <small class="homework-date">Créé le {{ homework.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+            <small class="homework-date" *ngIf="homework.updatedAt">Dernière mise à jour le {{ homework.updatedAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+          </div>
+        </div>
+        <ng-template #noHomeworks>
+          <p class="no-homeworks-message">Aucun devoir disponible pour le moment.</p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+
+  <!-- Onglet Personnes -->
+  <mat-tab label="Personnes">
+    <mat-card class="people-card mt-3">
+      <mat-card-content>
+        <h3 class="people-title">Personnes</h3>
+        <!-- Ajoutez ici le contenu pour la section Personnes -->
+        <p>Liste des étudiants et enseignants du cours.</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
