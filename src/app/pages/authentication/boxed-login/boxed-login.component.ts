@@ -18,14 +18,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AppBoxedLoginComponent {
   private authService = inject(AuthService);
-  private settings = inject(CoreService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   
-  options = this.settings.getOptions();
-
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    uname: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -33,30 +30,39 @@ export class AppBoxedLoginComponent {
     return this.form.controls;
   }
 
- 
   submit() {
     if (this.form.valid) {
       const credentials: CredentialsDto = {
-        email: this.form.value.uname ?? '',
-        password: this.form.value.password ?? ''
+        email: this.form.value.uname!,
+        password: this.form.value.password!
       };
 
       this.authService.login(credentials).subscribe({
-        next: (response) => {
-          localStorage.setItem('accessToken', response.accessToken);
-          localStorage.setItem('refreshToken', response.refreshToken);
-          this.router.navigate(['/dashboard']);
+        next: (response: LoginResponseDto) => {
+          console.log('Login Response:', response);
+          console.log('User Type:', response.user.type);
+    
+
+          localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          console.log('Auth Token:', localStorage.getItem('auth_token'));
+          const userData = localStorage.getItem('user');
+          console.log('User Data:', userData ? JSON.parse(userData) : null);
+          this.router.navigate([APP_ROUTES.dashboard]);
           this.snackBar.open('Login successful', 'Close', { duration: 3000 });
+          
         },
         error: (error) => {
-          console.error('Login failed:', error);
+          console.error('Login error:', error);
           this.snackBar.open(
-            error.error?.message || 'Login failed', 
+            error.error?.message || 'Login failed. Please check your credentials.', 
             'Close', 
             { duration: 3000 }
           );
         }
       });
+    } else {
+      console.log('Form is invalid:', this.form.errors);
     }
   }
 }
