@@ -83,7 +83,8 @@
                           class="w-100"
                           color="primary"
                         >
-                          <input matInput formControlName="uname" />
+                          <input matInput formControlName="uname"  type="email" 
+                          placeholder="Email" />
                           @if(f['uname'].touched && f['uname'].invalid) {
                           <mat-hint class="m-b-16 error-msg">
                             @if(f['uname'].errors &&
