@@ -1,4 +1,4 @@
 export const APP_ROUTES = {
-    login: '/authentication/boxed-login',
-    dashboard: '/dashboards/dashboard1'
-  };
+  login: '/authentication/boxed-login',
+  dashboard: '/dashboards/dashboard1',
+};
