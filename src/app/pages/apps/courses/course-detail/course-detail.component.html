@@ -31,48 +31,57 @@
 <mat-tab-group>
   <!-- Onglet Flux -->
   <mat-tab label="Flux">
-    <mat-card class="stream-card mt-3">
-      <mat-card-content>
-        <!-- Section Stream pour les annonces -->
-        <div class="stream-section">
-          <h3 class="stream-title">Stream</h3>
+    <!-- detail.html -->
+      <mat-card class="stream-card mt-3">
+        <mat-card-content>
+          <!-- Section Stream pour les annonces -->
+          <div class="stream-section">
+            <h3 class="stream-title">Stream</h3>
 
-          <!-- Section d'ajout d'annonce (réduite par défaut) -->
-          <div *ngIf="isTeacher" class="add-announcement-section">
-            <div class="add-announcement-header" (click)="toggleAnnouncementForm()">
-              <h3>Créer une nouvelle annonce</h3>
-              <mat-icon>{{ isAnnouncementFormOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+            <!-- Section d'ajout d'annonce (réduite par défaut) -->
+            <div *ngIf="isTeacher" class="add-announcement-section">
+              <div class="add-announcement-header" (click)="toggleAnnouncementForm()">
+                <h3>Créer une nouvelle annonce</h3>
+                <mat-icon>{{ isAnnouncementFormOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </div>
+
+              <!-- Formulaire (développé lorsqu'ouvert) -->
+              <div class="announcement-form-container" [class.open]="isAnnouncementFormOpen">
+                <form (ngSubmit)="onSubmit()" class="announcement-form">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input matInput [(ngModel)]="newAnnouncement.title" name="title" placeholder="Titre" required />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput [(ngModel)]="newAnnouncement.description" name="description" placeholder="Description" required></textarea>
+                  </mat-form-field>
+
+                  <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'En cours...' : 'Poster l\'annonce' }}
+                  </button>
+                </form>
+              </div>
             </div>
 
-            <!-- Formulaire (développé lorsqu'ouvert) -->
-            <div class="announcement-form-container" [class.open]="isAnnouncementFormOpen">
-              <form (ngSubmit)="onSubmit()" class="announcement-form">
-                <mat-form-field appearance="outline" class="full-width">
-                  <input matInput [(ngModel)]="newAnnouncement.title" name="title" placeholder="Titre" required />
-                </mat-form-field>
+            <!-- Liste des annonces avec espacement réduit -->
+            <div class="announcement-list mt-2" *ngIf="announcements.length > 0">
+              <div *ngFor="let announcement of announcements" class="announcement-item">
+                <h4>{{ announcement.title }}</h4>
+                <p>{{ announcement.description }}</p>
+                <small class="announcement-date">Posté le {{ announcement.date | date: 'dd/MM/yyyy à HH:mm' }}</small>
+              </div>
+            </div>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <textarea matInput [(ngModel)]="newAnnouncement.description" name="description" placeholder="Description" required></textarea>
-                </mat-form-field>
-
-                <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
-                  {{ isSubmitting ? 'En cours...' : 'Poster l\'annonce' }}
-                </button>
-              </form>
+            <!-- Liste des posts -->
+            <div class="post-list mt-2" *ngIf="posts.length > 0">
+              <div *ngFor="let post of posts" class="post-item">
+                <p>{{ post.content }}</p>
+                <small class="post-date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+              </div>
             </div>
           </div>
-
-          <!-- Liste des annonces avec espacement réduit -->
-          <div class="announcement-list mt-2" *ngIf="announcements.length > 0">
-            <div *ngFor="let announcement of announcements" class="announcement-item">
-              <h4>{{ announcement.title }}</h4>
-              <p>{{ announcement.description }}</p>
-              <small class="announcement-date">Posté le {{ announcement.date | date: 'dd/MM/yyyy à HH:mm' }}</small>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card>
   </mat-tab>
 
   <!-- Onglet Travaux et devoirs -->
@@ -80,54 +89,6 @@
     <mat-card class="homework-card mt-3">
       <mat-card-content>
         <h3 class="homework-title">Devoirs</h3>
-
-        <!-- Bouton "Plus" pour ajouter un devoir -->
-        <div *ngIf="isTeacher" class="add-homework-section">
-          <div class="add-homework-header" (click)="toggleHomeworkForm()">
-            <h3>Ajouter un devoir</h3>
-            <mat-icon>{{ isHomeworkFormOpen ? 'expand_less' : 'expand_more' }}</mat-icon>
-          </div>
-
-          <!-- Formulaire (développé lorsqu'ouvert) -->
-          <div class="homework-form-container" [class.open]="isHomeworkFormOpen">
-            <form (ngSubmit)="onHomeworkSubmit()" class="homework-form">
-              <mat-form-field appearance="outline" class="full-width">
-                <input matInput [(ngModel)]="newHomework.title" name="title" placeholder="Titre du devoir" required />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <textarea matInput [(ngModel)]="newHomework.description" name="description" placeholder="Description du devoir" required></textarea>
-              </mat-form-field>
-
-              <!-- Conteneur pour les champs de date et d'heure -->
-              <div class="date-time-container">
-                <!-- Champ Jour -->
-                <mat-form-field appearance="outline" class="small-field">
-                  <input matInput [(ngModel)]="newHomework.day" name="day" type="number" placeholder="Jour (JJ)" min="1" max="31" required />
-                </mat-form-field>
-
-                <!-- Champ Mois -->
-                <mat-form-field appearance="outline" class="small-field">
-                  <input matInput [(ngModel)]="newHomework.month" name="month" type="number" placeholder="Mois (MM)" min="1" max="12" required />
-                </mat-form-field>
-
-                <!-- Champ Année -->
-                <mat-form-field appearance="outline" class="small-field">
-                  <input matInput [(ngModel)]="newHomework.year" name="year" type="number" placeholder="Année (AAAA)" min="2023" required />
-                </mat-form-field>
-
-                <!-- Champ Heure -->
-                <mat-form-field appearance="outline" class="small-field">
-                  <input matInput [(ngModel)]="newHomework.time" name="time" type="time" placeholder="Heure (HH:MM)" required />
-                </mat-form-field>
-              </div>
-
-              <button mat-flat-button type="submit" color="primary" [disabled]="isHomeworkSubmitting">
-                {{ isHomeworkSubmitting ? 'En cours...' : 'Créer le devoir' }}
-              </button>
-            </form>
-          </div>
-        </div>
 
         <!-- Liste des devoirs -->
         <div class="homework-list mt-2" *ngIf="homeworks.length > 0; else noHomeworks">
@@ -142,6 +103,66 @@
         <ng-template #noHomeworks>
           <p class="no-homeworks-message">Aucun devoir disponible pour le moment.</p>
         </ng-template>
+
+       <!-- Section d'ajout de devoir (masquée par défaut) -->
+        <div *ngIf="isTeacher" class="add-homework-section" [class.open]="isHomeworkFormOpen">
+          <div class="homework-form-container">
+            <form (ngSubmit)="onHomeworkSubmit()" class="homework-form">
+              <!-- Titre du devoir -->
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput [(ngModel)]="newHomework.title" name="title" placeholder="Titre du devoir" required />
+              </mat-form-field>
+
+              <!-- Description du devoir -->
+              <mat-form-field appearance="outline" class="full-width">
+                <textarea matInput [(ngModel)]="newHomework.description" name="description" placeholder="Description du devoir" required></textarea>
+              </mat-form-field>
+
+              <!-- Conteneur pour les champs de date et d'heure -->
+              <div class="date-time-container">
+                <!-- Jour -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.day" name="day" type="number" placeholder="Jour (JJ)" min="1" max="31" required />
+                </mat-form-field>
+
+                <!-- Mois -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.month" name="month" type="number" placeholder="Mois (MM)" min="1" max="12" required />
+                </mat-form-field>
+
+                <!-- Année -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.year" name="year" type="number" placeholder="Année (AAAA)" min="2023" required />
+                </mat-form-field>
+
+                <!-- Heure -->
+                <mat-form-field appearance="outline" class="small-field">
+                  <input matInput [(ngModel)]="newHomework.time" name="time" type="time" placeholder="Heure (HH:MM)" required />
+                </mat-form-field>
+              </div>
+
+              <!-- Conteneur pour les boutons (croix et soumission) -->
+              <div class="form-buttons-container">
+                <!-- Bouton de soumission -->
+                <button mat-flat-button type="submit" color="primary" [disabled]="isHomeworkSubmitting">
+                  {{ isHomeworkSubmitting ? 'En cours...' : 'Créer le devoir' }}
+                </button>
+
+                <!-- Bouton pour annuler l'ajout -->
+                <button mat-icon-button class="close-button" (click)="cancelHomeworkForm()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bouton "+" pour ajouter un devoir -->
+        <div *ngIf="isTeacher" class="add-homework-button-container">
+          <button mat-fab color="primary" class="add-homework-button" (click)="toggleHomeworkForm()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
       </mat-card-content>
     </mat-card>
   </mat-tab>

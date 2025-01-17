@@ -1,8 +1,11 @@
+// course.service.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course } from './course'; // Importez l'interface Course
 import { Homework } from './homework'; // Importez l'interface Homework
+import { Post } from './Post'; // Importez l'interface Post (à créer)
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +33,10 @@ export class CourseService {
   // Créer un nouveau devoir
   createHomework(homework: any): Observable<Homework> {
     return this.http.post<Homework>(`${this.apiUrl}/homework`, homework);
+  }
+
+  // Récupérer les posts d'un cours par son ID
+  getPostsByCourseId(courseId: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.apiUrl}/courses/${courseId}/posts`);
   }
 }

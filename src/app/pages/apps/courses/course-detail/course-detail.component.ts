@@ -1,3 +1,5 @@
+// details.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '../course'; // Importez l'interface Course
@@ -16,6 +18,7 @@ import { CourseService } from '../course.service'; // Importez le service Course
 import { Homework } from '../homework'; // Importez l'interface Homework
 import { CustomDatePipe } from '../custom-date.pipe'; // Importez le module
 import { MatTabsModule } from '@angular/material/tabs';
+import { Post } from '../Post'; // Importez l'interface Post (à créer)
 
 @Component({
   selector: 'app-course-detail',
@@ -40,6 +43,7 @@ export class CourseDetailComponent implements OnInit {
   courseDetail: Course | null = null; // Détails du cours
   headerGradient: string = 'linear-gradient(135deg, #333, #333)'; // Dégradé sombre par défaut
   homeworks: Homework[] = []; // Liste des devoirs
+  posts: Post[] = []; // Liste des posts
 
   // Propriétés pour le formulaire d'annonce
   isTeacher = true; // À remplacer par la logique de vérification du rôle
@@ -69,7 +73,6 @@ export class CourseDetailComponent implements OnInit {
     private courseService: CourseService // Injectez CourseService
   ) {}
 
-
   ngOnInit(): void {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
@@ -89,10 +92,19 @@ export class CourseDetailComponent implements OnInit {
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.loadHomeworks(this.courseDetail.id); // Charger les devoirs
+      this.loadPosts(this.courseDetail.id); // Charger les posts
     }
 
     // Forcez la détection de changement
     this.cdr.detectChanges();
+  }
+
+  // Méthode pour annuler l'ajout de devoir
+  cancelHomeworkForm(): void {
+    this.isHomeworkFormOpen = false; // Fermer le formulaire
+    this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission
+    this.newHomework = { title: '', description: '', day: null, month: null, year: null, time: '', courseId: 0 }; // Réinitialiser les champs
+    console.log('Formulaire d\'ajout de devoir annulé');
   }
 
   // Lorsque vous récupérez les devoirs depuis l'API
@@ -110,6 +122,19 @@ export class CourseDetailComponent implements OnInit {
       },
       (error) => {
         console.error('Erreur lors de la récupération des devoirs :', error);
+      }
+    );
+  }
+
+  // Charger les posts d'un cours
+  loadPosts(courseId: number): void {
+    this.courseService.getPostsByCourseId(courseId).subscribe(
+      (posts) => {
+        this.posts = posts;
+        console.log('Posts récupérés :', this.posts);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des posts :', error);
       }
     );
   }
@@ -150,28 +175,57 @@ export class CourseDetailComponent implements OnInit {
     }
   }
 
-  // Basculer l'état du formulaire de devoir
+  // Méthode pour basculer l'affichage du formulaire de devoir
   toggleHomeworkForm(): void {
+    console.log('toggleHomeworkForm appelée. État actuel :', this.isHomeworkFormOpen); // Debug
     this.isHomeworkFormOpen = !this.isHomeworkFormOpen;
+    console.log('Nouvel état :', this.isHomeworkFormOpen); // Debug
   }
 
   onHomeworkSubmit(): void {
-    if (this.isHomeworkSubmitting) return;
+    if (this.isHomeworkSubmitting) return; // Empêcher les soumissions multiples
     this.isHomeworkSubmitting = true;
   
-    // Ajouter l'ID du cours au devoir
-    if (this.courseDetail) {
-      this.newHomework.courseId = this.courseDetail.id;
+    // Valider les champs de date et d'heure
+    if (
+      !this.newHomework.day ||
+      !this.newHomework.month ||
+      !this.newHomework.year ||
+      !this.newHomework.time
+    ) {
+      console.error('Tous les champs de date et d\'heure sont requis.');
+      this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission
+      return;
     }
   
-    // Combiner les champs pour créer une date ISO
-    const deadlineDate = new Date(
-      this.newHomework.year!, // Année
-      this.newHomework.month! - 1, // Mois (0-11)
-      this.newHomework.day!, // Jour
-      parseInt(this.newHomework.time.split(':')[0]), // Heure
-      parseInt(this.newHomework.time.split(':')[1]) // Minute
-    );
+    // Convertir les champs en nombres
+    const day = Number(this.newHomework.day);
+    const month = Number(this.newHomework.month) - 1; // Mois commence à 0 (0 = janvier)
+    const year = Number(this.newHomework.year);
+    const [hours, minutes] = this.newHomework.time.split(':').map(Number);
+  
+    // Valider les valeurs de date et d'heure
+    if (
+      isNaN(day) || day < 1 || day > 31 ||
+      isNaN(month) || month < 0 || month > 11 ||
+      isNaN(year) || year < 2023 ||
+      isNaN(hours) || hours < 0 || hours > 23 ||
+      isNaN(minutes) || minutes < 0 || minutes > 59
+    ) {
+      console.error('Les valeurs de date ou d\'heure sont invalides.');
+      this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission
+      return;
+    }
+  
+    // Créer la date
+    const deadlineDate = new Date(year, month, day, hours, minutes);
+  
+    // Vérifier que la date est valide
+    if (isNaN(deadlineDate.getTime())) {
+      console.error('La date créée est invalide.');
+      this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission
+      return;
+    }
   
     // Convertir en chaîne ISO
     const deadlineISO = deadlineDate.toISOString();
@@ -193,11 +247,11 @@ export class CourseDetailComponent implements OnInit {
         this.homeworks.push(response); // Ajouter le devoir à la liste
         this.newHomework = { title: '', description: '', day: null, month: null, year: null, time: '', courseId: 0 }; // Réinitialiser le formulaire
         this.isHomeworkFormOpen = false; // Fermer le formulaire
-        this.isHomeworkSubmitting = false;
+        this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission
       },
       (error) => {
         console.error('Erreur lors de la création du devoir :', error);
-        this.isHomeworkSubmitting = false;
+        this.isHomeworkSubmitting = false; // Réinitialiser l'état de soumission en cas d'erreur
       }
     );
   }

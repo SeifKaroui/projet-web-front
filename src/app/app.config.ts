@@ -6,7 +6,7 @@ import {
 import {
   HttpClient,
   provideHttpClient,
-  withInterceptorsFromDi,
+  withInterceptors, // Importez withInterceptors
 } from '@angular/common/http';
 import { routes } from './app.routes';
 import {
@@ -38,6 +38,9 @@ export function HttpLoaderFactory(http: HttpClient): any {
 
 import { NgxEchartsModule } from 'ngx-echarts';
 
+// Importez l'interceptor
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -49,7 +52,9 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding()
     ),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptors([authInterceptor]) // Ajoutez l'interceptor ici
+    ),
     provideClientHydration(),
     provideAnimationsAsync(),
 
