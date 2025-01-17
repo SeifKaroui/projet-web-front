@@ -6,6 +6,7 @@ import { authGuard } from './pages/authentication/auth.guard';
 export const routes: Routes = [
   {
     path: '',
+    canActivate: [authGuard],
     component: FullComponent,
     children: [
       {
@@ -23,7 +24,6 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/apps/apps.routes').then((m) => m.AppsRoutes),
       },
-
     ],
   },
   {

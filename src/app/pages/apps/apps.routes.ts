@@ -24,20 +24,7 @@ export const AppsRoutes: Routes = [
   {
     path: '',
     children: [
-      {
-        path: 'chat',
-        component: AppChatComponent,
-        data: {
-          title: 'Chat',
-        }
-      },
-      {
-        path: 'calendar',
-        component: AppFullcalendarComponent,
-        data: {
-          title: 'Calendar',
-        }
-      },
+
       {
         path: 'notes',
         component: AppNotesComponent,
@@ -45,27 +32,8 @@ export const AppsRoutes: Routes = [
           title: 'Notes',
         }
       },
-      { path: 'email', redirectTo: 'email/inbox', pathMatch: 'full' },
-      {
-        path: 'email/:type',
-        component: AppEmailComponent,
-        data: {
-          title: 'Email',
-        },
-        children: [
-          {
-            path: ':id',
-            component: DetailComponent,
-          },
-        ],
-      },
-      {
-        path: 'permission',
-        component: AppPermissionComponent,
-        data: {
-          title: 'Permission',
-        }
-      },
+
+
       {
         path: 'todo',
         component: AppTodoComponent,
@@ -80,20 +48,7 @@ export const AppsRoutes: Routes = [
           title: 'Taskboard',
         }
       },
-      {
-        path: 'tickets',
-        component: AppTicketlistComponent,
-        data: {
-          title: 'Tickets',
-        }
-      },
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-        }
-      },
+
       {
         path: 'courses',
         component: AppCoursesComponent,
@@ -108,55 +63,7 @@ export const AppsRoutes: Routes = [
           title: 'Course Detail',
         }
       },
-      {
-        path: 'blog/post',
-        component: AppBlogsComponent,
-        data: {
-          title: 'Blog',
-        }
-      },
-      {
-        path: 'blog/detail/:id',
-        component: AppBlogDetailsComponent,
-        data: {
-          title: 'Blog Detail',
-        }
-      },
-      {
-        path: 'employee',
-        component: AppEmployeeComponent,
-        data: {
-          title: 'Employee',
-        }
-      },
-      {
-        path: 'invoice',
-        component: AppInvoiceListComponent,
-        data: {
-          title: 'Invoice',
-        }
-      },
-      {
-        path: 'addInvoice',
-        component: AppAddInvoiceComponent,
-        data: {
-          title: 'Add Invoice',
-        }
-      },
-      {
-        path: 'viewInvoice/:id',
-        component: AppInvoiceViewComponent,
-        data: {
-          title: 'View Invoice',
-        }
-      },
-      {
-        path: 'editinvoice/:id',
-        component: AppEditInvoiceComponent,
-        data: {
-          title: 'Edit Invoice',
-        }
-      },
+
     ],
   },
 ];
