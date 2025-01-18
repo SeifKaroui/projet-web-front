@@ -15,27 +15,6 @@
                       </a>
                       <h4 class="f-w-700 f-s-34 m-t-24 m-b-8">Let's get you signed up</h4>
 
-                      <!-- Social Login Buttons -->
-                      <div class="row m-t-24">
-                        <div class="col-6">
-                          <button mat-stroked-button class="w-100">
-                            <div class="d-flex align-items-center">
-                              <img src="/assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-8" />
-                              <span class="d-none d-lg-block m-r-4">Sign in with </span>Google
-                            </div>
-                          </button>
-                        </div>
-                        <div class="col-6">
-                          <button mat-stroked-button class="w-100 d-flex align-items-center">
-                            <div class="d-flex align-items-center text-nowrap">
-                              <img src="/assets/images/svgs/facebook-icon.svg" alt="facebook" width="40" class="m-r-4" />
-                              <span class="d-none d-lg-block m-r-4">Sign in with </span>Facebook
-                            </div>
-                          </button>
-                        </div>
-                      </div>
-
-                      <div class="or-border m-t-30 text-muted">or Sign Up with</div>
 
                       <!-- Registration Form -->
                       <form class="m-t-30" [formGroup]="form" (ngSubmit)="submit()">
@@ -108,7 +87,7 @@
 
                       <span class="d-block f-w-500 m-t-24">
                         Already have an Account?
-                        <a [routerLink]="['/authentication/boxed-login']" class="text-decoration-none text-primary f-w-500 f-s-14">
+                        <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500 f-s-14">
                           Sign In
                         </a>
                       </span>

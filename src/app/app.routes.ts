@@ -6,14 +6,29 @@ import { authGuard } from './pages/authentication/auth.guard';
 export const routes: Routes = [
   {
     path: '',
-    canActivate: [authGuard],
-    component: FullComponent,
+    component: BlankComponent,
     children: [
       {
         path: '',
-        redirectTo: '/app/courses',
-        pathMatch: 'full',
+        loadChildren: () =>
+          import('./pages/theme-pages/landingpage/landingpage.routes').then(
+            (m) => m.LandingPageRoutes
+          ),
       },
+      {
+        path: 'authentication',
+        loadChildren: () =>
+          import('./pages/authentication/authentication.routes').then(
+            (m) => m.AuthenticationRoutes
+          ),
+      },
+    ],
+  },
+  {
+    path: '',
+    canActivate: [authGuard],
+    component: FullComponent,
+    children: [
       {
         path: 'starter',
         loadChildren: () =>
@@ -26,26 +41,7 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: '',
-    component: BlankComponent,
-    children: [
-      {
-        path: 'authentication',
-        loadChildren: () =>
-          import('./pages/authentication/authentication.routes').then(
-            (m) => m.AuthenticationRoutes
-          ),
-      },
-      {
-        path: 'landingpage',
-        loadChildren: () =>
-          import('./pages/theme-pages/landingpage/landingpage.routes').then(
-            (m) => m.LandingPageRoutes
-          ),
-      },
-    ],
-  },
+
   {
     path: '**',
     redirectTo: 'authentication/error',

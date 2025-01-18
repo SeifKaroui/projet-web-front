@@ -9,6 +9,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { AppCoursesComponent } from '../courses.component';
 
 @Component({
   selector: 'app-course-detail',
@@ -21,10 +22,9 @@ export class AppCourseDetailComponent {
   id: any;
   courseDetail: course;
 
-  constructor(activatedRouter: ActivatedRoute, courseService: CourseService) {
+  constructor(activatedRouter: ActivatedRoute, courseComponenet: AppCoursesComponent) {
     this.id = activatedRouter?.snapshot?.paramMap?.get('id');
-    this.courseDetail = courseService
-      .getCourse()
+    this.courseDetail = courseComponenet.courses
       .filter((x) => x?.Id === +this.id)[0];
   }
 }

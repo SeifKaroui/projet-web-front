@@ -1,13 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { course } from './course';
-import { courseList } from './course-data';
+import { APP_API } from './app-api.config';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
-  public course = courseList;
-  public getCourse(): course[] {
-    return this.course;
+  http = inject(HttpClient);
+
+  apiUrl = `${APP_API.baseUrl}${APP_API.fetchAll}`;
+
+  fetchData(): Observable<course[]> {
+    return this.http.get<course[]>(this.apiUrl);
   }
 }
