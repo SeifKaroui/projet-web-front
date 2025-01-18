@@ -13,7 +13,7 @@ export const teacherGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  const userType = localStorage.getItem(APP_CONST.userTypeLocalStorageKey);
+  const userType = localStorage.getItem(APP_CONST.userDataLocalStorageKey);
   
   if (userType !== 'teacher') {
     router.navigate([APP_ROUTES.unauthorized]);

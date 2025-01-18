@@ -18,11 +18,16 @@ export class AuthService {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }
+  getToken(): string | null {
+    return localStorage.getItem(APP_CONST.tokenLocalStorageKey);
+  }
   
 
   isTeacher(): boolean {
     const user = this.getCurrentUser();
-    return user?.type === 'Teacher';
+    console.log('User for teacher check:', user);
+    console.log('User type:', user?.type);
+    return user?.type?.toLowerCase() === 'teacher';
   }
 
   isStudent(): boolean {
@@ -39,15 +44,21 @@ console.log('Const',APP_CONST);
         'Content-Type': 'application/json'
       })
     }).pipe(
-      tap({
-        next: (response) => console.log('Login response:', response),
-        error: (error) => console.error('Login error:', error)
+      tap(response => {
+        localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
+        localStorage.setItem(APP_CONST.userDataLocalStorageKey, JSON.stringify(response.user));
+        console.log('Stored token:', localStorage.getItem(APP_CONST.tokenLocalStorageKey));
+        console.log('Stored user:', localStorage.getItem(APP_CONST.userDataLocalStorageKey));
+       // next: (response) => console.log('Login response:', response),
+        //: (error) => console.error('Login error:', error)
       })
     );
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(APP_CONST.tokenLocalStorageKey);
+    const token = this.getToken();
+    console.log('Token exists:', !!token);
+    return !!token;
   }
   register(data: RegisterDto): Observable<SignUpResponseDto> {
     console.log('Register request:', data);

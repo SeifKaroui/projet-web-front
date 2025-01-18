@@ -19,16 +19,32 @@ export class AbsenceService {
   ) {}
 
   getAbsenceList(courseId: string): Observable<StudentAbsence[]> {
+    console.log('Checking auth before request...');
+    console.log('Is authenticated:', this.authService.isAuthenticated());
+    console.log('Is teacher:', this.authService.isTeacher());
+    
+    if (!this.authService.isAuthenticated()) {
+      console.log('Not authenticated, redirecting to login');
+      this.router.navigate([APP_ROUTES.login]);
+      return throwError(() => new Error('Not authenticated'));
+    }
+  
     if (!this.authService.isTeacher()) {
+      console.log('Not a teacher, redirecting to unauthorized');
       this.router.navigate([APP_ROUTES.unauthorized]);
       return throwError(() => new Error('Unauthorized access'));
     }
-
-    return this.http.get<StudentAbsence[]>(
-      `${APP_API.baseUrl}${APP_API.absenceList}?courseId=${courseId}`
-    ).pipe(
-      tap(response => console.log('Absence data:', response)),
-      catchError(this.handleError.bind(this))
+  
+    const url = `${APP_API.baseUrl}${APP_API.absenceList}?courseId=${courseId}`;
+    console.log('Making request to:', url);
+    
+    return this.http.get<StudentAbsence[]>(url).pipe(
+      tap(response => console.log('Absence data received:', response)),
+      catchError(error => {
+        console.error('Request error:', error);
+        this.handleError(error);
+        return throwError(() => error);
+      })
     );
   }
 
