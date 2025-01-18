@@ -432,3 +432,48 @@
 button[mat-flat-button] {
   margin-right: 0;
 }
+
+/* Styles pour la section Absences */
+.absence-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .absence-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+}
+
+/* Styles pour la section Notes */
+.grades-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .grades-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+}
+
+/* Conteneur principal pour limiter la largeur */
+.course-detail-container {
+  max-width: 850px; 
+  margin: 0 auto; 
+  padding: 16px; 
+}
+
+/* Styles supplémentaires si nécessaire */
+.course-header-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}

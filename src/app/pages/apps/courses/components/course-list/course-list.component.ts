@@ -1,7 +1,7 @@
 import { RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { CourseService } from './course.service';
-import { Course } from './course';
+import { CourseService } from '../../services/course.service';
+import { Course } from '../../models/course.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,12 +12,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { ColorService } from './color.service'; // Importez le service ColorService
+import { ColorService } from '../../services/color.service'; // Importez le service ColorService
 
 @Component({
   selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss'],
+  templateUrl: './course-list.component.html',
+  styleUrls: ['./course-list.component.scss'],
   standalone: true,
   imports: [
     RouterModule,
@@ -34,13 +34,13 @@ import { ColorService } from './color.service'; // Importez le service ColorServ
     ReactiveFormsModule,
   ],
 })
-export class CoursesComponent implements OnInit {
+export class CourseListComponent implements OnInit {
   courses: Course[] = [];
   selectedCategory = 'All';
 
   constructor(
     private courseService: CourseService,
-    public colorService: ColorService // Rendez colorService public
+    public colorService: ColorService
   ) {}
 
   ngOnInit(): void {
@@ -69,25 +69,7 @@ export class CoursesComponent implements OnInit {
     );
   }
 
-  ddlChange(ob: any): void {
-    const filterValue = ob.value;
-    if (filterValue === 'All') {
-      this.loadCourses();
-    } else {
-      this.courseService.getCourses().subscribe({
-        next: (data: Course[]) => {
-          this.courses = data.filter(
-            (course: Course) => course.type === filterValue
-          );
-        },
-        error: (error: any) => {
-          console.error('Erreur lors du filtrage des cours :', error);
-        },
-      });
-    }
-  }
-
   storeCourseInLocalStorage(course: Course): void {
-    localStorage.setItem('currentCourse', JSON.stringify(course)); // Stockez l'objet course dans le localStorage
+    localStorage.setItem('currentCourse', JSON.stringify(course));
   }
 }

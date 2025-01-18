@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Course } from '../course';
+import { Course } from '../../models/course.model';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,13 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { ChangeDetectorRef } from '@angular/core';
-import { ColorService } from '../color.service';
-import { CourseService } from '../course.service';
-import { Homework } from '../homework';
-import { CustomDatePipe } from '../custom-date.pipe';
+import { ColorService } from '../../services/color.service';
+import { CourseService } from '../../services/course.service';
+import { Homework } from '../../models/homework.model';
+import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
-import { Post } from '../Post';
-import { CourseComment } from '../comment';
+import { Post } from '../../models/post.model';
+import { CourseComment } from '../../models/comment.model';
 
 @Component({
   selector: 'app-course-detail',
@@ -85,15 +85,16 @@ export class CourseDetailComponent implements OnInit {
         console.error('Aucune donnée de cours trouvée.');
       }
     }
-
+  
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.loadHomeworks(this.courseDetail.id);
       this.loadPosts(this.courseDetail.id);
     }
-
-    this.cdr.detectChanges();
+  
+    console.log('Course Detail:', this.courseDetail);
   }
+
 
   // Méthode pour charger les commentaires d'un post
   loadComments(postId: number): void {
@@ -211,8 +212,6 @@ export class CourseDetailComponent implements OnInit {
     if (this.isHomeworkSubmitting) return;
     this.isHomeworkSubmitting = true;
 
-    // Logique pour créer un devoir
-    // ...
   }
 
   cancelHomeworkForm(): void {
@@ -234,4 +233,8 @@ export class CourseDetailComponent implements OnInit {
   toggleShowCommentForm(postId: number): void {
     this.showCommentForm[postId] = !this.showCommentForm[postId];
   }
+
+
+
+
 }

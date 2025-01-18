@@ -7,12 +7,11 @@ import { DatePipe } from '@angular/common';
 })
 export class CustomDatePipe implements PipeTransform {
   transform(value: string | Date): string {
-    if (!value) return ''; // Gérer les valeurs nulles ou non définies
+    if (!value) return '';
 
     const datePipe = new DatePipe('en-US');
-    const formattedDate = datePipe.transform(value, 'MM/dd/yyyy hh:mm a'); // Formater la date
+    const formattedDate = datePipe.transform(value, 'MM/dd/yyyy hh:mm a');
 
-    // Retourner une chaîne vide si la date est invalide
     return formattedDate || '';
   }
 }

@@ -3,8 +3,9 @@ import { Routes } from '@angular/router';
 import { AppChatComponent } from './chat/chat.component';
 import { AppEmailComponent } from './email/email.component';
 import { DetailComponent } from './email/detail/detail.component';
-import { CoursesComponent } from './courses/courses.component';
-import { CourseDetailComponent } from './courses/course-detail/course-detail.component';import { AppEmployeeComponent } from './employee/employee.component';
+import { CourseListComponent } from './courses/components/course-list/course-list.component'; // Mise à jour de l'import
+import { CourseDetailComponent } from './courses/components/course-detail/course-detail.component'; // Mise à jour de l'import
+import { AppEmployeeComponent } from './employee/employee.component';
 import { AppBlogsComponent } from './blogs/blogs.component';
 import { AppBlogDetailsComponent } from './blogs/details/details.component';
 import { AppContactComponent } from './contact/contact.component';
@@ -28,21 +29,21 @@ export const AppsRoutes: Routes = [
         component: AppChatComponent,
         data: {
           title: 'Chat',
-        }
+        },
       },
       {
         path: 'calendar',
         component: AppFullcalendarComponent,
         data: {
           title: 'Calendar',
-        }
+        },
       },
       {
         path: 'notes',
         component: AppNotesComponent,
         data: {
           title: 'Notes',
-        }
+        },
       },
       { path: 'email', redirectTo: 'email/inbox', pathMatch: 'full' },
       {
@@ -63,93 +64,95 @@ export const AppsRoutes: Routes = [
         component: AppPermissionComponent,
         data: {
           title: 'Permission',
-        }
+        },
       },
       {
         path: 'todo',
         component: AppTodoComponent,
         data: {
           title: 'Todo',
-        }
+        },
       },
       {
         path: 'taskboard',
         component: AppTaskboardComponent,
         data: {
           title: 'Taskboard',
-        }
+        },
       },
       {
         path: 'tickets',
         component: AppTicketlistComponent,
         data: {
           title: 'Tickets',
-        }
+        },
       },
       {
         path: 'contacts',
         component: AppContactComponent,
         data: {
           title: 'Contacts',
-        }
+        },
       },
       {
         path: 'courses',
-        component: CoursesComponent,
+        component: CourseListComponent, // Utilisation de CourseListComponent au lieu de CoursesComponent
         data: {
           title: 'Courses',
-        }
+        },
       },
-      { path: 'courses/coursesdetail/:id', component: CourseDetailComponent },
-
+      {
+        path: 'courses/coursesdetail/:id',
+        component: CourseDetailComponent, // Utilisation de CourseDetailComponent
+      },
       {
         path: 'blog/post',
         component: AppBlogsComponent,
         data: {
           title: 'Blog',
-        }
+        },
       },
       {
         path: 'blog/detail/:id',
         component: AppBlogDetailsComponent,
         data: {
           title: 'Blog Detail',
-        }
+        },
       },
       {
         path: 'employee',
         component: AppEmployeeComponent,
         data: {
           title: 'Employee',
-        }
+        },
       },
       {
         path: 'invoice',
         component: AppInvoiceListComponent,
         data: {
           title: 'Invoice',
-        }
+        },
       },
       {
         path: 'addInvoice',
         component: AppAddInvoiceComponent,
         data: {
           title: 'Add Invoice',
-        }
+        },
       },
       {
         path: 'viewInvoice/:id',
         component: AppInvoiceViewComponent,
         data: {
           title: 'View Invoice',
-        }
+        },
       },
       {
         path: 'editinvoice/:id',
         component: AppEditInvoiceComponent,
         data: {
           title: 'Edit Invoice',
-        }
+        },
       },
     ],
   },
