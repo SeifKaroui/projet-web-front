@@ -3,4 +3,5 @@ export const APP_CONST = {
     accessParamApiKey: 'access_token',
     accessHeaderApiKey: 'Authorization',
     userTypeLocalStorageKey: 'userType',
+    userDataLocalStorageKey: 'userData',
   };

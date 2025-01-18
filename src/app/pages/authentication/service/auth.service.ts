@@ -18,6 +18,7 @@ export class AuthService {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }
+  
 
   isTeacher(): boolean {
     const user = this.getCurrentUser();
@@ -32,7 +33,7 @@ export class AuthService {
     const url = `${APP_API.baseUrl}${APP_API.login}`;
     console.log('Login URL:', url);
     console.log('Credentials:', credentials);
-
+console.log('Const',APP_CONST);
     return this.http.post<LoginResponseDto>(url, credentials, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -63,6 +64,7 @@ export class AuthService {
       })
     );
 }
+
 signOut() {
   localStorage.removeItem(APP_CONST.tokenLocalStorageKey);
   localStorage.removeItem('user');

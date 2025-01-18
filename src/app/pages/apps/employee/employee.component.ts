@@ -4,6 +4,8 @@ import {
   Optional,
   ViewChild,
   AfterViewInit,
+  OnInit,
+  inject,
 } from '@angular/core';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,8 +20,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
+import { StudentAbsence } from './add/student-absence.dto';
+import { MatSort } from '@angular/material/sort';
+import { AbsenceService } from './absence.service';
+import { AuthService } from '../../authentication/service/auth.service';
+import { Router } from '@angular/router';
+import { APP_ROUTES } from '../../authentication/app-routes.config';
 
-export interface Employee {
+export interface Employee  {
   id: number;
   Name: string;
   Position: string;
@@ -146,93 +154,51 @@ const employees = [
   ],
   providers: [DatePipe],
 })
-export class AppEmployeeComponent implements AfterViewInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any> =
-    Object.create(null);
-  searchText: any;
-  displayedColumns: string[] = [
-    '#',
-    'name',
-    'email',
-    'mobile',
-    'date of joining',
-    'salary',
-    'projects',
-    'action',
-  ];
-  dataSource = new MatTableDataSource(employees);
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
-    Object.create(null);
+export class AppEmployeeComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  
+  dataSource: MatTableDataSource<StudentAbsence>;
+  displayedColumns: string[] = ['#', 'name', 'email', 'justified', 'nonJustified', 'total', 'action'];
+authService = inject(AuthService);
+router = inject(Router);
+absenceService = inject(AbsenceService);
+  constructor() {
+    this.dataSource = new MatTableDataSource<StudentAbsence>();
+    if (!this.authService.isTeacher()) {
+      this.router.navigate([APP_ROUTES.unauthorized]);
+    }
+  }
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) {}
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated() && this.authService.isTeacher()) {
+      this.loadAbsences();
+    }
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  applyFilter(filterValue: string): void {
+  loadAbsences(): void {
+    this.absenceService.getAbsenceList('3').subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+      },
+      error: (error) => {
+        if (error.status === 401) {
+          this.router.navigate([APP_ROUTES.login]);
+        }
+      }
+    });
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  openDialog(action: string, obj: any): void {
-    obj.action = action;
-    const dialogRef = this.dialog.open(AppEmployeeDialogContentComponent, {
-      data: obj,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
-      }
-    });
-  }
-
-  // tslint:disable-next-line - Disables all
-  addRowData(row_obj: Employee): void {
-    this.dataSource.data.unshift({
-      id: employees.length + 1,
-      Name: row_obj.Name,
-      Position: row_obj.Position,
-      Email: row_obj.Email,
-      Mobile: row_obj.Mobile,
-
-      DateOfJoining: row_obj.DateOfJoining,
-      Salary: row_obj.Salary,
-      Projects: row_obj.Projects,
-      imagePath: row_obj.imagePath,
-    });
-    this.dialog.open(AppAddEmployeeComponent);
-    this.table.renderRows();
-  }
-
-  // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: Employee): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      if (value.id === row_obj.id) {
-        value.Name = row_obj.Name;
-        value.Position = row_obj.Position;
-        value.Email = row_obj.Email;
-        value.Mobile = row_obj.Mobile;
-        value.DateOfJoining = row_obj.DateOfJoining;
-        value.Salary = row_obj.Salary;
-        value.Projects = row_obj.Projects;
-        value.imagePath = row_obj.imagePath;
-      }
-      return true;
-    });
-  }
-
-  // tslint:disable-next-line - Disables all
-  deleteRowData(row_obj: Employee): boolean | any {
-    this.dataSource.data = this.dataSource.data.filter((value: any) => {
-      return value.id !== row_obj.id;
-    });
-  }
 }
-
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'app-dialog-content',
