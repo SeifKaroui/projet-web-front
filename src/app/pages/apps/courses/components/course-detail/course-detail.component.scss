@@ -1,0 +1,525 @@
+/* Styles pour l'en-tête du cours */
+.course-header-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+
+  .header-content {
+    padding: 16px;
+    margin-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .back-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .course-title {
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: #fff;
+      }
+
+      p {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 4px 0 0;
+      }
+    }
+
+    .course-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .info-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        span {
+          font-size: 0.875rem;
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
+  }
+}
+
+/* Styles pour la section Stream */
+.stream-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .stream-section {
+    .stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+
+      .stream-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin: 0;
+        color: #333;
+      }
+
+      .add-post-button-container {
+        margin-left: auto;
+      }
+
+      .add-post-button {
+        margin: 0;
+        transform: scale(0.8);
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .add-post-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+
+      &.open {
+        max-height: 500px;
+      }
+    }
+
+    .post-form-container {
+      padding: 16px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+
+    .post-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      button[mat-flat-button] {
+        align-self: flex-start;
+      }
+    }
+
+    .post-list {
+      margin-top: 12px;
+
+      .post-item {
+        margin-bottom: 16px;
+        padding: 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+        p {
+          font-size: 0.875rem;
+          color: #333;
+          margin: 0 0 8px;
+          line-height: 1.5;
+        }
+
+        .post-date {
+          font-size: 0.75rem;
+          color: #666;
+          display: block;
+          margin-bottom: 12px;
+        }
+
+        .comment-section {
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid #e0e0e0;
+        
+          h4 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 3px; // Réduire la marge en bas
+            margin-top: -1px ;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        
+            .delete-comment-button {
+              margin-left: 8px;
+              margin-top: 0;
+              margin-right: 0;
+              color: #666;
+              transition: color 0.3s ease;
+        
+              &:hover {
+                color: #333;
+              }
+            }
+          }
+        
+          .add-comment-section {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        
+            mat-form-field {
+              flex: 1;
+        
+              .mat-form-field-wrapper {
+                padding-bottom: 0;
+              }
+        
+              textarea {
+                min-height: 40px; // Hauteur réduite
+                font-size: 0.875rem; // Taille de police réduite
+                padding: 6px; // Padding réduit
+                line-height: 1.4; // Interligne ajusté
+              }
+            }
+        
+            button[mat-flat-button] {
+              height: 36px;
+              font-size: 0.875rem;
+              padding: 0 12px;
+            }
+          }
+        
+          .comment-list {
+            margin-top: 8px;
+        
+            .comment-item {
+              margin-bottom: 8px;
+              padding: 12px;
+              border: 1px solid #e0e0e0;
+              border-radius: 8px;
+              background-color: #ffffff;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            
+              .comment-content-container {
+                display: flex;
+                align-items: center; // Aligner le texte et l'icône verticalement
+                justify-content: space-between; // Espacer le texte et l'icône
+                gap: 8px; // Espace entre le texte et l'icône
+            
+                p {
+                  font-size: 0.875rem;
+                  color: #444;
+                  margin: 0;
+                  line-height: 1.4;
+                  flex: 1; // Permettre au texte de prendre tout l'espace disponible
+                }
+            
+                .delete-comment-button {
+                  margin-left: auto; // Aligner l'icône à droite
+                  margin-top: 0;
+                  margin-right: 0;
+                  color: #666;
+                  transition: color 0.3s ease;
+            
+                  &:hover {
+                    color: #333;
+                  }
+                }
+              }
+            
+              .comment-date {
+                font-size: 0.75rem;
+                color: #777;
+                display: block;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Styles pour la section des devoirs */
+.homework-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .homework-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+  .homework-list {
+    margin-top: 12px;
+
+    .homework-item {
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+      h4 {
+        font-size: 0.875rem;
+        font-weight: bold;
+        margin: 0 0 8px;
+      }
+
+      p {
+        font-size: 0.75rem;
+        color: #666;
+        margin: 0 0 8px;
+      }
+
+      .homework-date {
+        font-size: 0.75rem;
+        color: #666;
+        display: block;
+      }
+    }
+  }
+
+  .no-homeworks-message {
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+}
+
+/* Styles pour le bouton "+" et le formulaire d'ajout de post */
+.add-post-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.add-post-button {
+  margin: 16px 0;
+}
+
+/* Styles pour le bouton "+" et le formulaire d'ajout de devoir */
+.add-homework-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.add-homework-button {
+  margin: 16px 0;
+}
+
+.add-homework-section {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+
+  &.open {
+    max-height: 500px;
+  }
+}
+
+.homework-form-container {
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.homework-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  button[mat-flat-button] {
+    align-self: flex-start;
+  }
+}
+
+/* Conteneur pour les champs de date et d'heure */
+.date-time-container {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.small-field {
+  flex: 1;
+}
+
+.small-field input[type="time"] {
+  width: 100%;
+}
+
+/* Style pour le formulaire de devoir */
+.homework-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Style pour le conteneur du formulaire */
+.homework-form-container {
+  position: relative;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+/* Conteneur pour les boutons (croix et soumission) */
+.form-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+/* Style pour le bouton de fermeture */
+.close-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  mat-icon {
+    color: #666;
+    font-size: 24px;
+  }
+
+  &:hover mat-icon {
+    color: #333;
+  }
+}
+
+/* Style pour le bouton de soumission */
+button[mat-flat-button] {
+  margin-right: 0;
+}
+
+/* Styles pour la section Absences */
+.absence-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .absence-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+}
+
+/* Styles pour la section Notes */
+.grades-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  .grades-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+
+}
+
+/* Conteneur principal pour limiter la largeur */
+.course-detail-container {
+  max-width: 850px; 
+  margin: 0 auto; 
+  padding: 16px; 
+}
+
+/* Styles supplémentaires si nécessaire */
+.course-header-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+/* course-detail.component.scss */
+
+.people-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.teacher-section,
+.students-section {
+  margin-bottom: 24px;
+}
+
+.teacher-info,
+.student-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.teacher-name,
+.student-name {
+  font-weight: 500;
+}
+
+.student-email {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.student-list {
+  max-height: 300px;
+  overflow-y: auto;
+}

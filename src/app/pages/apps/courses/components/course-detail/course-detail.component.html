@@ -1,0 +1,271 @@
+<!-- course-detail.component.html -->
+<div class="course-detail-container">
+  <mat-card class="course-header-card overflow-hidden">
+    <mat-card-content [ngStyle]="{ 'background': headerGradient }" class="text-white p-16">
+      <div class="header-content" style="margin-left: 16px;">
+        <!-- Bouton Retour -->
+        <button mat-icon-button class="back-button" (click)="goBack()">
+          <i-tabler name="chevron-left" class="icon-18"></i-tabler>
+        </button>
+
+        <!-- Titre du cours -->
+        <div class="course-title">
+          <h1 class="mat-headline">{{ courseDetail?.title }}</h1>
+          <p class="mat-caption">{{ courseDetail?.description }}</p>
+        </div>
+
+        <!-- Informations supplémentaires -->
+        <div class="course-info">
+          <div class="info-item">
+            <mat-icon class="info-icon">calendar_today</mat-icon>
+            <span>Date de début : {{ courseDetail?.startDate | date }}</span>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">school</mat-icon>
+            <span>Enseignant : {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Barre de navigation avec onglets -->
+  <mat-tab-group>
+    <!-- Onglet Flux -->
+    <mat-tab label="Flux">
+      <mat-card class="stream-card mt-3">
+        <mat-card-content>
+          <!-- Section Stream pour les posts -->
+          <div class="stream-section">
+            <!-- En-tête du flux avec le titre et le bouton d'ajout -->
+            <div class="stream-header">
+              <h3 class="stream-title">Posts</h3>
+              <!-- Bouton "+" pour ajouter un post -->
+              <div *ngIf="isTeacher" class="add-post-button-container">
+                <button mat-fab color="primary" class="add-post-button" (click)="togglePostForm()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <!-- Section d'ajout de post (masquée par défaut) -->
+            <div *ngIf="isTeacher" class="add-post-section" [class.open]="isPostFormOpen">
+              <div class="post-form-container">
+                <form (ngSubmit)="onSubmit()" class="post-form">
+                  <!-- Contenu du post -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput [(ngModel)]="newPost.content" name="content" placeholder="Contenu du post" required></textarea>
+                  </mat-form-field>
+
+                  <!-- Boutons (soumission et fermeture) -->
+                  <div class="form-buttons-container">
+                    <!-- Bouton de soumission -->
+                    <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
+                      {{ isSubmitting ? 'En cours...' : 'Poster' }}
+                    </button>
+
+                    <!-- Bouton pour annuler l'ajout -->
+                    <button mat-icon-button class="close-button" (click)="togglePostForm()">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Liste des posts -->
+            <div class="post-list mt-2" *ngIf="posts.length > 0">
+              <div *ngFor="let post of posts" class="post-item">
+                <p>{{ post.content }}</p>
+                <small class="post-date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+
+                <!-- Section des commentaires -->
+                <div class="comment-section mt-2">
+                  <h4>Commentaires</h4>
+
+                  <!-- Bouton "Show more" pour afficher les commentaires -->
+                  <button mat-button color="primary" (click)="toggleShowComments(post.id)">
+                    {{ showComments[post.id] ? 'Masquer les commentaires' : 'Afficher les commentaires' }}
+                  </button>
+
+                  <!-- Liste des commentaires -->
+                  <div class="comment-list mt-2" *ngIf="showComments[post.id] && comments[post.id] && comments[post.id].length > 0">
+                    <div *ngFor="let comment of comments[post.id]" class="comment-item">
+                      <div class="comment-content-container">
+                        <p>{{ comment.content }}</p>
+                        <button *ngIf="isTeacher" mat-icon-button class="delete-comment-button" (click)="deleteComment(post.id, comment.id)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                      <small class="comment-date">
+                        Par {{ comment.author.firstName }} {{ comment.author.lastName }} le {{ comment.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!-- Bouton "Ajouter un commentaire" -->
+                  <button mat-button color="primary" (click)="toggleShowCommentForm(post.id)">
+                    {{ showCommentForm[post.id] ? 'Annuler' : 'Ajouter un commentaire' }}
+                  </button>
+
+                  <!-- Formulaire pour ajouter un commentaire -->
+                  <div *ngIf="showCommentForm[post.id]" class="add-comment-section">
+                    <mat-form-field appearance="outline" class="full-width">
+                      <textarea matInput [(ngModel)]="newComment[post.id]" name="comment" placeholder="Ajouter un commentaire au cours..." required></textarea>
+                    </mat-form-field>
+                    <button mat-flat-button color="primary" (click)="addComment(post.id)">
+                      Commenter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <!-- Onglet Travaux et devoirs -->
+    <mat-tab label="Travaux et devoirs">
+      <mat-card class="homework-card mt-3">
+        <mat-card-content>
+          <h3 class="homework-title">Devoirs</h3>
+
+          <!-- Liste des devoirs -->
+          <div class="homework-list mt-2" *ngIf="homeworks.length > 0; else noHomeworks">
+            <div *ngFor="let homework of homeworks" class="homework-item">
+              <h4>{{ homework.title }}</h4>
+              <p>{{ homework.description }}</p>
+              <small class="homework-date">À rendre pour le {{ homework.deadline | customDate }}</small>
+              <small class="homework-date">Créé le {{ homework.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+              <small class="homework-date" *ngIf="homework.updatedAt">Dernière mise à jour le {{ homework.updatedAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+            </div>
+          </div>
+          <ng-template #noHomeworks>
+            <p class="no-homeworks-message">Aucun devoir disponible pour le moment.</p>
+          </ng-template>
+
+          <!-- Section d'ajout de devoir (masquée par défaut) -->
+          <div *ngIf="isTeacher" class="add-homework-section" [class.open]="isHomeworkFormOpen">
+            <div class="homework-form-container">
+              <form (ngSubmit)="onHomeworkSubmit()" class="homework-form">
+                <!-- Titre du devoir -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <input matInput [(ngModel)]="newHomework.title" name="title" placeholder="Titre du devoir" required />
+                </mat-form-field>
+
+                <!-- Description du devoir -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <textarea matInput [(ngModel)]="newHomework.description" name="description" placeholder="Description du devoir" required></textarea>
+                </mat-form-field>
+
+                <!-- Conteneur pour les champs de date et d'heure -->
+                <div class="date-time-container">
+                  <!-- Jour -->
+                  <mat-form-field appearance="outline" class="small-field">
+                    <input matInput [(ngModel)]="newHomework.day" name="day" type="number" placeholder="Jour (JJ)" min="1" max="31" required />
+                  </mat-form-field>
+
+                  <!-- Mois -->
+                  <mat-form-field appearance="outline" class="small-field">
+                    <input matInput [(ngModel)]="newHomework.month" name="month" type="number" placeholder="Mois (MM)" min="1" max="12" required />
+                  </mat-form-field>
+
+                  <!-- Année -->
+                  <mat-form-field appearance="outline" class="small-field">
+                    <input matInput [(ngModel)]="newHomework.year" name="year" type="number" placeholder="Année (AAAA)" min="2023" required />
+                  </mat-form-field>
+
+                  <!-- Heure -->
+                  <mat-form-field appearance="outline" class="small-field">
+                    <input matInput [(ngModel)]="newHomework.time" name="time" type="time" placeholder="Heure (HH:MM)" required />
+                  </mat-form-field>
+                </div>
+
+                <!-- Conteneur pour les boutons (croix et soumission) -->
+                <div class="form-buttons-container">
+                  <!-- Bouton de soumission -->
+                  <button mat-flat-button type="submit" color="primary" [disabled]="isHomeworkSubmitting">
+                    {{ isHomeworkSubmitting ? 'En cours...' : 'Créer le devoir' }}
+                  </button>
+
+                  <!-- Bouton pour annuler l'ajout -->
+                  <button mat-icon-button class="close-button" (click)="cancelHomeworkForm()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Bouton "+" pour ajouter un devoir -->
+          <div *ngIf="isTeacher" class="add-homework-button-container">
+            <button mat-fab color="primary" class="add-homework-button" (click)="toggleHomeworkForm()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <!-- Onglet Absences -->
+    <mat-tab label="Absences">
+      <mat-card class="absence-card mt-3">
+        <mat-card-content>
+          <h3 class="absence-title">Absences</h3>
+          <p>Liste des absences des étudiants.</p>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <!-- Onglet Notes -->
+    <mat-tab label="Notes">
+      <mat-card class="grades-card mt-3">
+        <mat-card-content>
+          <h3 class="grades-title">Notes</h3>
+          <p>Liste des notes des étudiants.</p>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <!-- Onglet Personnes -->
+      <mat-tab label="Personnes">
+        <mat-card class="people-card mt-3">
+          <mat-card-content>
+            <!-- Enseignant -->
+            <div class="teacher-section">
+              <h3>Enseignant</h3>
+              <div class="teacher-info">
+                <div class="avatar" [style.background-color]="getColor(courseDetail?.teacher?.email || '')">
+                  {{ getInitial(courseDetail?.teacher?.email || '') }}
+                </div>
+                <div class="teacher-name">
+                  {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Liste des étudiants -->
+            <div class="students-section">
+              <h3>Étudiants</h3>
+              <div class="student-list">
+                <div *ngFor="let student of students" class="student-item">
+                  <div class="avatar" [style.background-color]="getColor(student.email)">
+                    {{ getInitial(student.email) }}
+                  </div>
+                  <div class="student-info">
+                    <div class="student-name">
+                      {{ student.firstName }} {{ student.lastName }}
+                    </div>
+                    <div class="student-email">
+                      {{ student.email }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+  </mat-tab-group>
+</div>

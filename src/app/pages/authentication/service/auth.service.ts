@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { APP_API } from '../app-api.config';
 import { CredentialsDto } from '../DTO/credentials.dto';
 import { LoginResponseDto } from '../DTO/login-response.dto';
@@ -19,6 +19,21 @@ export class AuthService {
     return userStr ? JSON.parse(userStr) : null;
   }
 
+  refreshToken(): Observable<LoginResponseDto> {
+    const refreshToken = localStorage.getItem('refresh_token');
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token found'));
+    }
+    return this.http.post<LoginResponseDto>(`${APP_API.baseUrl}/auth/refresh`, { refreshToken })
+      .pipe(
+        tap(response => {
+          localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          localStorage.setItem('refresh_token', response.refreshToken);
+        }),
+        catchError((error: HttpErrorResponse) => throwError(() => error))
+      );
+  }
   isTeacher(): boolean {
     const user = this.getCurrentUser();
     return user?.type === 'Teacher';
