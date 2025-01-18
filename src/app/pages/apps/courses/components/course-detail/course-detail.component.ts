@@ -17,6 +17,7 @@ import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Post } from '../../models/post.model';
 import { CourseComment } from '../../models/comment.model';
+import { Student } from '../../models/Student.model';
 
 @Component({
   selector: 'app-course-detail',
@@ -43,8 +44,9 @@ export class CourseDetailComponent implements OnInit {
   posts: Post[] = [];
   comments: { [postId: number]: CourseComment[] } = {};
   newComment: { [postId: number]: string } = {};
-  showCommentForm: { [postId: number]: boolean } = {}; // Pour gérer l'affichage du formulaire d'ajout de commentaire
-  showComments: { [postId: number]: boolean } = {}; // Pour gérer l'affichage des commentaires
+  showCommentForm: { [postId: number]: boolean } = {};
+  showComments: { [postId: number]: boolean } = {};
+  students: Student[] = [];
 
   // Propriétés pour le formulaire de post
   isTeacher = true;
@@ -85,16 +87,38 @@ export class CourseDetailComponent implements OnInit {
         console.error('Aucune donnée de cours trouvée.');
       }
     }
-  
+
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.loadHomeworks(this.courseDetail.id);
       this.loadPosts(this.courseDetail.id);
+      this.loadStudents(this.courseDetail.id); // Charger les étudiants
     }
-  
+
     console.log('Course Detail:', this.courseDetail);
   }
 
+  // Méthode pour charger les étudiants
+  loadStudents(courseId: number): void {
+    this.courseService.getStudentsByCourseId(courseId).subscribe({
+      next: (response: any) => {
+        this.students = response.students;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération des étudiants :', error);
+      },
+    });
+  }
+
+  // Méthode pour obtenir la première lettre de l'email
+  getInitial(email: string): string {
+    return email.charAt(0).toUpperCase();
+  }
+
+  // Méthode pour générer une couleur unique à partir de l'email
+  getColor(email: string): string {
+    return this.colorService.generateColorFromString(email);
+  }
 
   // Méthode pour charger les commentaires d'un post
   loadComments(postId: number): void {
@@ -118,10 +142,9 @@ export class CourseDetailComponent implements OnInit {
 
     this.courseService.createComment(postId, { content }).subscribe(
       () => {
-        // Recharger les commentaires après en avoir ajouté un nouveau
         this.loadComments(postId);
-        this.newComment[postId] = ''; // Réinitialiser le champ de commentaire
-        this.showCommentForm[postId] = false; // Masquer le formulaire après l'ajout
+        this.newComment[postId] = '';
+        this.showCommentForm[postId] = false;
       },
       (error) => {
         console.error('Erreur lors de la création du commentaire :', error);
@@ -175,8 +198,8 @@ export class CourseDetailComponent implements OnInit {
 
       this.courseService.createPost(this.courseDetail!.id, newPost).subscribe(
         (response) => {
-          this.posts.push(response); // Ajouter le post à la liste
-          this.newPost = { content: '' }; // Réinitialiser le formulaire
+          this.posts.push(response);
+          this.newPost = { content: '' };
           this.isSubmitting = false;
           this.isPostFormOpen = false;
         },
@@ -211,7 +234,6 @@ export class CourseDetailComponent implements OnInit {
   onHomeworkSubmit(): void {
     if (this.isHomeworkSubmitting) return;
     this.isHomeworkSubmitting = true;
-
   }
 
   cancelHomeworkForm(): void {
@@ -233,8 +255,4 @@ export class CourseDetailComponent implements OnInit {
   toggleShowCommentForm(postId: number): void {
     this.showCommentForm[postId] = !this.showCommentForm[postId];
   }
-
-
-
-
 }

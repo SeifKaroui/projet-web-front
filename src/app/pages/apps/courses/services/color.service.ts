@@ -22,4 +22,12 @@ export class ColorService {
 
     return `linear-gradient(135deg, ${darkColor}, ${vibrantColor})`;
   }
+  generateColorFromString(str: string): string {
+    const colors = [
+      '#FF6B6B', '#FFE66D', '#4ECDC4', '#45B7D3', '#A29BFE', '#6C5CE7',
+      '#FF7675', '#FDCB6E', '#00B894', '#00CEC9', '#74B9FF', '#0984E3',
+    ];
+    const hash = str.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+    return colors[hash % colors.length];
+  }
 }

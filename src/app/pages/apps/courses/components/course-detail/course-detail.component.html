@@ -229,13 +229,43 @@
     </mat-tab>
 
     <!-- Onglet Personnes -->
-    <mat-tab label="Personnes">
-      <mat-card class="people-card mt-3">
-        <mat-card-content>
-          <h3 class="people-title">Personnes</h3>
-          <p>Liste des étudiants et enseignants du cours.</p>
-        </mat-card-content>
-      </mat-card>
-    </mat-tab>
+      <mat-tab label="Personnes">
+        <mat-card class="people-card mt-3">
+          <mat-card-content>
+            <!-- Enseignant -->
+            <div class="teacher-section">
+              <h3>Enseignant</h3>
+              <div class="teacher-info">
+                <div class="avatar" [style.background-color]="getColor(courseDetail?.teacher?.email || '')">
+                  {{ getInitial(courseDetail?.teacher?.email || '') }}
+                </div>
+                <div class="teacher-name">
+                  {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Liste des étudiants -->
+            <div class="students-section">
+              <h3>Étudiants</h3>
+              <div class="student-list">
+                <div *ngFor="let student of students" class="student-item">
+                  <div class="avatar" [style.background-color]="getColor(student.email)">
+                    {{ getInitial(student.email) }}
+                  </div>
+                  <div class="student-info">
+                    <div class="student-name">
+                      {{ student.firstName }} {{ student.lastName }}
+                    </div>
+                    <div class="student-email">
+                      {{ student.email }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
   </mat-tab-group>
 </div>
