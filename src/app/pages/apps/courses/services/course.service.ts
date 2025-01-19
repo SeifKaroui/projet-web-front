@@ -64,7 +64,7 @@ export class CourseService {
     return this.http.get<any[]>(`${this.apiUrl}/courses/${courseId}/students`);
   }
 
-  markAbsence(studentId: string, courseId: number, date: string): Observable<any> {
+  /*markAbsence(studentId: string, courseId: number, date: string): Observable<any> {
     const body = {
       studentId,
       courseId,
@@ -85,5 +85,5 @@ export class CourseService {
 
   deleteAbsence(absenceId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/absences/teacher/${absenceId}`);
-  }
+  }*/
 }

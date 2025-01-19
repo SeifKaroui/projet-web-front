@@ -16,69 +16,61 @@
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" matSort class="w-100">
-        <!-- Index Column -->
+      <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="#">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
-          <td mat-cell *matCellDef="let i = index">{{ i + 1 }}</td>
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
         </ng-container>
 
-        <!-- Name Column -->
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
+          <th mat-header-cell *matHeaderCellDef>Student Name</th>
           <td mat-cell *matCellDef="let element">
-            <div class="d-flex align-items-center">
-              <div class="m-l-16">
-                <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                  {{ element.firstName }} {{ element.lastName }}
-                </p>
-              </div>
-            </div>
+            {{ element.student.firstName }} {{ element.student.lastName }}
           </td>
         </ng-container>
 
-        <!-- Email Column -->
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Email</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}</td>
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let element">{{ element.student.email }}</td>
         </ng-container>
 
-        <!-- Justified Absences -->
         <ng-container matColumnDef="justified">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Justified</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.absenceCounts.justifiedCount }}
-          </td>
+          <th mat-header-cell *matHeaderCellDef>Justified</th>
+          <td mat-cell *matCellDef="let element">{{ element.absenceCounts.justifiedCount }}</td>
         </ng-container>
 
-        <!-- Non-Justified Absences -->
         <ng-container matColumnDef="nonJustified">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Non-Justified</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.absenceCounts.nonJustifiedCount }}
-          </td>
+          <th mat-header-cell *matHeaderCellDef>Non-Justified</th>
+          <td mat-cell *matCellDef="let element">{{ element.absenceCounts.nonJustifiedCount }}</td>
         </ng-container>
 
-        <!-- Total Absences -->
         <ng-container matColumnDef="total">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Total</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.absenceCounts.totalCount }}
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let element">{{ element.absenceCounts.totalCount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="addAbsence">
+          <th mat-header-cell *matHeaderCellDef>Add Absence</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" (click)="addAbsence(element)">
+              <mat-icon>
+                <i-tabler name="plus" class="icon-20"></i-tabler>
+              </mat-icon>
+            </button>
           </td>
         </ng-container>
 
-        <!-- Action Column -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Action</th>
-          <td mat-cell *matCellDef="let element" class="action-link">
-            <a class="m-r-10 cursor-pointer">
-              <i-tabler name="eye" class="icon-18"></i-tabler>
-            </a>
+        <ng-container matColumnDef="justification">
+          <th mat-header-cell *matHeaderCellDef>Justifications</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-button color="primary" (click)="openJustificationDialog(element)">
+              View Justifications
+            </button>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
