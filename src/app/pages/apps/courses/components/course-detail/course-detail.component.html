@@ -1,4 +1,4 @@
-<!-- course-detail.component.html -->
+
 <div class="course-detail-container">
   <mat-card class="course-header-card overflow-hidden">
     <mat-card-content [ngStyle]="{ 'background': headerGradient }" class="text-white p-16">
@@ -25,10 +25,23 @@
             <span>Enseignant : {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}</span>
           </div>
         </div>
+
+        <!-- Bouton circulaire pour afficher le courseCode -->
+        <button *ngIf="courseDetail?.courseCode" mat-fab class="course-code-button" (click)="showCourseCode()">
+          <mat-icon>info</mat-icon> <!-- Icône "i" -->
+        </button>
       </div>
     </mat-card-content>
   </mat-card>
 
+  <!-- Boîte modale pour afficher le courseCode -->
+  <div *ngIf="isCourseCodeVisible" class="course-code-modal">
+    <div class="modal-content">
+      <h2>Code du cours</h2>
+      <p>{{ courseDetail?.courseCode }}</p>
+      <button mat-button (click)="hideCourseCode()">Fermer</button>
+    </div>
+  </div>
   <!-- Barre de navigation avec onglets -->
   <mat-tab-group>
     <!-- Onglet Flux -->

@@ -18,7 +18,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Post } from '../../models/post.model';
 import { CourseComment } from '../../models/comment.model';
 import { Student } from '../../models/Student.model';
-import { AuthService } from '../../../../authentication/service/auth.service'; // Importez le service AuthService
+import { AuthService } from '../../../../authentication/service/auth.service';
+import { Title } from '@angular/platform-browser'; // Importez le service Title
 
 @Component({
   selector: 'app-course-detail',
@@ -49,7 +50,7 @@ export class CourseDetailComponent implements OnInit {
   showComments: { [postId: number]: boolean } = {};
   students: Student[] = [];
   files: File[] = [];
-
+  isCourseCodeVisible: boolean = false;
   // Propriétés pour le formulaire de post
   isTeacher: boolean = false;
   isPostFormOpen = false;
@@ -75,7 +76,8 @@ export class CourseDetailComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private colorService: ColorService,
     private courseService: CourseService,
-    private authService: AuthService
+    private authService: AuthService,
+    private titleService: Title // Injectez le service Title
   ) {}
 
   ngOnInit(): void {
@@ -97,11 +99,23 @@ export class CourseDetailComponent implements OnInit {
       this.loadHomeworks(this.courseDetail.id);
       this.loadPosts(this.courseDetail.id);
       this.loadStudents(this.courseDetail.id);
+      this.titleService.setTitle('Course Detail - Angular 18'); // Définissez le titre de la page
     }
 
     console.log('Course Detail:', this.courseDetail);
   }
 
+  
+  // Méthode pour afficher le courseCode
+  showCourseCode(): void {
+    this.isCourseCodeVisible = true;
+  }
+
+  // Méthode pour masquer le courseCode
+  hideCourseCode(): void {
+    this.isCourseCodeVisible = false;
+  }
+  
   // Méthode pour charger les étudiants
   loadStudents(courseId: number): void {
     this.courseService.getStudentsByCourseId(courseId).subscribe({
