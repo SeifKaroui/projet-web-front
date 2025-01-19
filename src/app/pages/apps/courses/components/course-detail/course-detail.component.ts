@@ -18,6 +18,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Post } from '../../models/post.model';
 import { CourseComment } from '../../models/comment.model';
 import { Student } from '../../models/Student.model';
+import { CourseMarkComponent } from '../course-mark/course-mark.component';
 
 @Component({
   selector: 'app-course-detail',
@@ -33,6 +34,7 @@ import { Student } from '../../models/Student.model';
     MatInputModule,
     FormsModule,
     TablerIconsModule,
+    CourseMarkComponent
   ],
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss'],

@@ -1,0 +1,20 @@
+.submission-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+  
+    .action-button {
+      visibility: hidden;
+    }
+  
+    &:hover {
+      .action-button {
+        visibility: visible;
+      }
+    }
+  }
+  
+  table {
+    width: 100%;
+  }

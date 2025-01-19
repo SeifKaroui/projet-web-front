@@ -45,7 +45,7 @@ export const AuthenticationRoutes: Routes = [
       },
       {
         path: 'login',
-        component: AppSideLoginComponent,
+        component: AppBoxedLoginComponent,
       },
       {
         path: 'side-register',
