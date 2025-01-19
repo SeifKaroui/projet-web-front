@@ -18,6 +18,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Post } from '../../models/post.model';
 import { CourseComment } from '../../models/comment.model';
 import { Student } from '../../models/Student.model';
+import { AuthService } from '../../../../authentication/service/auth.service'; // Importez le service AuthService
 
 @Component({
   selector: 'app-course-detail',
@@ -47,11 +48,12 @@ export class CourseDetailComponent implements OnInit {
   showCommentForm: { [postId: number]: boolean } = {};
   showComments: { [postId: number]: boolean } = {};
   students: Student[] = [];
+  files: File[] = [];
 
   // Propriétés pour le formulaire de post
-  isTeacher = true;
+  isTeacher: boolean = false;
   isPostFormOpen = false;
-  newPost = { content: '' };
+  newPost = { content: '', files: [] as File[] };
   isSubmitting = false;
 
   // Propriétés pour le formulaire de devoir
@@ -72,10 +74,12 @@ export class CourseDetailComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private colorService: ColorService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isTeacher = this.authService.isTeacher();
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.courseDetail = navigation.extras.state['course'];
@@ -92,7 +96,7 @@ export class CourseDetailComponent implements OnInit {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.loadHomeworks(this.courseDetail.id);
       this.loadPosts(this.courseDetail.id);
-      this.loadStudents(this.courseDetail.id); // Charger les étudiants
+      this.loadStudents(this.courseDetail.id);
     }
 
     console.log('Course Detail:', this.courseDetail);
@@ -125,6 +129,7 @@ export class CourseDetailComponent implements OnInit {
     this.courseService.getCommentsByPostId(postId).subscribe(
       (comments) => {
         this.comments[postId] = comments;
+        console.log('Commentaires récupérés pour le post', postId, ':', comments);
       },
       (error) => {
         console.error('Erreur lors de la récupération des commentaires :', error);
@@ -168,8 +173,8 @@ export class CourseDetailComponent implements OnInit {
   loadPosts(courseId: number): void {
     this.courseService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
-        this.posts = posts;
-        console.log('Posts récupérés :', this.posts);
+        this.posts = posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        console.log('Posts récupérés et triés :', this.posts);
 
         // Charger les commentaires pour chaque post
         this.posts.forEach((post) => {
@@ -182,6 +187,21 @@ export class CourseDetailComponent implements OnInit {
     );
   }
 
+  // Méthode pour supprimer un post
+  deletePost(postId: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
+      this.courseService.deletePost(postId).subscribe(
+        () => {
+          this.posts = this.posts.filter((post) => post.id !== postId);
+          console.log('Post supprimé avec succès');
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression du post :', error);
+        }
+      );
+    }
+  }
+
   // Méthodes pour les posts
   togglePostForm(): void {
     this.isPostFormOpen = !this.isPostFormOpen;
@@ -191,15 +211,21 @@ export class CourseDetailComponent implements OnInit {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
 
-    if (this.newPost.content) {
-      const newPost = {
-        content: this.newPost.content,
-      };
+    if (this.newPost.content || this.newPost.files.length > 0) {
+      const formData = new FormData();
+      formData.append('content', this.newPost.content);
 
-      this.courseService.createPost(this.courseDetail!.id, newPost).subscribe(
+      // Ajouter les fichiers au FormData
+      if (this.newPost.files && this.newPost.files.length > 0) {
+        for (const file of this.newPost.files) {
+          formData.append('files', file);
+        }
+      }
+
+      this.courseService.createPost(this.courseDetail!.id, formData).subscribe(
         (response) => {
-          this.posts.push(response);
-          this.newPost = { content: '' };
+          this.posts.unshift(response); // Ajouter le nouveau post en haut de la liste
+          this.newPost = { content: '', files: [] }; // Réinitialiser le formulaire
           this.isSubmitting = false;
           this.isPostFormOpen = false;
         },
@@ -210,9 +236,20 @@ export class CourseDetailComponent implements OnInit {
         }
       );
     } else {
-      console.error('Le contenu du post est requis.');
+      console.error('Le contenu du post ou des fichiers sont requis.');
       this.isSubmitting = false;
     }
+  }
+
+  onFileChange(event: any): void {
+    if (event.target.files && event.target.files.length > 0) {
+      this.newPost.files = Array.from(event.target.files);
+    }
+  }
+
+  // Méthode pour supprimer un fichier de la liste des fichiers à uploader
+  removeFile(file: File): void {
+    this.newPost.files = this.newPost.files.filter((f) => f !== file);
   }
 
   // Méthodes pour les devoirs
@@ -254,5 +291,10 @@ export class CourseDetailComponent implements OnInit {
   // Méthode pour basculer l'affichage du formulaire d'ajout de commentaire
   toggleShowCommentForm(postId: number): void {
     this.showCommentForm[postId] = !this.showCommentForm[postId];
+  }
+
+  // Méthode pour récupérer l'URL des fichiers
+  getFileUrl(fileId: number): string {
+    return this.courseService.getFileUrl(fileId);
   }
 }

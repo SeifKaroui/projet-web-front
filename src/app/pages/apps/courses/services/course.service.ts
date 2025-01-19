@@ -14,7 +14,13 @@ export class CourseService {
 
   constructor(private http: HttpClient) {}
 
-  getCourses(): Observable<Course[]> {
+  // Récupérer les cours auxquels l'étudiant est inscrit
+  getEnrolledCourses(): Observable<Course[]> {
+    return this.http.get<Course[]>(`${this.apiUrl}/courses/my-enrolled-courses`);
+  }
+
+  // Récupérer les cours créés par l'enseignant
+  getMyCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/courses/my-courses`);
   }
 
@@ -34,13 +40,8 @@ export class CourseService {
     return this.http.get<Post[]>(`${this.apiUrl}/courses/${courseId}/posts`);
   }
 
-  createPost(courseId: number, post: { content: string }): Observable<Post> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Post>(
-      `${this.apiUrl}/courses/${courseId}/posts`,
-      { content: post.content },
-      { headers }
-    );
+  createPost(courseId: number, postData: FormData): Observable<Post> {
+    return this.http.post<Post>(`${this.apiUrl}/courses/${courseId}/posts`, postData);
   }
 
   getCommentsByPostId(postId: number): Observable<CourseComment[]> {
@@ -56,34 +57,28 @@ export class CourseService {
     return this.http.delete<void>(`${this.apiUrl}/courses/posts/${postId}/comments/${commentId}`);
   }
 
-  getAbsencesByCourseId(courseId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/absences/teacher/absence-list?courseId=${courseId}`);
-  }
-
   getStudentsByCourseId(courseId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/courses/${courseId}/students`);
   }
 
-  markAbsence(studentId: string, courseId: number, date: string): Observable<any> {
-    const body = {
-      studentId,
-      courseId,
-      date,
-      justified: false,
-      justification: '',
-    };
-    return this.http.post(`${this.apiUrl}/absences/teacher`, body);
+  uploadFiles(files: File[]): Observable<File[]> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+    return this.http.post<File[]>(`${this.apiUrl}/files/upload`, formData);
   }
 
-  justifyAbsence(absenceId: number, justification: string): Observable<any> {
-    const body = {
-      justified: true,
-      justification,
-    };
-    return this.http.patch(`${this.apiUrl}/absences/teacher/${absenceId}/validate`, body);
+  getFileById(fileId: number): Observable<File> {
+    return this.http.get<File>(`${this.apiUrl}/files/${fileId}`);
   }
 
-  deleteAbsence(absenceId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/absences/teacher/${absenceId}`);
+  // Méthode pour obtenir l'URL d'un fichier
+  getFileUrl(fileId: number): string {
+    return `${this.apiUrl}/files/${fileId}`;
+  }
+
+  deletePost(postId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/courses/posts/${postId}`);
   }
 }

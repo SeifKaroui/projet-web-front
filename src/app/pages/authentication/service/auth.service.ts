@@ -21,12 +21,12 @@ export class AuthService {
 
   isTeacher(): boolean {
     const user = this.getCurrentUser();
-    return user?.type === 'Teacher';
+    return user?.type === 'teacher';
   }
 
   isStudent(): boolean {
     const user = this.getCurrentUser();
-    return user?.type === 'Student';
+    return user?.type === 'student';
   }
   login(credentials: CredentialsDto): Observable<LoginResponseDto> {
     const url = `${APP_API.baseUrl}${APP_API.login}`;

@@ -12,7 +12,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { ColorService } from '../../services/color.service'; // Importez le service ColorService
+import { ColorService } from '../../services/color.service';
+import { AuthService } from '../../../../authentication/service/auth.service'; // Importez le service AuthService
 
 @Component({
   selector: 'app-courses',
@@ -37,10 +38,13 @@ import { ColorService } from '../../services/color.service'; // Importez le serv
 export class CourseListComponent implements OnInit {
   courses: Course[] = [];
   selectedCategory = 'All';
+  isLoading = false;
+  error: string | null = null;
 
   constructor(
     private courseService: CourseService,
-    public colorService: ColorService
+    public colorService: ColorService,
+    private authService: AuthService // Injectez le service AuthService
   ) {}
 
   ngOnInit(): void {
@@ -48,14 +52,50 @@ export class CourseListComponent implements OnInit {
   }
 
   loadCourses(): void {
-    this.courseService.getCourses().subscribe({
-      next: (data: Course[]) => {
-        this.courses = data;
-      },
-      error: (error: any) => {
-        console.error('Erreur lors du chargement des cours :', error);
-      },
-    });
+    this.isLoading = true;
+    this.error = null;
+  
+    // Afficher le rôle de l'utilisateur dans la console
+    const user = this.authService.getCurrentUser();
+    console.log('Utilisateur connecté :', user);
+  
+    if (this.authService.isStudent()) {
+      console.log('Utilisateur : Étudiant');
+      console.log('Fonction utilisée : getEnrolledCourses()');
+  
+      // Charger les cours auxquels l'étudiant est inscrit
+      this.courseService.getEnrolledCourses().subscribe({
+        next: (data: Course[]) => {
+          this.courses = data;
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          this.error = 'Erreur lors du chargement des cours.';
+          this.isLoading = false;
+          console.error('Erreur lors du chargement des cours :', error);
+        },
+      });
+    } else if (this.authService.isTeacher()) {
+      console.log('Utilisateur : Enseignant');
+      console.log('Fonction utilisée : getMyCourses()');
+  
+      // Charger les cours créés par l'enseignant
+      this.courseService.getMyCourses().subscribe({
+        next: (data: Course[]) => {
+          this.courses = data;
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          this.error = 'Erreur lors du chargement des cours.';
+          this.isLoading = false;
+          console.error('Erreur lors du chargement des cours :', error);
+        },
+      });
+    } else {
+      console.log('Rôle utilisateur non reconnu.');
+      this.error = 'Rôle utilisateur non reconnu.';
+      this.isLoading = false;
+    }
   }
 
   applyFilter(event: Event): void {
