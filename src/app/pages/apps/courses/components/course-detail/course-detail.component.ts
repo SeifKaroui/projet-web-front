@@ -311,4 +311,28 @@ export class CourseDetailComponent implements OnInit {
   getFileUrl(fileId: number): string {
     return this.courseService.getFileUrl(fileId);
   }
+
+  // Méthode pour télécharger un fichier
+  downloadFile(fileId: number, fileName: string): void {
+    console.log('Tentative de téléchargement du fichier :', fileId, fileName);
+  
+    this.courseService.getFileById(fileId).subscribe(
+      (file: Blob) => {
+        console.log('Fichier récupéré avec succès :', file);
+  
+        // Créer un lien temporaire pour le téléchargement
+        const url = window.URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName; // Nom du fichier à télécharger
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url); // Libérer l'URL
+      },
+      (error) => {
+        console.error('Erreur lors du téléchargement du fichier :', error);
+      }
+    );
+  }
 }

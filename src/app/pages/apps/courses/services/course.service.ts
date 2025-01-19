@@ -69,8 +69,8 @@ export class CourseService {
     return this.http.post<File[]>(`${this.apiUrl}/files/upload`, formData);
   }
 
-  getFileById(fileId: number): Observable<File> {
-    return this.http.get<File>(`${this.apiUrl}/files/${fileId}`);
+  getFileById(fileId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/files/${fileId}`, { responseType: 'blob' });
   }
 
   // Méthode pour obtenir l'URL d'un fichier

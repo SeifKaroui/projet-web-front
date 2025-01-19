@@ -133,7 +133,6 @@
             
                 <small class="post-date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
             
-                <!-- Afficher les fichiers attachés -->
                 <div *ngIf="post.attachments && post.attachments.length > 0" class="attachments-section">
                   <h4>Fichier attaché</h4>
                   <ul class="attachments-list">
@@ -142,6 +141,10 @@
                       <a [href]="getFileUrl(file.id)" target="_blank" class="file-link">
                         {{ file.originalname }}
                       </a>
+                      <!-- Bouton de téléchargement -->
+                      <button mat-icon-button (click)="downloadFile(file.id, file.originalname)">
+                        <mat-icon>download</mat-icon>
+                      </button>
                     </li>
                   </ul>
                 </div>
