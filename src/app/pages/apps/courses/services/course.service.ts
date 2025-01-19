@@ -10,7 +10,7 @@ import { CourseComment } from '../models/comment.model';
   providedIn: 'root',
 })
 export class CourseService {
-  private apiUrl = '/api';
+  private apiUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
