@@ -1,7 +1,5 @@
-
-
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
@@ -17,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     FormsModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule
@@ -28,12 +27,21 @@ export class FeedbackDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { grade: number; feedback: string }
   ) {}
 
+  isValid(): boolean {
+    const feedbackValid = this.data.feedback != null && this.data.feedback.trim() !== '';
+    const gradeValid = this.data.grade != null && this.data.grade >= 0 && this.data.grade <= 100;
+    return feedbackValid && gradeValid;
+  }
+  
   onCancel(): void {
     this.dialogRef.close();
   }
 
   onSave(): void {
-    // You can add validation here if needed
+    if (!this.isValid()) {
+      // Do not close the dialog, show an error or disable the save button
+      return;
+    }
     this.dialogRef.close(this.data);
   }
 }
