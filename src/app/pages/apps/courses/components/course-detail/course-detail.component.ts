@@ -18,11 +18,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { Post } from '../../models/post.model';
 import { CourseComment } from '../../models/comment.model';
 import { Student } from '../../models/Student.model';
+import {AppEmployeeComponent} from '../../../employee/employee.component'
 
 @Component({
   selector: 'app-course-detail',
   standalone: true,
   imports: [
+    AppEmployeeComponent, 
     MatTabsModule,
     CustomDatePipe,
     MatCardModule,

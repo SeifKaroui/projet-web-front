@@ -208,12 +208,12 @@
       </mat-card>
     </mat-tab>
 
-    <!-- Onglet Absences -->
+    <!-- course-detail.component.html -->
     <mat-tab label="Absences">
       <mat-card class="absence-card mt-3">
         <mat-card-content>
           <h3 class="absence-title">Absences</h3>
-          <p>Liste des absences des étudiants.</p>
+          <app-employee [courseId]="courseDetail?.id ?? 0"></app-employee>
         </mat-card-content>
       </mat-card>
     </mat-tab>
