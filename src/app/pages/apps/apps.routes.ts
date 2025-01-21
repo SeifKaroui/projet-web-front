@@ -105,6 +105,9 @@ export const AppsRoutes: Routes = [
       {
         path: 'courses/coursesdetail/:id',
         component: CourseDetailComponent, // Utilisation de CourseDetailComponent
+        data: {
+          title: 'Course Detail', // Ajoutez le titre ici
+        },
       },
       {
         path: 'blog/post',

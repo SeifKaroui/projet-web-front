@@ -18,16 +18,10 @@ export class AuthService {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   }
-  getToken(): string | null {
-    return localStorage.getItem(APP_CONST.tokenLocalStorageKey);
-  }
-  
 
   isTeacher(): boolean {
     const user = this.getCurrentUser();
-    console.log('User for teacher check:', user);
-    console.log('User type:', user?.type);
-    return user?.type?.toLowerCase() === 'teacher';
+    return user?.type === 'teacher';
   }
 
   isStudent(): boolean {
@@ -38,27 +32,21 @@ export class AuthService {
     const url = `${APP_API.baseUrl}${APP_API.login}`;
     console.log('Login URL:', url);
     console.log('Credentials:', credentials);
-console.log('Const',APP_CONST);
+
     return this.http.post<LoginResponseDto>(url, credentials, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
     }).pipe(
-      tap(response => {
-        localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
-        localStorage.setItem(APP_CONST.userDataLocalStorageKey, JSON.stringify(response.user));
-        console.log('Stored token:', localStorage.getItem(APP_CONST.tokenLocalStorageKey));
-        console.log('Stored user:', localStorage.getItem(APP_CONST.userDataLocalStorageKey));
-       // next: (response) => console.log('Login response:', response),
-        //: (error) => console.error('Login error:', error)
+      tap({
+        next: (response) => console.log('Login response:', response),
+        error: (error) => console.error('Login error:', error)
       })
     );
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    console.log('Token exists:', !!token);
-    return !!token;
+    return !!localStorage.getItem(APP_CONST.tokenLocalStorageKey);
   }
   register(data: RegisterDto): Observable<SignUpResponseDto> {
     console.log('Register request:', data);
@@ -75,7 +63,6 @@ console.log('Const',APP_CONST);
       })
     );
 }
-
 signOut() {
   localStorage.removeItem(APP_CONST.tokenLocalStorageKey);
   localStorage.removeItem('user');

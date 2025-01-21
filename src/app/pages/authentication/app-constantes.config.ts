@@ -1,5 +1,6 @@
 export const APP_CONST = {
-  tokenLocalStorageKey: 'auth_token', // Match what's in logs
-  userDataLocalStorageKey: 'userData',
-  accessHeaderApiKey: 'Authorization'
-};
+    tokenLocalStorageKey: 'auth_token',
+    accessParamApiKey: 'access_token',
+    accessHeaderApiKey: 'Authorization',
+    userTypeLocalStorageKey: 'userType',
+  };
