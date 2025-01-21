@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatCardModule } from '@angular/material/card';
+import { JustificationStudentDialogComponent } from '../justification-student-dialog/justification-student-dialog.component';
 
 export interface StudentAbsenceFlat {
   id: number;
@@ -72,7 +73,6 @@ export class StudentComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('welcome');
     if (this.authService.isAuthenticated() && this.authService.isStudent()) {
       this.loadAbsences();
     }
@@ -104,11 +104,11 @@ export class StudentComponent implements OnInit, AfterViewInit {
   }
 
   openJustificationDialog(absence: StudentAbsenceFlat): void {
-    const dialogRef = this.dialog.open(JustificationDialogComponent, {
+    const dialogRef = this.dialog.open(JustificationStudentDialogComponent, {
       width: '400px',
       data: { absence },
     });
-
+  
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.action === 'confirm') {
         const justification = result.justification;

@@ -146,7 +146,7 @@ export class AbsenceService {
   }
 
   rejectAbsence(absenceId: number): Observable<any> {
-    const url = `${APP_API.baseUrl}/absences/teacher/${absenceId}/reject`;
+    const url = `${APP_API.baseUrl}/absences/${absenceId}/reject`;
     console.log('Making PATCH request to:', url);
   
     return this.http.patch(url, {}).pipe(

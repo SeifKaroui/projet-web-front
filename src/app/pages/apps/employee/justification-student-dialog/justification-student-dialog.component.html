@@ -1,1 +1,12 @@
-<p>justification-student-dialog works!</p>
+<h2 mat-dialog-title>Justify Absence</h2>
+<mat-dialog-content>
+  <form [formGroup]="justificationForm">
+    <mat-form-field appearance="outline" class="w-100">
+      <textarea matInput placeholder="Justification" formControlName="justification"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button color="primary" (click)="onConfirm()" [disabled]="justificationForm.invalid">Confirm</button>
+</mat-dialog-actions>

@@ -45,7 +45,7 @@
               mat-button
               color="primary"
               (click)="openJustificationDialog(element)"
-              [disabled]="element.justified"
+              [disabled]="element.justified || element.justification != null"
             >
               Justify
             </button>
