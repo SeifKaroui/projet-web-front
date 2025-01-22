@@ -43,8 +43,18 @@
               (click)="storeCourseInLocalStorage(course)" 
               class="w-100"
             >
-              START
+              Commencer
             </a>
+          <!-- Bouton de suppression visible uniquement pour les enseignants -->
+          <button
+            *ngIf="this.authService.isTeacher()"
+            mat-button
+            color="warn"
+            (click)="deleteCourse(course.id)"
+            class="w-100"
+          >
+            <mat-icon>delete</mat-icon> Supprimer
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>

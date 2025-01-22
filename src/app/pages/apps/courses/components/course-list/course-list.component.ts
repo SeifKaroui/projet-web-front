@@ -1,5 +1,5 @@
 import { RouterModule } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CourseService } from '../../services/course.service';
 import { Course } from '../../models/course.model';
 import { MatCardModule } from '@angular/material/card';
@@ -36,15 +36,18 @@ import { AuthService } from '../../../../authentication/service/auth.service'; /
   ],
 })
 export class CourseListComponent implements OnInit {
-  courses: Course[] = [];
+  courses: Course[] = []; // Liste filtrée
+  allCourses: Course[] = []; // Liste complète
   selectedCategory = 'All';
   isLoading = false;
   error: string | null = null;
 
+  @ViewChild('searchInput') searchInput: any; // Référence à l'input de recherche
+
   constructor(
     private courseService: CourseService,
     public colorService: ColorService,
-    private authService: AuthService // Injectez le service AuthService
+    public authService: AuthService // Injectez le service AuthService
   ) {}
 
   ngOnInit(): void {
@@ -54,19 +57,20 @@ export class CourseListComponent implements OnInit {
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
-  
+
     // Afficher le rôle de l'utilisateur dans la console
     const user = this.authService.getCurrentUser();
     console.log('Utilisateur connecté :', user);
-  
+
     if (this.authService.isStudent()) {
       console.log('Utilisateur : Étudiant');
       console.log('Fonction utilisée : getEnrolledCourses()');
-  
+
       // Charger les cours auxquels l'étudiant est inscrit
       this.courseService.getEnrolledCourses().subscribe({
         next: (data: Course[]) => {
-          this.courses = data;
+          this.allCourses = data; // Stocker la liste complète
+          this.courses = data; // Initialiser la liste filtrée
           this.isLoading = false;
         },
         error: (error: any) => {
@@ -78,11 +82,12 @@ export class CourseListComponent implements OnInit {
     } else if (this.authService.isTeacher()) {
       console.log('Utilisateur : Enseignant');
       console.log('Fonction utilisée : getMyCourses()');
-  
+
       // Charger les cours créés par l'enseignant
       this.courseService.getMyCourses().subscribe({
         next: (data: Course[]) => {
-          this.courses = data;
+          this.allCourses = data; // Stocker la liste complète
+          this.courses = data; // Initialiser la liste filtrée
           this.isLoading = false;
         },
         error: (error: any) => {
@@ -100,13 +105,34 @@ export class CourseListComponent implements OnInit {
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.courses = this.filter(filterValue);
+    if (filterValue) {
+      this.courses = this.filter(filterValue); // Appliquer le filtre
+    } else {
+      this.courses = [...this.allCourses]; // Réinitialiser à la liste complète
+    }
   }
 
   filter(v: string): Course[] {
-    return this.courses.filter(
+    return this.allCourses.filter(
       (x: Course) => x.title.toLowerCase().indexOf(v.toLowerCase()) !== -1
     );
+  }
+
+  deleteCourse(courseId: number): void {
+    this.courseService.deleteCourse(courseId).subscribe({
+      next: () => {
+        // Supprimer le cours de `allCourses`
+        this.allCourses = this.allCourses.filter((course) => course.id !== courseId);
+        // Mettre à jour `courses` pour refléter la suppression
+        this.courses = this.courses.filter((course) => course.id !== courseId);
+        // Réinitialiser la barre de recherche
+        this.searchInput.nativeElement.value = '';
+        console.log('Cours supprimé avec succès.');
+      },
+      error: (error: any) => {
+        console.error('Erreur lors de la suppression du cours :', error);
+      },
+    });
   }
 
   storeCourseInLocalStorage(course: Course): void {

@@ -1,5 +1,13 @@
+/* course-detail.component.scss */
 
-/* Styles pour l'en-tête du cours */
+/* Conteneur principal */
+.course-detail-container {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Carte d'en-tête du cours */
 .course-header-card {
   border-radius: 8px;
   overflow: hidden;
@@ -13,6 +21,7 @@
     flex-direction: column;
     gap: 12px;
 
+    /* Bouton Retour */
     .back-button {
       background-color: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
@@ -28,6 +37,7 @@
       }
     }
 
+    /* Titre du cours */
     .course-title {
       h1 {
         font-size: 1.5rem;
@@ -41,25 +51,9 @@
         color: rgba(255, 255, 255, 0.8);
         margin: 4px 0 0;
       }
-
-      .course-code {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 8px;
-
-        mat-icon {
-          font-size: 18px;
-          color: rgba(255, 255, 255, 0.9);
-        }
-
-        span {
-          font-size: 0.875rem;
-          color: rgba(255, 255, 255, 0.9);
-        }
-      }
     }
 
+    /* Informations supplémentaires */
     .course-info {
       display: flex;
       flex-direction: column;
@@ -85,644 +79,13 @@
     }
   }
 }
-/* Styles pour la section Stream */
-.stream-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
 
-  .stream-section {
-    .stream-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-
-      .stream-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-        margin: 0;
-        color: #333;
-      }
-
-      .add-post-button-container {
-        margin-left: auto;
-      }
-
-      .add-post-button {
-        margin: 0;
-        transform: scale(0.8);
-        width: 40px;
-        height: 40px;
-      }
-    }
-
-/* Styles pour le formulaire d'ajout de post */
-.add-post-section {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-
-  &.open {
-    max-height: 400px; /* Hauteur maximale ajustée */
-  }
-}
-
-.post-form-container {
-  padding: 16px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  margin-top: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.post-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  mat-form-field {
-    width: 100%;
-
-    textarea {
-      font-size: 0.875rem;
-      line-height: 1.5;
-      padding: 8px;
-      min-height: 30px; /* Hauteur ajustée */
-      resize: vertical; /* Permettre à l'utilisateur de redimensionner */
-    }
-  }
-}
-
-.file-upload-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-
-  .file-upload-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #3f51b5;
-    font-size: 0.875rem;
-
-    mat-icon {
-      font-size: 20px;
-    }
-
-    &:hover {
-      color: #303f9f;
-    }
-  }
-}
-
-.file-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-  max-height: 150px; /* Limiter la hauteur de la liste des fichiers */
-  overflow-y: auto; /* Ajouter un défilement vertical si nécessaire */
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  padding: 8px;
-  background-color: #f9f9f9;
-}
-
-.file-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-
-  .file-icon {
-    color: #3f51b5;
-    font-size: 18px;
-  }
-
-  .file-name {
-    flex: 1;
-    font-size: 0.75rem;
-    color: #333;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  button {
-    mat-icon {
-      font-size: 16px;
-      color: #666;
-    }
-
-    &:hover mat-icon {
-      color: #333;
-    }
-  }
-}
-
-.form-buttons-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-
-  button[mat-flat-button] {
-    font-size: 0.875rem;
-    padding: 6px 12px;
-  }
-
-  .close-button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-
-    mat-icon {
-      color: #666;
-      font-size: 20px;
-    }
-
-    &:hover mat-icon {
-      color: #333;
-    }
-  }
-}
-
-    .post-list {
-      margin-top: 12px;
-
-      .post-item {
-        margin-bottom: 16px;
-        padding: 16px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        background-color: #ffffff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-        p {
-          font-size: 0.875rem;
-          color: #333;
-          margin: 0 0 8px;
-          line-height: 1.5;
-        }
-
-        .post-date {
-          font-size: 0.75rem;
-          color: #666;
-          display: block;
-          margin-bottom: 12px;
-        }
-
-        /* Styles pour les fichiers attachés */
-        .attachments-section {
-          margin-top: 12px;
-          padding-top: 12px;
-          border-top: 1px solid #e0e0e0;
-
-          h4 {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            mat-icon {
-              color: #3f51b5; // Couleur de l'icône
-              font-size: 20px;
-            }
-          }
-
-          .attachments-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-
-            .attachment-item {
-              display: flex;
-              align-items: center;
-              gap: 8px;
-              padding: 8px;
-              border-radius: 4px;
-              background-color: #f9f9f9;
-              margin-bottom: 8px;
-              transition: background-color 0.3s ease;
-
-              &:hover {
-                background-color: #f0f0f0;
-              }
-
-              .file-icon {
-                color: #3f51b5; // Couleur de l'icône
-                font-size: 20px;
-              }
-
-              .file-link {
-                color: #3f51b5; // Couleur du lien
-                text-decoration: none;
-                font-size: 0.875rem;
-                flex: 1;
-
-                &:hover {
-                  text-decoration: underline;
-                }
-              }
-
-              .file-size {
-                font-size: 0.75rem;
-                color: #666;
-              }
-            }
-          }
-        }
-
-        .comment-section {
-          margin-top: 12px;
-          padding-top: 12px;
-          border-top: 1px solid #e0e0e0;
-
-          h4 {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 8px;
-          }
-
-          .comment-list {
-            margin-top: 8px;
-
-            .comment-item {
-              margin-bottom: 8px;
-              padding: 12px;
-              border: 1px solid #e0e0e0;
-              border-radius: 8px;
-              background-color: #ffffff;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-              display: flex;
-              flex-direction: column;
-              gap: 8px;
-
-              .comment-content-container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 8px;
-
-                p {
-                  font-size: 0.875rem;
-                  color: #444;
-                  margin: 0;
-                  line-height: 1.4;
-                  flex: 1;
-                }
-
-                .delete-comment-button {
-                  margin-left: auto;
-                  margin-top: 0;
-                  margin-right: 0;
-                  color: #666;
-                  transition: color 0.3s ease;
-
-                  &:hover {
-                    color: #333;
-                  }
-                }
-              }
-
-              .comment-date {
-                font-size: 0.75rem;
-                color: #777;
-                display: block;
-              }
-            }
-          }
-
-          .add-comment-section {
-            margin-top: 8px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-
-            mat-form-field {
-              flex: 1;
-
-              .mat-form-field-wrapper {
-                padding-bottom: 0;
-              }
-
-              textarea {
-                min-height: 40px;
-                font-size: 0.875rem;
-                padding: 6px;
-                line-height: 1.4;
-              }
-            }
-
-            button[mat-flat-button] {
-              height: 36px;
-              font-size: 0.875rem;
-              padding: 0 12px;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-/* Styles pour la section des devoirs */
-.homework-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-
-  .homework-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 12px;
-    color: #333;
-  }
-
-  .homework-list {
-    margin-top: 12px;
-
-    .homework-item {
-      margin-bottom: 12px;
-      padding: 12px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      background-color: #ffffff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-      h4 {
-        font-size: 0.875rem;
-        font-weight: bold;
-        margin: 0 0 8px;
-      }
-
-      p {
-        font-size: 0.75rem;
-        color: #666;
-        margin: 0 0 8px;
-      }
-
-      .homework-date {
-        font-size: 0.75rem;
-        color: #666;
-        display: block;
-      }
-    }
-  }
-
-  .no-homeworks-message {
-    font-size: 0.875rem;
-    color: #666;
-    text-align: center;
-    padding: 12px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-  }
-}
-
-/* Styles pour le bouton "+" et le formulaire d'ajout de post */
-.add-post-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.add-post-button {
-  margin: 16px 0;
-}
-
-/* Styles pour le bouton "+" et le formulaire d'ajout de devoir */
-.add-homework-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.add-homework-button {
-  margin: 16px 0;
-}
-
-.add-homework-section {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-
-  &.open {
-    max-height: 500px;
-  }
-}
-
-.homework-form-container {
-  padding: 16px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 16px;
-}
-
-.homework-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  mat-form-field {
-    width: 100%;
-  }
-
-  button[mat-flat-button] {
-    align-self: flex-start;
-  }
-}
-
-/* Conteneur pour les champs de date et d'heure */
-.date-time-container {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.small-field {
-  flex: 1;
-}
-
-.small-field input[type="time"] {
-  width: 100%;
-}
-
-/* Style pour le formulaire de devoir */
-.homework-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Style pour le conteneur du formulaire */
-.homework-form-container {
-  position: relative;
-  padding: 16px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-top: 16px;
-}
-
-/* Conteneur pour les boutons (croix et soumission) */
-.form-buttons-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-}
-
-/* Style pour le bouton de fermeture */
-.close-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-
-  mat-icon {
-    color: #666;
-    font-size: 24px;
-  }
-
-  &:hover mat-icon {
-    color: #333;
-  }
-}
-
-/* Style pour le bouton de soumission */
-button[mat-flat-button] {
-  margin-right: 0;
-}
-
-/* Styles pour la section Absences */
-.absence-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-
-  .absence-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 12px;
-    color: #333;
-  }
-}
-
-/* Styles pour la section Notes */
-.grades-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-
-  .grades-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 12px;
-    color: #333;
-  }
-}
-
-/* Conteneur principal pour limiter la largeur */
-.course-detail-container {
-  max-width: 1060px; 
-  margin: 0 auto; 
-  padding: 16px; 
-}
-
-/* Styles supplémentaires si nécessaire */
-.course-header-card {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 16px;
-}
-
-/* Styles pour la section Personnes */
-.people-card {
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-}
-
-.teacher-section,
-.students-section {
-  margin-bottom: 24px;
-}
-
-.teacher-info,
-.student-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  margin-right: 12px;
-}
-
-.teacher-name,
-.student-name {
-  font-weight: 500;
-}
-
-.student-email {
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.student-list {
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* Styles pour le bouton de suppression de post */
-.delete-post-button {
-  color: #ff4444;
-  margin-left: auto; 
-}
-
-/* Styles pour le bouton de suppression de commentaire */
-.delete-comment-button {
-  color: #ff4444;
-  margin-left: auto; 
-}
-
-/* Styles pour l'en-tête du post */
-.post-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* Styles pour le bouton circulaire */
+/* Bouton pour afficher le code du cours */
 .course-code-button {
   position: absolute;
   bottom: 16px;
   right: 16px;
-  background-color: rgba(255, 255, 255, 0.9); /* Fond clair */
-  color: #333; /* Couleur de l'icône (sombre) */
+  color: #fff; /* Texte blanc pour contraster avec le fond */
   transition: background-color 0.3s ease;
   width: 40px;
   height: 40px;
@@ -730,17 +93,13 @@ button[mat-flat-button] {
   align-items: center;
   justify-content: center;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 1);
-  }
-
   mat-icon {
-    font-size: 25px; /* Taille de l'icône */
-    color: #333; /* Couleur de l'icône (sombre) */
+    font-size: 25px;
+    color: #fff; /* Icône blanche pour contraster avec le fond */
   }
 }
 
-/* Styles pour la boîte modale */
+/* Boîte modale pour afficher le code du cours */
 .course-code-modal {
   position: fixed;
   top: 0;
@@ -754,27 +113,26 @@ button[mat-flat-button] {
   z-index: 1000;
 
   .modal-content {
-    background-color: white;
     padding: 24px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    color: #fff; /* Texte blanc pour contraster avec le fond */
 
     h2 {
       font-size: 1.5rem;
       margin-bottom: 16px;
-      color: #333;
+      color:  #fff;
     }
 
     p {
       font-size: 1.25rem;
       font-weight: bold;
-      color: #3f51b5; /* Couleur du code du cours */
       margin-bottom: 24px;
     }
 
     button {
-      background-color: #3f51b5; /* Couleur de l'en-tête */
+      background-color: rgba(255, 255, 255, 0.1);
       color: white;
       border: none;
       padding: 8px 16px;
@@ -783,48 +141,8 @@ button[mat-flat-button] {
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #303f9f; /* Couleur au survol */
+        background-color: rgba(255, 255, 255, 0.2);
       }
-    }
-  }
-}
-
-.attachment-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-  margin-bottom: 8px;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
-
-  .file-icon {
-    color: #3f51b5;
-    font-size: 20px;
-  }
-
-  .file-link {
-    color: #3f51b5;
-    text-decoration: none;
-    font-size: 0.875rem;
-    flex: 1;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  button[mat-icon-button] {
-    color: #3f51b5;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #303f9f;
     }
   }
 }
