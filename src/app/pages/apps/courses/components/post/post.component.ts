@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
-import { CourseService } from '../../services/course.service';
+import { PostService } from '../../services/post.service';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-post',
@@ -37,14 +38,14 @@ export class PostComponent implements OnInit {
   newPost = { content: '', files: [] as File[] };
   isSubmitting = false;
 
-  constructor(private courseService: CourseService) {}
+  constructor(private postService: PostService,private fileService : FileService) {}
 
   ngOnInit(): void {
     this.loadPosts(this.courseId); // Charge les posts au démarrage
   }
 
   loadPosts(courseId: number): void {
-    this.courseService.getPostsByCourseId(courseId).subscribe(
+    this.postService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
         this.posts = posts;
         console.log('Posts récupérés :', this.posts); 
@@ -73,7 +74,7 @@ export class PostComponent implements OnInit {
         }
       }
 
-      this.courseService.createPost(this.courseId, formData).subscribe(
+      this.postService.createPost(this.courseId, formData).subscribe(
         (response) => {
           this.posts.unshift(response);
           this.newPost = { content: '', files: [] };
@@ -103,7 +104,7 @@ export class PostComponent implements OnInit {
 
   deletePost(postId: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
-      this.courseService.deletePost(postId).subscribe(
+      this.postService.deletePost(postId).subscribe(
         () => {
           this.posts = this.posts.filter((post) => post.id !== postId);
         },
@@ -122,7 +123,7 @@ export class PostComponent implements OnInit {
   }
 
   loadComments(postId: number): void {
-    this.courseService.getCommentsByPostId(postId).subscribe(
+    this.postService.getCommentsByPostId(postId).subscribe(
       (comments) => {
         this.comments[postId] = comments;
       },
@@ -143,7 +144,7 @@ export class PostComponent implements OnInit {
       return;
     }
 
-    this.courseService.createComment(postId, { content }).subscribe(
+    this.postService.createComment(postId, { content }).subscribe(
       () => {
         this.loadComments(postId); // Recharger les commentaires après ajout
         this.newComment[postId] = '';
@@ -156,7 +157,7 @@ export class PostComponent implements OnInit {
   }
 
   deleteComment(postId: number, commentId: number): void {
-    this.courseService.deleteComment(postId, commentId).subscribe(
+    this.postService.deleteComment(postId, commentId).subscribe(
       () => {
         this.comments[postId] = this.comments[postId].filter((c) => c.id !== commentId);
       },
@@ -167,11 +168,11 @@ export class PostComponent implements OnInit {
   }
 
   getFileUrl(fileId: number): string {
-    return this.courseService.getFileUrl(fileId);
+    return this.fileService.getFileUrl(fileId);
   }
 
   downloadFile(fileId: number, fileName: string): void {
-    this.courseService.getFileById(fileId).subscribe(
+    this.fileService.getFileById(fileId).subscribe(
       (file: Blob) => {
         const url = window.URL.createObjectURL(file);
         const a = document.createElement('a');

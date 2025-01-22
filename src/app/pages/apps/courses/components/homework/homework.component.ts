@@ -1,7 +1,6 @@
-// homework.component.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { Homework } from '../../models/homework.model';
-import { CourseService } from '../../services/course.service';
+import { HomeworkService } from '../../services/homework.service'; // Importer HomeworkService
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +27,7 @@ import { CustomDatePipe } from "../../pipes/custom-date.pipe";
   styleUrls: ['./homework.component.scss'],
 })
 export class HomeworkComponent implements OnInit {
-  @Input() courseId: number = 0; // Reçoit l'ID du cours depuis le parent
+  @Input() courseId: number = 0;
   @Input() isTeacher: boolean = false;
   homeworks: Homework[] = [];
   isHomeworkFormOpen = false;
@@ -43,14 +42,14 @@ export class HomeworkComponent implements OnInit {
   };
   isHomeworkSubmitting = false;
 
-  constructor(private courseService: CourseService) {}
+  constructor(private homeworkService: HomeworkService) {} // Utiliser HomeworkService
 
   ngOnInit(): void {
-    this.loadHomeworks(this.courseId); // Charge les devoirs lors de l'initialisation
+    this.loadHomeworks(this.courseId);
   }
 
   loadHomeworks(courseId: number): void {
-    this.courseService.getHomeworksByCourseId(courseId).subscribe(
+    this.homeworkService.getHomeworksByCourseId(courseId).subscribe(
       (homeworks) => {
         this.homeworks = homeworks;
       },

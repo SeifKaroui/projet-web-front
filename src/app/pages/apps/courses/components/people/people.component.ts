@@ -3,8 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { ColorService } from '../../services/color.service';
-import { CourseService } from '../../services/course.service';
 import { Course } from '../../models/course.model'; // Importez le modèle Course
+import { StudentService } from '../../services/student.service';
 
 @Component({
   selector: 'app-people',
@@ -21,7 +21,7 @@ export class PeopleComponent implements OnInit {
 
   constructor(
     private colorService: ColorService,
-    private courseService: CourseService
+    private studentService: StudentService
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class PeopleComponent implements OnInit {
   }
 
   loadStudents(courseId: number): void {
-    this.courseService.getStudentsByCourseId(courseId).subscribe({
+    this.studentService.getStudentsByCourseId(courseId).subscribe({
       next: (response: any) => {
         this.students = response.students;
       },
