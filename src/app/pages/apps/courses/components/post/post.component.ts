@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
 import { PostService } from '../../services/post.service';
 import { FileService } from '../../services/file.service';
+import { ColorService } from '../../services/color.service';
 
 @Component({
   selector: 'app-post',
@@ -38,12 +39,15 @@ export class PostComponent implements OnInit {
   newPost = { content: '', files: [] as File[] };
   isSubmitting = false;
 
-  constructor(private postService: PostService,private fileService : FileService) {}
+  constructor(private postService: PostService,private fileService : FileService,public colorService: ColorService) {}
 
   ngOnInit(): void {
     this.loadPosts(this.courseId); // Charge les posts au démarrage
   }
 
+  getCourseHeaderColor(): string {
+    return this.colorService.generateFancyDarkGradientFromId(this.courseId);
+  }
   loadPosts(courseId: number): void {
     this.postService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
@@ -171,6 +175,7 @@ export class PostComponent implements OnInit {
     return this.fileService.getFileUrl(fileId);
   }
 
+  
   downloadFile(fileId: number, fileName: string): void {
     this.fileService.getFileById(fileId).subscribe(
       (file: Blob) => {
@@ -188,4 +193,5 @@ export class PostComponent implements OnInit {
       }
     );
   }
+  
 }

@@ -1,16 +1,20 @@
 <div class="course-detail-container">
-  <mat-card class="course-header-card overflow-hidden">
-    <mat-card-content [ngStyle]="{ 'background': headerGradient }" class="text-white p-16">
+  <!-- En-tête du cours -->
+  <mat-card class="course-header-card overflow-hidden" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
+    <mat-card-content class="text-white p-16">
       <div class="header-content" style="margin-left: 16px;">
+        <!-- Bouton Retour -->
         <button mat-icon-button class="back-button" (click)="goBack()">
           <i-tabler name="chevron-left" class="icon-18"></i-tabler>
         </button>
 
+        <!-- Titre du cours -->
         <div class="course-title">
           <h1 class="mat-headline">{{ courseDetail?.title }}</h1>
           <p class="mat-caption">{{ courseDetail?.description }}</p>
         </div>
 
+        <!-- Informations supplémentaires -->
         <div class="course-info">
           <div class="info-item">
             <mat-icon class="info-icon">calendar_today</mat-icon>
@@ -22,15 +26,17 @@
           </div>
         </div>
 
-        <button *ngIf="courseDetail?.courseCode" mat-fab class="course-code-button" (click)="showCourseCode()">
+        <!-- Bouton circulaire pour afficher le courseCode -->
+        <button *ngIf="courseDetail?.courseCode" mat-fab class="course-code-button" (click)="showCourseCode()" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
           <mat-icon>info</mat-icon>
         </button>
       </div>
     </mat-card-content>
   </mat-card>
 
+  <!-- Boîte modale pour afficher le courseCode -->
   <div *ngIf="isCourseCodeVisible" class="course-code-modal">
-    <div class="modal-content">
+    <div class="modal-content" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
       <h2>Code du cours</h2>
       <p>{{ courseDetail?.courseCode }}</p>
       <button mat-button (click)="hideCourseCode()">Fermer</button>
@@ -63,3 +69,4 @@
     ></app-people>    </mat-tab>
   </mat-tab-group>
 </div>
+

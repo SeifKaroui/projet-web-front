@@ -364,3 +364,10 @@
       }
     }
   }
+  ::ng-deep button[mat-button][ngStyle] {
+    color: inherit !important;
+  }
+
+  button[mat-button][ngStyle] {
+    color: inherit !important;
+  }

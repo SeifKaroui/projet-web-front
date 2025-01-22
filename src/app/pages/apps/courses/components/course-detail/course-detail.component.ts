@@ -1,4 +1,3 @@
-// course-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '../../models/course.model';
@@ -11,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { ChangeDetectorRef } from '@angular/core';
-import { ColorService } from '../../services/color.service';
+import { ColorService } from '../../services/color.service'; // Importez ColorService
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -56,7 +55,7 @@ export class CourseDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private colorService: ColorService,
+    public colorService: ColorService, // Injectez ColorService
     private courseService: CourseService,
     private authService: AuthService,
     private titleService: Title
