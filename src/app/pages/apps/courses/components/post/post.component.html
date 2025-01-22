@@ -51,7 +51,7 @@
               </div>
   
               <div class="form-buttons-container">
-                <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
+                <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }">
                   {{ isSubmitting ? 'En cours...' : 'Poster' }}
                 </button>
   
