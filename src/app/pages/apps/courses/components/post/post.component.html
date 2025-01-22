@@ -1,0 +1,132 @@
+<mat-card class="stream-card mt-3">
+    <mat-card-content>
+      <div class="stream-section">
+        <div class="stream-header">
+          <h3 class="stream-title">Posts</h3>
+          <div *ngIf="isTeacher" class="add-post-button-container">
+            <button mat-fab color="primary" class="add-post-button" (click)="togglePostForm()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+  
+        <div *ngIf="isTeacher" class="add-post-section" [class.open]="isPostFormOpen">
+          <div class="post-form-container">
+            <form (ngSubmit)="onSubmit()" class="post-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <textarea
+                  matInput
+                  [(ngModel)]="newPost.content"
+                  name="content"
+                  placeholder="Écrivez quelque chose..."
+                  rows="2"
+                ></textarea>
+              </mat-form-field>
+  
+              <div class="file-upload-container">
+                <label for="file-upload" class="file-upload-label">
+                  <mat-icon>attach_file</mat-icon>
+                  <span>Ajouter des fichiers</span>
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  (change)="onFileChange($event)"
+                  multiple
+                  style="display: none;"
+                />
+              </div>
+  
+              <div *ngIf="newPost.files.length > 0" class="file-preview">
+                <div class="file-list">
+                  <div *ngFor="let file of newPost.files" class="file-item">
+                    <mat-icon class="file-icon">description</mat-icon>
+                    <span class="file-name">{{ file.name }}</span>
+                    <button mat-icon-button (click)="removeFile(file)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="form-buttons-container">
+                <button mat-flat-button type="submit" color="primary" [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'En cours...' : 'Poster' }}
+                </button>
+  
+                <button mat-icon-button class="close-button" (click)="togglePostForm()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+  
+        <div class="post-list mt-2" *ngIf="posts.length > 0">
+            <div *ngFor="let post of posts" class="post-item">
+              <div class="post-header">
+                <div class="post-title-container">
+                  <p class="post-title">{{ post.content }}</p>
+                  <button *ngIf="isTeacher" mat-icon-button class="delete-post-button" (click)="deletePost(post.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <small class="post-date">Posté le {{ post.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+              </div>
+          
+              <!-- Section des fichiers joints -->
+              <div *ngIf="post.attachments && post.attachments.length > 0" class="attachments-section">
+                <h4>Fichier attaché</h4>
+                <ul class="attachments-list">
+                  <li *ngFor="let file of post.attachments" class="attachment-item">
+                    <mat-icon class="file-icon">description</mat-icon>
+                    <a [href]="getFileUrl(file.id)" target="_blank" class="file-link">
+                      {{ file.originalname }}
+                    </a>
+                    <button mat-icon-button (click)="downloadFile(file.id, file.originalname)">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                  </li>
+                </ul>
+              </div>
+          
+              <!-- Section des commentaires -->
+              <div class="comment-section mt-2">
+                <h4>Commentaires</h4>
+          
+                <button mat-button color="primary" (click)="toggleShowComments(post.id)">
+                  {{ showComments[post.id] ? 'Masquer les commentaires' : 'Afficher les commentaires' }}
+                </button>
+          
+                <div class="comment-list mt-2" *ngIf="showComments[post.id] && comments[post.id] && comments[post.id].length > 0">
+                  <div *ngFor="let comment of comments[post.id]" class="comment-item">
+                    <div class="comment-content-container">
+                      <p>{{ comment.content }}</p>
+                      <button *ngIf="isTeacher" mat-icon-button class="delete-comment-button" (click)="deleteComment(post.id, comment.id)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                    <small class="comment-date">
+                      Par {{ comment.author.firstName }} {{ comment.author.lastName }} le {{ comment.createdAt | date: 'dd/MM/yyyy à HH:mm' }}
+                    </small>
+                  </div>
+                </div>
+          
+                <button mat-button color="primary" (click)="toggleShowCommentForm(post.id)">
+                  {{ showCommentForm[post.id] ? 'Annuler' : 'Ajouter un commentaire' }}
+                </button>
+          
+                <div *ngIf="showCommentForm[post.id]" class="add-comment-section">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <textarea matInput [(ngModel)]="newComment[post.id]" name="comment" placeholder="Ajouter un commentaire au cours..." required></textarea>
+                  </mat-form-field>
+                  <button mat-flat-button color="primary" (click)="addComment(post.id)">
+                    Commenter
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
