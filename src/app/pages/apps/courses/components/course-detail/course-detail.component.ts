@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Course } from '../../models/course.model';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -10,23 +10,19 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { ChangeDetectorRef } from '@angular/core';
-import { ColorService } from '../../services/color.service'; // Importez ColorService
+import { ColorService } from '../../services/color.service';
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AppEmployeeComponent } from '../../../employee/employee.component';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Title } from '@angular/platform-browser';
-import { PostComponent } from "../post/post.component";
-import { HomeworkComponent } from "../homework/homework.component";
-import { AbsenceComponent } from "../absence/absence.component";
-import { GradeComponent } from "../grade/grade.component";
-import { PeopleComponent } from "../people/people.component";
 
 @Component({
   selector: 'app-course-detail',
   standalone: true,
   imports: [
+    RouterModule,
     MatTabsModule,
     MatCardModule,
     CommonModule,
@@ -36,11 +32,6 @@ import { PeopleComponent } from "../people/people.component";
     MatInputModule,
     FormsModule,
     TablerIconsModule,
-    PostComponent,
-    HomeworkComponent,
-    AbsenceComponent,
-    GradeComponent,
-    PeopleComponent
   ],
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss'],
@@ -51,11 +42,19 @@ export class CourseDetailComponent implements OnInit {
   isCourseCodeVisible: boolean = false;
   isTeacher: boolean = false;
 
+  tabs = [
+    { label: 'Flux', route: 'flux' },
+    { label: 'Travaux et devoirs', route: 'homework' },
+    { label: 'Absences', route: 'absences' },
+    { label: 'Notes', route: 'grades' },
+    { label: 'Personnes', route: 'people' },
+  ];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    public colorService: ColorService, // Injectez ColorService
+    public colorService: ColorService,
     private courseService: CourseService,
     private authService: AuthService,
     private titleService: Title
@@ -66,21 +65,24 @@ export class CourseDetailComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.courseDetail = navigation.extras.state['course'];
+      console.log('Course Detail dans CourseDetailComponent:', this.courseDetail);
     } else {
       const courseFromLocalStorage = localStorage.getItem('currentCourse');
       if (courseFromLocalStorage) {
         this.courseDetail = JSON.parse(courseFromLocalStorage);
+        console.log('Course Detail depuis localStorage:', this.courseDetail);
       } else {
         console.error('Aucune donnée de cours trouvée.');
       }
     }
-
+  
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.titleService.setTitle('Course Detail - Angular 18');
+      console.log('Course Detail avec enseignant:', this.courseDetail.teacher);
+    } else {
+      console.error('CourseDetail est null ou undefined.');
     }
-
-    console.log('Course Detail:', this.courseDetail);
   }
 
   showCourseCode(): void {
@@ -93,5 +95,23 @@ export class CourseDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/apps/courses']);
+  }
+
+  navigateToPeople(): void {
+    if (this.courseDetail && this.courseDetail.teacher) {
+      const teacherData = this.courseDetail.teacher; // Extraire uniquement les données du teacher
+      console.log('Données du teacher envoyées à PeopleComponent:', teacherData);
+      this.router.navigate(['people'], {
+        relativeTo: this.activatedRoute,
+        state: { teacher: teacherData }, // Envoyer uniquement les données du teacher
+      });
+    } else {
+      console.error('Aucune donnée de teacher à envoyer.');
+    }
+  }
+  onTabClick(route: string): void {
+    if (route === 'people') {
+      this.navigateToPeople();
+    }
   }
 }

@@ -1,4 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { PostService } from '../../services/post.service';
+import { FileService } from '../../services/file.service';
+import { ColorService } from '../../services/color.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -6,9 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
-import { PostService } from '../../services/post.service';
-import { FileService } from '../../services/file.service';
-import { ColorService } from '../../services/color.service';
+import { AuthService } from '../../../../authentication/service/auth.service';
 
 @Component({
   selector: 'app-post',
@@ -27,9 +29,8 @@ import { ColorService } from '../../services/color.service';
   styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
-  @Input() courseId: number = 0; // Reçoit l'ID du cours du parent
-  @Input() isTeacher: boolean = false; // Reçoit le statut de l'utilisateur
-
+  courseId: number = 0; // Initialisez avec une valeur par défaut
+  isTeacher: boolean = false;
   posts: any[] = [];
   comments: { [postId: number]: any[] } = {};
   newComment: { [postId: number]: string } = {};
@@ -39,20 +40,29 @@ export class PostComponent implements OnInit {
   newPost = { content: '', files: [] as File[] };
   isSubmitting = false;
 
-  constructor(private postService: PostService,private fileService : FileService,public colorService: ColorService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private postService: PostService,
+    private fileService: FileService,
+    public colorService: ColorService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadPosts(this.courseId); // Charge les posts au démarrage
+    this.route.parent?.params.subscribe((params) => {
+      this.courseId = +params['id']; // Récupérer l'ID du cours depuis l'URL
+      console.log("id de cour est : ",this.courseId);
+      this.isTeacher = this.authService.isTeacher(); // Vérifier si l'utilisateur est un enseignant
+      this.loadPosts(this.courseId); // Charger les posts
+      console.log('Course ID in PostComponent:', this.courseId); // Vérifiez l'ID dans la console
+    });
   }
-
-  getCourseHeaderColor(): string {
-    return this.colorService.generateFancyDarkGradientFromId(this.courseId);
-  }
+  
   loadPosts(courseId: number): void {
     this.postService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
         this.posts = posts;
-        console.log('Posts récupérés :', this.posts); 
+        console.log('Posts récupérés :', this.posts); // Vérifiez les posts dans la console
       },
       (error) => {
         console.error('Erreur lors de la récupération des posts :', error);
@@ -67,17 +77,21 @@ export class PostComponent implements OnInit {
   onSubmit(): void {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
-
+  
+    if (!this.courseId) {
+      throw new Error('Course ID is missing.');
+    }
+  
     if (this.newPost.content || this.newPost.files.length > 0) {
       const formData = new FormData();
       formData.append('content', this.newPost.content);
-
+  
       if (this.newPost.files && this.newPost.files.length > 0) {
         for (const file of this.newPost.files) {
           formData.append('files', file);
         }
       }
-
+  
       this.postService.createPost(this.courseId, formData).subscribe(
         (response) => {
           this.posts.unshift(response);

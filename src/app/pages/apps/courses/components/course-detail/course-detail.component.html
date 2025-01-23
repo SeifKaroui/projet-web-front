@@ -1,72 +1,73 @@
 <div class="course-detail-container">
-  <!-- En-tête du cours -->
-  <mat-card class="course-header-card overflow-hidden" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
+  <mat-card
+    *ngIf="courseDetail"
+    class="course-header-card overflow-hidden"
+    [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail.id) }"
+  >
     <mat-card-content class="text-white p-16">
       <div class="header-content" style="margin-left: 16px;">
-        <!-- Bouton Retour -->
         <button mat-icon-button class="back-button" (click)="goBack()">
           <i-tabler name="chevron-left" class="icon-18"></i-tabler>
         </button>
 
-        <!-- Titre du cours -->
         <div class="course-title">
-          <h1 class="mat-headline">{{ courseDetail?.title }}</h1>
-          <p class="mat-caption">{{ courseDetail?.description }}</p>
+          <h1 class="mat-headline">{{ courseDetail.title }}</h1>
+          <p class="mat-caption">{{ courseDetail.description }}</p>
         </div>
 
-        <!-- Informations supplémentaires -->
         <div class="course-info">
           <div class="info-item">
             <mat-icon class="info-icon">calendar_today</mat-icon>
-            <span>Date de début : {{ courseDetail?.startDate | date }}</span>
+            <span>Date de début : {{ courseDetail.startDate | date }}</span>
           </div>
           <div class="info-item">
             <mat-icon class="info-icon">school</mat-icon>
-            <span>Enseignant : {{ courseDetail?.teacher?.firstName }} {{ courseDetail?.teacher?.lastName }}</span>
+            <span *ngIf="courseDetail.teacher">
+              Enseignant : {{ courseDetail.teacher.firstName }} {{ courseDetail.teacher.lastName }}
+            </span>
+            <span *ngIf="!courseDetail.teacher">Enseignant : Non spécifié</span>
           </div>
         </div>
 
-        <!-- Bouton circulaire pour afficher le courseCode -->
-        <button *ngIf="courseDetail?.courseCode" mat-fab class="course-code-button" (click)="showCourseCode()" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
+        <button
+          *ngIf="courseDetail.courseCode"
+          mat-fab
+          class="course-code-button"
+          (click)="showCourseCode()"
+          [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail.id) }"
+        >
           <mat-icon>info</mat-icon>
         </button>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <!-- Boîte modale pour afficher le courseCode -->
-  <div *ngIf="isCourseCodeVisible" class="course-code-modal">
-    <div class="modal-content" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail?.id ?? 0) }">
+  <div *ngIf="!courseDetail" class="no-course-message">
+    <p>Aucune donnée de cours disponible.</p>
+  </div>
+
+  <div *ngIf="isCourseCodeVisible && courseDetail" class="course-code-modal">
+    <div
+      class="modal-content"
+      [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseDetail.id) }"
+    >
       <h2>Code du cours</h2>
-      <p>{{ courseDetail?.courseCode }}</p>
+      <p>{{ courseDetail.courseCode }}</p>
       <button mat-button (click)="hideCourseCode()">Fermer</button>
     </div>
   </div>
 
-  <mat-tab-group>
+  <nav *ngIf="courseDetail" mat-tab-nav-bar>
+    <a
+      mat-tab-link
+      *ngFor="let tab of tabs"
+      [routerLink]="tab.route"
+      routerLinkActive="active"
+      (click)="onTabClick(tab.route)" 
+    >
+      {{ tab.label }}
+    </a>
+  </nav>
 
-    <mat-tab label="Flux">
-      <app-post [courseId]="courseDetail?.id ?? 0" [isTeacher]="isTeacher"></app-post>
-    </mat-tab>
-
-    <mat-tab label="Travaux et devoirs">
-      <app-homework [courseId]="courseDetail?.id ?? 0" [isTeacher]="isTeacher"></app-homework>
-    </mat-tab>
-
-    <mat-tab label="Absences">
-      <app-absence [courseId]="courseDetail?.id ?? 0"></app-absence>
-    </mat-tab>
-
-    <mat-tab label="Notes">
-      <app-grade></app-grade>
-    </mat-tab>
-
-    <mat-tab label="Personnes">
-      <app-people
-      [courseId]="courseDetail?.id ?? 0"
-      [isTeacher]="isTeacher"
-      [courseDetail]="courseDetail" 
-    ></app-people>    </mat-tab>
-  </mat-tab-group>
+  <router-outlet></router-outlet>
 </div>
-

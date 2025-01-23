@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Homework } from '../../models/homework.model';
-import { HomeworkService } from '../../services/homework.service'; // Importer HomeworkService
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HomeworkService } from '../../services/homework.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { CustomDatePipe } from "../../pipes/custom-date.pipe";
+import { CustomDatePipe } from '../../pipes/custom-date.pipe';
+import { AuthService } from '../../../../authentication/service/auth.service';
 
 @Component({
   selector: 'app-homework',
@@ -21,15 +22,15 @@ import { CustomDatePipe } from "../../pipes/custom-date.pipe";
     MatInputModule,
     FormsModule,
     CommonModule,
-    CustomDatePipe
+    CustomDatePipe,
   ],
   templateUrl: './homework.component.html',
   styleUrls: ['./homework.component.scss'],
 })
 export class HomeworkComponent implements OnInit {
-  @Input() courseId: number = 0;
-  @Input() isTeacher: boolean = false;
-  homeworks: Homework[] = [];
+  courseId: number | null = null; // Récupérer l'ID du cours depuis l'URL
+  isTeacher: boolean = false; // Récupérer le statut de l'utilisateur
+  homeworks: any[] = [];
   isHomeworkFormOpen = false;
   newHomework = {
     title: '',
@@ -42,10 +43,18 @@ export class HomeworkComponent implements OnInit {
   };
   isHomeworkSubmitting = false;
 
-  constructor(private homeworkService: HomeworkService) {} // Utiliser HomeworkService
+  constructor(
+    private route: ActivatedRoute,
+    private homeworkService: HomeworkService,
+    private authService: AuthService // Injectez AuthService pour vérifier le statut de l'utilisateur
+  ) {}
 
   ngOnInit(): void {
-    this.loadHomeworks(this.courseId);
+    this.route.parent?.params.subscribe((params) => {
+      this.courseId = +params['id']; // Récupérer l'ID du cours depuis l'URL
+      this.isTeacher = this.authService.isTeacher(); // Vérifier si l'utilisateur est un enseignant
+      this.loadHomeworks(this.courseId); // Charger les devoirs
+    });
   }
 
   loadHomeworks(courseId: number): void {
