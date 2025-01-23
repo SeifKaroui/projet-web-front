@@ -13,6 +13,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { AuthService } from 'src/app/pages/authentication/service/auth.service';
 
 interface Profile {
   createdAt: string;
@@ -47,7 +48,11 @@ export class HeaderComponent implements OnInit {
   showFiller = false;
   profile: Profile;
 
-  constructor(private settings: CoreService, public dialog: MatDialog) {}
+  constructor(
+    private settings: CoreService,
+    public dialog: MatDialog,
+    private authService: AuthService
+  ) {}
   ngOnInit(): void {
     const data = localStorage.getItem('user'); // Retrieve the item using its key
     if (data) {
@@ -58,6 +63,10 @@ export class HeaderComponent implements OnInit {
 
   setDark() {
     this.settings.toggleTheme();
+  }
+  signOut() {
+    this.authService.signOut()
+    return
   }
 }
 

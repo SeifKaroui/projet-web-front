@@ -10,10 +10,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { ColorService } from '../../services/color.service';
 import { AuthService } from '../../../../authentication/service/auth.service'; // Importez le service AuthService
+import { CreateCourseDialogComponent } from '../create-course-dialog/create-course-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-courses',
@@ -36,6 +38,10 @@ import { AuthService } from '../../../../authentication/service/auth.service'; /
   ],
 })
 export class CourseListComponent implements OnInit {
+  courseCode: string;
+  onSubmit() {
+    this.courseService.joinCourse(this.courseCode).subscribe();
+  }
   courses: Course[] = []; // Liste filtrée
   allCourses: Course[] = []; // Liste complète
   selectedCategory = 'All';
@@ -47,13 +53,25 @@ export class CourseListComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     public colorService: ColorService,
-    public authService: AuthService // Injectez le service AuthService
+    public authService: AuthService,
+    private dialog: MatDialog // Injectez le service AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadCourses();
   }
+  openCreateCourseDialog() {
+    const dialogRef = this.dialog.open(CreateCourseDialogComponent, {
+      width: '400px',
+    });
 
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Handle the created course (e.g., send it to the backend)
+        console.log('New Course:', result);
+      }
+    });
+  }
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
@@ -122,7 +140,9 @@ export class CourseListComponent implements OnInit {
     this.courseService.deleteCourse(courseId).subscribe({
       next: () => {
         // Supprimer le cours de `allCourses`
-        this.allCourses = this.allCourses.filter((course) => course.id !== courseId);
+        this.allCourses = this.allCourses.filter(
+          (course) => course.id !== courseId
+        );
         // Mettre à jour `courses` pour refléter la suppression
         this.courses = this.courses.filter((course) => course.id !== courseId);
         // Réinitialiser la barre de recherche

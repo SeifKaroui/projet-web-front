@@ -20,7 +20,7 @@ export const AuthenticationRoutes: Routes = [
         component: AppBoxedForgotPasswordComponent,
       },
       {
-        path: 'boxed-login',
+        path: 'login',
         component: AppBoxedLoginComponent,
       },
       {
@@ -42,10 +42,6 @@ export const AuthenticationRoutes: Routes = [
       {
         path: 'side-forgot-pwd',
         component: AppSideForgotPasswordComponent,
-      },
-      {
-        path: 'login',
-        component: AppSideLoginComponent,
       },
       {
         path: 'side-register',
