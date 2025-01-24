@@ -13,14 +13,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { AuthService } from '../../../../authentication/service/auth.service';
-import { AbsenceService } from '../../../employee/absence.service';
 import { ColorService } from '../../services/color.service';
 import { FormsModule } from '@angular/forms';
+import { AbsenceService } from '../../services/absence.service';
 
 export interface StudentAbsence {
   id: number;
   date: string;
   justified: boolean;
+  confirmed: boolean;
   justification: string | null;
   student: {
     id: string;
@@ -141,11 +142,17 @@ export class AbsenceComponent implements OnInit {
       return;
     }
 
-    this.absenceService.validateAbsence(absence.id, true).subscribe({
+    this.absenceService.validateAbsence(absence.id).subscribe({
       next: (response) => {
         console.log('Absence confirmed:', response);
-        absence.justified = true; // Marquer comme justifiée
-        this.loadAbsences(); // Recharger les données
+
+        // Mettre à jour les données locales
+        absence.confirmed = true;
+        absence.justification = null;
+        absence.status = 'confirmée';
+
+        // Recharger les données pour refléter les changements
+        this.loadAbsences();
       },
       error: (error) => {
         console.error('Error confirming absence:', error);
@@ -163,8 +170,15 @@ export class AbsenceComponent implements OnInit {
     this.absenceService.rejectAbsence(absence.id).subscribe({
       next: (response) => {
         console.log('Absence rejected:', response);
-        absence.justified = false; // Marquer comme non justifiée
-        this.loadAbsences(); // Recharger les données
+
+        // Mettre à jour les données locales
+        absence.confirmed = false;
+        absence.justification = null;
+        absence.justified = true;
+        absence.status = 'rejetée';
+
+        // Recharger les données pour refléter les changements
+        this.loadAbsences();
       },
       error: (error) => {
         console.error('Error rejecting absence:', error);
@@ -176,9 +190,12 @@ export class AbsenceComponent implements OnInit {
   submitJustification(element: any, justification: string): void {
     this.absenceService.justifyAbsence(element.id, justification).subscribe({
       next: () => {
-        element.justification = justification; // Mettre à jour la justification
-        element.justified = false; // La justification n'est pas encore confirmée
-        this.loadAbsences(); // Recharger les données
+        element.justification = justification;
+        element.confirmed = false;
+        element.justified = true;
+
+        // Recharger les données pour refléter les changements
+        this.loadAbsences();
       },
       error: (error) => {
         console.error('Error justifying absence:', error);
@@ -189,7 +206,7 @@ export class AbsenceComponent implements OnInit {
   // Méthode pour ouvrir la boîte modale des détails des justifications (pour les enseignants)
   openJustificationDetailsDialog(element: any): void {
     const pendingAbsences = element.absences.filter(
-      (absence: any) => absence.justification && !absence.justified
+      (absence: any) => absence.justification && !absence.confirmed
     );
 
     this.dialog.open(this.justificationDetailsDialog, {
@@ -212,7 +229,7 @@ export class AbsenceComponent implements OnInit {
         next: (absences: any[]) => {
           this.dataSource.data = absences.map((absence) => ({
             ...absence,
-            justificationConfirmed: absence.justification && absence.justified,
+            justificationConfirmed: absence.justification && absence.confirmed,
           }));
         },
         error: (error) => {
@@ -239,6 +256,7 @@ export class AbsenceComponent implements OnInit {
                     ...absence,
                     id: countAbsence?.id || absence.id,
                     justification: countAbsence?.justification,
+                    confirmed: countAbsence?.confirmed || false,
                     justified: countAbsence?.justified || false,
                   };
                 });

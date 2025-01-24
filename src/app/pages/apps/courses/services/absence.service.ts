@@ -3,9 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../pages/authentication/service/auth.service';
-import { APP_ROUTES } from '../../../pages/authentication/app-routes.config';
-import { APP_API } from '../../authentication/app-api.config';
+import { APP_ROUTES } from 'src/app/pages/authentication/app-routes.config';
+import { APP_API } from 'src/app/pages/authentication/app-api.config';
+import { AuthService } from 'src/app/pages/authentication/service/auth.service';
 
 @Injectable({
   providedIn: 'root',

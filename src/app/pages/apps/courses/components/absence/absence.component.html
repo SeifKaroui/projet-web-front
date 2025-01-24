@@ -62,8 +62,8 @@
         <ng-container matColumnDef="confirmed">
           <th mat-header-cell *matHeaderCellDef class="header-cell">Confirmer</th>
           <td mat-cell *matCellDef="let element" class="cell">
-            <span *ngIf="authService.isStudent()" [ngClass]="element.justified ? 'confirmed' : 'not-confirmed'">
-              {{ element.justified ? 'Oui' : 'Non' }}
+            <span *ngIf="authService.isStudent()" [ngClass]="element.confirmed ? 'confirmed' : 'not-confirmed'">
+              {{ element.confirmed ? 'Oui' : 'Non' }}
             </span>
           </td>
         </ng-container>
@@ -120,7 +120,7 @@
           <td mat-cell *matCellDef="let element" class="cell">
             <!-- Bouton pour créer une justification -->
             <button
-              *ngIf="authService.isStudent() && !element.justification"
+              *ngIf="authService.isStudent() && !element.justified"
               mat-button
               [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }"
               (click)="openJustificationDialog(element)"
@@ -129,10 +129,13 @@
               <mat-icon>edit</mat-icon>
               Justifier
             </button>
-            <span *ngIf="authService.isStudent() && element.justification">
+            <span *ngIf="authService.isStudent() && element.justification && !element.confirmed">
               {{ element.justification }}
             </span>
-            <span *ngIf="authService.isStudent() && element.justification && !element.justified" class="rejected-message">
+            <span *ngIf="authService.isStudent() && element.confirmed && element.justified && !element.justification" class="confirmed-message">
+              Justification confirmée.
+            </span>
+            <span *ngIf="authService.isStudent() && element.justified && !element.confirmed && !element.justification" class="rejected-message">
               Votre justification a été rejetée.
             </span>
           </td>
@@ -184,8 +187,8 @@
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Annuler</button>
-    <button mat-button color="primary" [mat-dialog-close]="data.justification">Envoyer</button>
+    <button mat-button [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId), 'color': 'white' }" mat-dialog-close>Annuler</button>
+    <button mat-button [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId), 'color': 'white' }" color="primary" [mat-dialog-close]="data.justification">Envoyer</button>
   </mat-dialog-actions>
 </ng-template>
 
@@ -196,10 +199,20 @@
     <!-- Afficher uniquement les absences avec une justification -->
     <div *ngFor="let absence of data.absences">
       <p><strong>Date:</strong> {{ absence.date | date: 'dd/MM/yyyy' }}</p>
-      <p><strong>Justification:</strong> {{ absence.justification }}</p>
+      
+      <!-- Afficher la justification ou le message de statut -->
+      <div *ngIf="!absence.status">
+        <p><strong>Justification:</strong> {{ absence.justification }}</p>
+      </div>
+      <div *ngIf="absence.status === 'confirmée'" class="justification-status">
+        <p class="confirmed-message">La justification a été confirmée.</p>
+      </div>
+      <div *ngIf="absence.status === 'rejetée'" class="justification-status">
+        <p class="rejected-message">La justification a été rejetée.</p>
+      </div>
       
       <!-- Boutons Confirmer et Rejeter -->
-      <div *ngIf="!absence.justified" class="justification-actions">
+      <div *ngIf="!absence.confirmed && !absence.status" class="justification-actions">
         <button mat-button color="primary" (click)="confirmJustification(absence)">
           <mat-icon>check</mat-icon>
           Confirmer
@@ -209,6 +222,7 @@
           Rejeter
         </button>
       </div>
+
       <mat-divider></mat-divider>
     </div>
 

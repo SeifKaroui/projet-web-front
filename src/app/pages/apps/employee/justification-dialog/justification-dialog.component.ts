@@ -43,7 +43,7 @@ export class JustificationDialogComponent {
     }
   
     // Call the API to validate the absence
-    this.absenceService.validateAbsence(absence.id, true).subscribe({
+    this.absenceService.validateAbsence(absence.id).subscribe({
       next: (response) => {
         console.log('Absence confirmed:', response);
   
