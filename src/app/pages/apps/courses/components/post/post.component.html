@@ -2,7 +2,7 @@
     <mat-card-content>
       <div class="stream-section">
         <div class="stream-header">
-          <h3 class="stream-title">Posts</h3>
+          <h2 class="stream-title">Posts</h2>
           <div *ngIf="isTeacher" class="add-post-button-container">
             <!-- Appliquez la couleur dynamique au bouton -->
             <button mat-fab class="add-post-button" (click)="togglePostForm()" [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }">

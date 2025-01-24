@@ -108,12 +108,12 @@ export class AbsenceService {
       this.router.navigate([APP_ROUTES.login]);
       return throwError(() => new Error('Not authenticated'));
     }
-
+  
     if (!this.authService.isStudent()) {
       this.router.navigate([APP_ROUTES.unauthorized]);
       return throwError(() => new Error('Unauthorized access'));
     }
-
+  
     const url = `${APP_API.baseUrl}${APP_API.studentAbsences}?courseId=${courseId}`;
     return this.http.get<StudentAbsenceFlat[]>(url).pipe(
       tap((response) => console.log('Student absences received:', response)),
@@ -129,12 +129,12 @@ export class AbsenceService {
       this.router.navigate([APP_ROUTES.login]);
       return throwError(() => new Error('Not authenticated'));
     }
-
+  
     if (!this.authService.isStudent()) {
       this.router.navigate([APP_ROUTES.unauthorized]);
       return throwError(() => new Error('Unauthorized access'));
     }
-
+  
     const url = `${APP_API.baseUrl}/absences/student/${absenceId}/justify`;
     return this.http.patch(url, { justification }).pipe(
       tap((response) => console.log('Absence justified:', response)),

@@ -1,6 +1,223 @@
 <mat-card class="absence-card mt-3">
-    <mat-card-content>
-      <h3 class="absence-title">Absences</h3>
-      <app-employee [courseId]="courseId"></app-employee>
-    </mat-card-content>
-  </mat-card>
+  <mat-card-content>
+    <h3 class="absence-title">Absences</h3>
+
+    <!-- Barre de recherche (visible uniquement pour les enseignants) -->
+    <div class="search-bar" *ngIf="authService.isTeacher()">
+      <mat-form-field appearance="outline" class="w-100">
+        <input
+          matInput
+          placeholder="Rechercher des absences..."
+          (keyup)="applyFilter($event)"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Tableau des absences -->
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort class="absence-table">
+        <!-- Colonne Numéro -->
+        <ng-container matColumnDef="#">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">No.</th>
+          <td mat-cell *matCellDef="let element; let i = index" class="cell">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <!-- Colonne Étudiant (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="header-cell student-column">Étudiant</th>
+          <td mat-cell *matCellDef="let element" class="cell student-column">
+            <div *ngIf="authService.isTeacher()" class="student-info">
+              <mat-icon class="student-icon">person</mat-icon>
+              <span class="student-name">
+                {{ element.student.firstName }} {{ element.student.lastName }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Email (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Email</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()">
+              {{ element.student.email }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Date d'absence (visible uniquement pour les étudiants) -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Date d'absence</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isStudent()">
+              {{ element.date | date: 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Confirmer (visible uniquement pour les étudiants) -->
+        <ng-container matColumnDef="confirmed">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Confirmer</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isStudent()" [ngClass]="element.justified ? 'confirmed' : 'not-confirmed'">
+              {{ element.justified ? 'Oui' : 'Non' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Justifiée (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="justified">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Justifiée</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()" class="justified-count">
+              {{ element.absenceCounts.justifiedCount }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Non justifiée (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="nonJustified">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Non justifiée</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()" class="non-justified-count">
+              {{ element.absenceCounts.nonJustifiedCount }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Total (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Total</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()" class="total-count">
+              {{ element.absenceCounts.totalCount }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Ajouter une absence (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="addAbsence">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Ajouter</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <button
+              *ngIf="authService.isTeacher()"
+              mat-icon-button
+              [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }"
+              (click)="addAbsence(element)"
+              class="add-button"
+            >
+              <mat-icon>add</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Justification (pour les étudiants) -->
+        <ng-container matColumnDef="justification">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Justification</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <!-- Bouton pour créer une justification -->
+            <button
+              *ngIf="authService.isStudent() && !element.justification"
+              mat-button
+              [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }"
+              (click)="openJustificationDialog(element)"
+              class="justify-button"
+            >
+              <mat-icon>edit</mat-icon>
+              Justifier
+            </button>
+            <span *ngIf="authService.isStudent() && element.justification">
+              {{ element.justification }}
+            </span>
+            <span *ngIf="authService.isStudent() && element.justification && !element.justified" class="rejected-message">
+              Votre justification a été rejetée.
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Justifications (pour les enseignants) -->
+        <ng-container matColumnDef="justifications" *ngIf="authService.isTeacher()">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Justifications</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <!-- Bouton pour voir les détails des justifications -->
+            <button
+              mat-button
+              [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }"
+              (click)="openJustificationDetailsDialog(element)"
+              class="justify-button"
+            >
+              <mat-icon>visibility</mat-icon>
+              Voir
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Ligne d'en-tête -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+        <!-- Lignes de données -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="data-row"></tr>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      class="absence-paginator"
+    ></mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+<!-- Boîte modale de justification (pour les étudiants) -->
+<ng-template #justificationDialog let-data>
+  <h2 mat-dialog-title>Justifier l'absence</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="w-100">
+      <textarea
+        matInput
+        placeholder="Entrez votre justification"
+        [(ngModel)]="data.justification"
+      ></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-button color="primary" [mat-dialog-close]="data.justification">Envoyer</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<!-- Boîte modale des détails des justifications (pour les enseignants) -->
+<ng-template #justificationDetailsDialog let-data>
+  <h2 mat-dialog-title>Détails des justifications</h2>
+  <mat-dialog-content>
+    <!-- Afficher uniquement les absences avec une justification -->
+    <div *ngFor="let absence of data.absences">
+      <p><strong>Date:</strong> {{ absence.date | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Justification:</strong> {{ absence.justification }}</p>
+      
+      <!-- Boutons Confirmer et Rejeter -->
+      <div *ngIf="!absence.justified" class="justification-actions">
+        <button mat-button color="primary" (click)="confirmJustification(absence)">
+          <mat-icon>check</mat-icon>
+          Confirmer
+        </button>
+        <button mat-button color="warn" (click)="rejectJustification(absence)">
+          <mat-icon>close</mat-icon>
+          Rejeter
+        </button>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+
+    <!-- Message si aucune justification n'est trouvée -->
+    <div *ngIf="data.absences.length === 0">
+      <p>Aucune justification à afficher.</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Fermer</button>
+  </mat-dialog-actions>
+</ng-template>
