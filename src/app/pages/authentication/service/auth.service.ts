@@ -7,12 +7,16 @@ import { LoginResponseDto } from '../DTO/login-response.dto';
 import { APP_CONST } from '../app-constantes.config';
 import { RegisterDto } from '../DTO/register.dto';
 import { SignUpResponseDto } from '../DTO/signup-response.dto';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http = inject(HttpClient);
+  router = inject(Router);
+  snackBar = inject(MatSnackBar);
   constructor() {}
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
@@ -20,18 +24,30 @@ export class AuthService {
   }
 
   refreshToken(): Observable<LoginResponseDto> {
-    const refreshToken = localStorage.getItem('refresh_token');
+    const refreshToken = this.getRefreshToken();
     if (!refreshToken) {
       return throwError(() => new Error('No refresh token found'));
     }
-    return this.http.post<LoginResponseDto>(`${APP_API.baseUrl}/auth/refresh`, { refreshToken })
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${refreshToken}`);
+
+    return this.http.get<LoginResponseDto>(`${APP_API.baseUrl}/auth/refresh`, { headers })
       .pipe(
         tap(response => {
+          console.log('AuthService => Refresh token successful:', response);
+          // Store new access token
           localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
+
+          // Store new refresh token
+          localStorage.setItem(APP_CONST.refreshTokenLocalStorageKey, response.refreshToken);
+
+          // Update user data
           localStorage.setItem('user', JSON.stringify(response.user));
-          localStorage.setItem('refresh_token', response.refreshToken);
         }),
-        catchError((error: HttpErrorResponse) => throwError(() => error))
+        catchError(error => {
+          console.error('AuthService => Refresh token error:', error);
+          return throwError(() => error);
+        })
       );
   }
   isTeacher(): boolean {
@@ -54,7 +70,13 @@ export class AuthService {
       })
     }).pipe(
       tap({
-        next: (response) => console.log('Login response:', response),
+        next: (response) => {
+          console.log('Login response:', response);
+          // Store tokens and user data
+          localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
+          localStorage.setItem(APP_CONST.refreshTokenLocalStorageKey, response.refreshToken);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        },
         error: (error) => console.error('Login error:', error)
       })
     );
@@ -78,8 +100,22 @@ export class AuthService {
       })
     );
 }
-signOut() {
-  localStorage.removeItem(APP_CONST.tokenLocalStorageKey);
-  localStorage.removeItem('user');
+getRefreshToken(): string | null {
+  return localStorage.getItem(APP_CONST.refreshTokenLocalStorageKey);
 }
+getToken(): string | null {
+  return localStorage.getItem(APP_CONST.tokenLocalStorageKey);
 }
+
+
+  signOut() {
+    localStorage.removeItem(APP_CONST.tokenLocalStorageKey);
+    localStorage.removeItem(APP_CONST.refreshTokenLocalStorageKey);
+    localStorage.removeItem('user');
+    this.router.navigate([APP_API.login]);
+    this.snackBar.open('You have been logged out.', 'Close', {
+      duration: 3000,
+      panelClass: ['info-snackbar']
+    });
+  }
+  }
