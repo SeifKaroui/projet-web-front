@@ -2,13 +2,10 @@ import { Routes } from '@angular/router';
 
 import { CourseListComponent } from './courses/components/course-list/course-list.component';
 import { CourseDetailComponent } from './courses/components/course-detail/course-detail.component';
-import { AppEmployeeComponent } from './employee/employee.component';
 import { AppNotesComponent } from './notes/notes.component';
 import { AppTodoComponent } from './todo/todo.component';
 import { AppTaskboardComponent } from './taskboard/taskboard.component';
 import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { StudentComponent } from './employee/student/student.component';
-
 import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
 import { AbsenceComponent } from './courses/components/absence/absence.component';
@@ -102,20 +99,6 @@ export const AppsRoutes: Routes = [
             },
           },
         ],
-      },
-      {
-        path: 'employee',
-        component: AppEmployeeComponent,
-        data: {
-          title: 'Employee',
-        },
-      },
-      {
-        path: 'student',
-        component: StudentComponent,
-        data: {
-          title: 'Student',
-        },
       },
     ],
   },

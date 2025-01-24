@@ -14,7 +14,6 @@ import { ColorService } from '../../services/color.service';
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AppEmployeeComponent } from '../../../employee/employee.component';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Title } from '@angular/platform-browser';
 
