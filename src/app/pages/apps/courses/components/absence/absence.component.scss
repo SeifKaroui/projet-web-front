@@ -1,11 +1,10 @@
 .absence-card {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  padding: 0px;
   background-color: #ffffff;
 
   .absence-title {
-    margin-top: -10px;
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 20px;
@@ -20,26 +19,24 @@
     }
   }
 
-  /* Styles pour la boîte modale */
-.mat-dialog-container {
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+  .elimination-message {
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
 
-.mat-dialog-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
+    .elimination-icon {
+      color: #f44336;
+      margin-right: 8px;
+    }
 
-.mat-dialog-content {
-  margin-bottom: 16px;
-}
-
-.mat-dialog-actions {
-  justify-content: flex-end;
-}
+    .elimination-text {
+      color: #f44336;
+      font-weight: bold;
+    }
+  }
 
   .table-responsive {
     overflow-x: auto;
@@ -91,12 +88,12 @@
       .cell {
         text-align: center !important;
         vertical-align: middle !important;
-        padding: 12px;
+        padding: 5px;
       }
 
       .header-cell {
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: #555;
         background-color: #f5f5f5;
       }
@@ -234,4 +231,24 @@
     }
   }
 }
+/* Style pour les justifications validées */
+.validated-count {
+  color: green; 
+  font-weight: bold;
+}
 
+/* Style pour les justifications rejetées */
+.rejected-count {
+  color: red; 
+  font-weight: bold; 
+}
+
+/* Classe pour la ligne rouge claire */
+.highlight-red {
+  background-color: #ffebee; /* Rouge clair */
+}
+
+/* Classe pour la ligne verte claire */
+.highlight-green {
+  background-color: #e8f5e9; /* Vert clair */
+}
