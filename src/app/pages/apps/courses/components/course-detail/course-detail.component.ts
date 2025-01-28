@@ -64,12 +64,10 @@ export class CourseDetailComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.courseDetail = navigation.extras.state['course'];
-      console.log('Course Detail dans CourseDetailComponent:', this.courseDetail);
     } else {
       const courseFromLocalStorage = localStorage.getItem('currentCourse');
       if (courseFromLocalStorage) {
         this.courseDetail = JSON.parse(courseFromLocalStorage);
-        console.log('Course Detail depuis localStorage:', this.courseDetail);
       } else {
         console.error('Aucune donnée de cours trouvée.');
       }
@@ -78,7 +76,6 @@ export class CourseDetailComponent implements OnInit {
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.titleService.setTitle('Course Detail - Angular 18');
-      console.log('Course Detail avec enseignant:', this.courseDetail.teacher);
     } else {
       console.error('CourseDetail est null ou undefined.');
     }
@@ -99,7 +96,6 @@ export class CourseDetailComponent implements OnInit {
   navigateToPeople(): void {
     if (this.courseDetail && this.courseDetail.teacher) {
       const teacherData = this.courseDetail.teacher; // Extraire uniquement les données du teacher
-      console.log('Données du teacher envoyées à PeopleComponent:', teacherData);
       this.router.navigate(['people'], {
         relativeTo: this.activatedRoute,
         state: { teacher: teacherData }, // Envoyer uniquement les données du teacher

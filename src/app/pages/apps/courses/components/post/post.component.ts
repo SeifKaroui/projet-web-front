@@ -51,10 +51,8 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent?.params.subscribe((params) => {
       this.courseId = +params['id']; // Récupérer l'ID du cours depuis l'URL
-      console.log("id de cour est : ",this.courseId);
       this.isTeacher = this.authService.isTeacher(); // Vérifier si l'utilisateur est un enseignant
       this.loadPosts(this.courseId); // Charger les posts
-      console.log('Course ID in PostComponent:', this.courseId); // Vérifiez l'ID dans la console
     });
   }
   
@@ -62,7 +60,6 @@ export class PostComponent implements OnInit {
     this.postService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
         this.posts = posts;
-        console.log('Posts récupérés :', this.posts); // Vérifiez les posts dans la console
       },
       (error) => {
         console.error('Erreur lors de la récupération des posts :', error);

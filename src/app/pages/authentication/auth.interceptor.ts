@@ -16,12 +16,9 @@ export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log('AuthInterceptor => Intercepting request:', request.url);
-
     const token = localStorage.getItem(APP_CONST.tokenLocalStorageKey);
 
     if (token) {
-      console.log('AuthInterceptor => Adding token to headers');
       request = request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
     }
 
@@ -35,7 +32,6 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.authService.refreshToken().pipe(
             switchMap(() => {
               const newToken = localStorage.getItem(APP_CONST.tokenLocalStorageKey);
-              console.log('AuthInterceptor => Refresh successful, retrying request with new token');
               const cloned = request.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } });
               return next.handle(cloned);
             }),

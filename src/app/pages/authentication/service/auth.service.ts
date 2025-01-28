@@ -45,8 +45,6 @@ export class AuthService {
   }
   login(credentials: CredentialsDto): Observable<LoginResponseDto> {
     const url = `${APP_API.baseUrl}${APP_API.login}`;
-    console.log('Login URL:', url);
-    console.log('Credentials:', credentials);
 
     return this.http.post<LoginResponseDto>(url, credentials, {
       headers: new HttpHeaders({
@@ -54,7 +52,6 @@ export class AuthService {
       })
     }).pipe(
       tap({
-        next: (response) => console.log('Login response:', response),
         error: (error) => console.error('Login error:', error)
       })
     );
@@ -64,7 +61,6 @@ export class AuthService {
     return !!localStorage.getItem(APP_CONST.tokenLocalStorageKey);
   }
   register(data: RegisterDto): Observable<SignUpResponseDto> {
-    console.log('Register request:', data);
     const url = `${APP_API.baseUrl}${APP_API.register}`;
     
     return this.http.post<SignUpResponseDto>(url, data, {
@@ -73,7 +69,6 @@ export class AuthService {
       })
     }).pipe(
       tap({
-        next: (response) => console.log('Register response:', response),
         error: (error) => console.error('Register error:', error)
       })
     );
