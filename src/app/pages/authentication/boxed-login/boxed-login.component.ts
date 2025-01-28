@@ -39,15 +39,9 @@ export class AppBoxedLoginComponent {
 
       this.authService.login(credentials).subscribe({
         next: (response: LoginResponseDto) => {
-          console.log('Login Response:', response);
-          console.log('User Type:', response.user.type);
-    
-
           localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
           localStorage.setItem('user', JSON.stringify(response.user));
-          console.log('Auth Token:', localStorage.getItem('auth_token'));
           const userData = localStorage.getItem('user');
-          console.log('User Data:', userData ? JSON.parse(userData) : null);
           this.router.navigate([APP_ROUTES.dashboard]);
           this.snackBar.open('Login successful', 'Close', { duration: 3000 });
           
@@ -61,8 +55,6 @@ export class AppBoxedLoginComponent {
           );
         }
       });
-    } else {
-      console.log('Form is invalid:', this.form.errors);
-    }
+    } 
   }
 }

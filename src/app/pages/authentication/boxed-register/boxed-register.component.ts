@@ -35,9 +35,6 @@ export class AppBoxedRegisterComponent {
   }
 
   submit() {
-    console.log('Form Values:', this.form.value);
-    console.log('Form Valid:', this.form.valid);
-    console.log('Type Value:', this.form.get('type')?.value);
 
     if (this.form.valid) {
       const type = this.form.get('type')?.value;
@@ -55,11 +52,8 @@ export class AppBoxedRegisterComponent {
         type: type as 'student' | 'teacher' // Ensure lowercase
       };
 
-      console.log('Sending register data:', registerData);
-
       this.authService.register(registerData).subscribe({
         next: (response) => {
-          console.log('Register success:', response);
           this.snackBar.open('Registration successful!', 'Close', { duration: 3000 });
           this.router.navigate([APP_ROUTES.login]);
         },

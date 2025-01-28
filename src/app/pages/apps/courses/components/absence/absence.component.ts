@@ -271,7 +271,6 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.validateAbsence(absence.id).subscribe({
       next: (response) => {
-        console.log('Absence confirmed:', response);
 
         // Mettre à jour les données locales
         absence.confirmed = true;
@@ -296,8 +295,6 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.rejectAbsence(absence.id).subscribe({
       next: (response) => {
-        console.log('Absence rejected:', response);
-
         // Mettre à jour les données locales
         absence.confirmed = false;
         absence.justification = null;
@@ -373,7 +370,6 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.addAbsence(absenceData).subscribe({
       next: (response) => {
-        console.log('Absence added successfully:', response);
         this.loadAbsences();
       },
       error: (error) => {
