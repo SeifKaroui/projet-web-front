@@ -42,11 +42,11 @@ export class CourseDetailComponent implements OnInit {
   isTeacher: boolean = false;
 
   tabs = [
-    { label: 'Flux', route: 'flux' },
-    { label: 'Travaux et devoirs', route: 'homework' },
-    { label: 'Absences', route: 'absences' },
-    { label: 'Notes', route: 'grades' },
-    { label: 'Personnes', route: 'people' },
+    { label: 'Flux', route: 'Flux' },
+    { label: 'Travaux et devoirs', route: 'Travaux et devoirs' },
+    { label: 'Absences', route: 'Absences' },
+    { label: 'Notes', route: 'Notes' },
+    { label: 'Personnes', route: 'Personnes' },
   ];
 
   constructor(
@@ -96,7 +96,7 @@ export class CourseDetailComponent implements OnInit {
   navigateToPeople(): void {
     if (this.courseDetail && this.courseDetail.teacher) {
       const teacherData = this.courseDetail.teacher; // Extraire uniquement les données du teacher
-      this.router.navigate(['people'], {
+      this.router.navigate(['Personnes'], {
         relativeTo: this.activatedRoute,
         state: { teacher: teacherData }, // Envoyer uniquement les données du teacher
       });
@@ -105,7 +105,7 @@ export class CourseDetailComponent implements OnInit {
     }
   }
   onTabClick(route: string): void {
-    if (route === 'people') {
+    if (route === 'Personnes') {
       this.navigateToPeople();
     }
   }
