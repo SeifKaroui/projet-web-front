@@ -62,8 +62,8 @@
       mat-tab-link
       *ngFor="let tab of tabs"
       [routerLink]="tab.route"
-      routerLinkActive="active"
-      (click)="onTabClick(tab.route)" 
+      routerLinkActive="active-tab"
+      (click)="onTabClick(tab.route)"
     >
       {{ tab.label }}
     </a>
