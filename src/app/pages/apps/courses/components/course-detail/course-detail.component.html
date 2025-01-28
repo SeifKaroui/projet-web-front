@@ -57,7 +57,7 @@
     </div>
   </div>
 
-  <nav *ngIf="courseDetail" mat-tab-nav-bar>
+  <nav *ngIf="courseDetail" mat-tab-nav-bar [tabPanel]="tabPanel">
     <a
       mat-tab-link
       *ngFor="let tab of tabs"
@@ -69,5 +69,7 @@
     </a>
   </nav>
 
-  <router-outlet></router-outlet>
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
 </div>

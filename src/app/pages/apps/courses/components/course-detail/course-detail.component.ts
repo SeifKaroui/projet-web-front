@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Course } from '../../models/course.model';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { ColorService } from '../../services/color.service';
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule, MatTabNav, MatTabNavPanel } from '@angular/material/tabs';
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Title } from '@angular/platform-browser';
 
@@ -31,11 +31,15 @@ import { Title } from '@angular/platform-browser';
     MatInputModule,
     FormsModule,
     TablerIconsModule,
+    MatTabNav,
+    MatTabNavPanel,
   ],
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss'],
 })
 export class CourseDetailComponent implements OnInit {
+  @ViewChild('tabPanel') tabPanel!: MatTabNavPanel;
+
   courseDetail: Course | null = null;
   headerGradient: string = 'linear-gradient(135deg, #333, #333)';
   isCourseCodeVisible: boolean = false;
@@ -104,6 +108,7 @@ export class CourseDetailComponent implements OnInit {
       console.error('Aucune donnée de teacher à envoyer.');
     }
   }
+
   onTabClick(route: string): void {
     if (route === 'Personnes') {
       this.navigateToPeople();
