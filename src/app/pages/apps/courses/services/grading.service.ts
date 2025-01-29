@@ -55,5 +55,8 @@ export class GradingService {
       data
     );
   }
-  getFileUrl(uploadId: number): string { return `${this.apiUrl}/uploads/${uploadId}`; }
+  getFileUrl(uploadId: number): string { return `${this.apiUrl}/files/${uploadId}`; }
+  downloadFile(fileUrl: string): Observable<Blob> {
+    return this.http.get(fileUrl, { responseType: 'blob' });
+  }
 }

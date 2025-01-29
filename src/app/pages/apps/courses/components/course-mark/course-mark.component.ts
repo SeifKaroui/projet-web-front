@@ -55,7 +55,8 @@ export class CourseMarkComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {}
-  setMenuContext(studentId: string, homeworkId: number): void { this.menuStudentId = studentId; this.menuHomeworkId = homeworkId; }
+  setMenuContext(studentId: string, homeworkId: number): void
+   { this.menuStudentId = studentId; this.menuHomeworkId = homeworkId; }
   ngOnInit(): void {
     this.route.params.pipe(
       switchMap(params => {
@@ -149,12 +150,18 @@ export class CourseMarkComponent implements OnInit {
 
   onDownloadClick(fileUrl: string | undefined): void {
     if (fileUrl) {
-      window.open(fileUrl, '_blank');
+      this.gradingService.downloadFile(fileUrl).subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'file'; // adjust filename
+        link.click();
+        URL.revokeObjectURL(url);
+      });
     } else {
       this.snackBar.open('No file available for download', 'OK', { duration: 2000 });
     }
   }
-
   openFeedbackDialog(submission: HomeworkSubmission | null): void {
     console.log('openFeedbackDialog called with submission:');
     if (submission) {
