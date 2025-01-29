@@ -14,8 +14,15 @@ import { ColorService } from '../../services/color.service';
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
+
+import { Post } from '../../models/post.model';
+import { CourseComment } from '../../models/comment.model';
+import { Student } from '../../models/Student.model';
+import { CourseMarkComponent } from '../course-mark/course-mark.component';
+
 import { AuthService } from '../../../../authentication/service/auth.service';
 import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-course-detail',
@@ -31,6 +38,7 @@ import { Title } from '@angular/platform-browser';
     MatInputModule,
     FormsModule,
     TablerIconsModule,
+    CourseMarkComponent
   ],
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.scss'],
