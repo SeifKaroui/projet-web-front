@@ -20,7 +20,7 @@ export const AuthenticationRoutes: Routes = [
         component: AppBoxedForgotPasswordComponent,
       },
       {
-        path: 'boxed-login',
+        path: 'login',
         component: AppBoxedLoginComponent,
       },
       {
@@ -44,10 +44,12 @@ export const AuthenticationRoutes: Routes = [
         component: AppSideForgotPasswordComponent,
       },
       {
+
         path: 'login',
         component: AppBoxedLoginComponent,
       },
       {
+
         path: 'side-register',
         component: AppSideRegisterComponent,
       },

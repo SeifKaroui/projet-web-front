@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import {
   HttpClient,
+
   provideHttpClient, // Importez provideHttpClient
   withInterceptorsFromDi, // Importez withInterceptorsFromDi
 } from '@angular/common/http';
@@ -18,6 +19,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideClientHydration } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 // Importez l'interceptor de votre collègue
 import { AuthInterceptorProvider } from 'src/app/pages/authentication/auth.interceptor';
 // icons
@@ -76,5 +78,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    
   ],
 };

@@ -4,34 +4,64 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HTTP_INTERCEPTORS
+  HTTP_INTERCEPTORS,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'src/app/pages/authentication/service/auth.service';
 import { APP_CONST } from 'src/app/pages/authentication/app-constantes.config';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log('Interceptor: Request URL =', request.url);
-    
-    if (this.authService.isAuthenticated()) {
-      const token = localStorage.getItem(APP_CONST.tokenLocalStorageKey) || '';
-      console.log('Interceptor: Token =', token);
-      
-      const clonedRequest = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      console.log('Interceptor: Added auth header');
-      return next.handle(clonedRequest);
+    // Skip interception for the refresh token endpoint to prevent infinite loops
+    if (request.url.endsWith('/auth/refresh')) {
+      console.log('AuthInterceptor => Skipping interception for:', request.url);
+      return next.handle(request);
     }
-    
-    console.log('Interceptor: No auth token');
-    return next.handle(request);
+
+    const token = this.authService.getToken();
+
+    if (token) {
+      request = request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+    }
+
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('AuthInterceptor => Request error:', error.status, error.message);
+
+        if (error.status === 401 && this.authService.refreshToken()) {
+          console.warn('AuthInterceptor => 401 detected, attempting refresh token');
+
+          return this.authService.refreshToken().pipe(
+            switchMap(() => {
+              const newToken = this.authService.getToken();
+              console.log('AuthInterceptor => Refresh successful, retrying request with new token');
+              const cloned = request.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } });
+              return next.handle(cloned);
+            }),
+            catchError(refreshError => {
+              console.error('AuthInterceptor => Refresh failed:', refreshError.message);
+              this.authService.signOut();
+              
+              // Display a user-friendly message
+              this.snackBar.open('Session expired. Please log in again.', 'Close', {
+                duration: 5000,
+                panelClass: ['error-snackbar']
+              });
+
+              return throwError(() => refreshError);
+            })
+          );
+        }
+
+        return throwError(() => error);
+      })
+    );
   }
 }
 
