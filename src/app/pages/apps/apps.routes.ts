@@ -14,7 +14,6 @@ import { PeopleComponent } from './courses/components/people/people.component';
 import { HomeworkDetailsComponent } from './courses/components/homework/homework-details/homework-details.component';
 import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
 import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
-import { teacherGuard } from '../authentication/teacher.guard';
 
 export const AppsRoutes: Routes = [
   {
