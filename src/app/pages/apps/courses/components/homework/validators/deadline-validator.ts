@@ -1,5 +1,8 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+/**
+ * Validator function to check if a date is in the future.
+ */
 export const futureDateValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     if (!control.value) {
         return null; // Let the required validator handle empty values

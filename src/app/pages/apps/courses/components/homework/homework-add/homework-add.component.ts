@@ -12,6 +12,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatOptionModule } from '@angular/material/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { HomeworkService } from '../../../services/homework.service';
+import { futureDateValidator } from '../validators/deadline-validator';
 
 @Component({
   selector: 'app-homework-add',
@@ -53,7 +54,7 @@ export class HomeworkAddComponent implements OnInit {
     this.homeworkForm = this.fb.group({
       title: ['', [Validators.required,]],
       description: ['', [Validators.required,]],
-      deadline: ['', Validators.required]
+      deadline: ['', [Validators.required, futureDateValidator]]
     });
   }
 
