@@ -74,7 +74,7 @@ export class HomeworkDetailsComponent implements OnInit {
       next: (homework) => {
         this.homework = homework;
         this.loadingHomework = false;
-        console.log(homework)
+        // console.log(homework)
       },
       error: (err) => { }
     })

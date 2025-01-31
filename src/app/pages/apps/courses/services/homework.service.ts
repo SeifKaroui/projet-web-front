@@ -45,8 +45,6 @@ export class HomeworkService {
       formData.append('files', file, file.name);
     });
 
-    console.log('formData')
-    console.log(formData)
 
     return this.http.post<any>(`${this.API_URL}/homework`, formData);
   }
