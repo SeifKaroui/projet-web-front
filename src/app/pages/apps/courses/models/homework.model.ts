@@ -6,4 +6,5 @@ export interface Homework {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    files: { id: number; originalname: string }[];
   }
