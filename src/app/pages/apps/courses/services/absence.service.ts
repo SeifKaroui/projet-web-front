@@ -30,7 +30,6 @@ export class AbsenceService {
 
     const url = `${APP_API.baseUrl}/absences/teacher/absence-list?courseId=${courseId}`;
     return this.http.get<any[]>(url).pipe(
-      tap((response) => console.log('Absence data received:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -51,7 +50,6 @@ export class AbsenceService {
 
     const url = `${APP_API.baseUrl}/absences/teacher/count-absence-list?courseId=${courseId}`;
     return this.http.get<any[]>(url).pipe(
-      tap((response) => console.log('Absence counts received:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -72,7 +70,6 @@ export class AbsenceService {
 
     const url = `${APP_API.baseUrl}/absences/teacher`;
     return this.http.post(url, absenceData).pipe(
-      tap((response) => console.log('Absence added:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -93,7 +90,6 @@ export class AbsenceService {
   
     const url = `${APP_API.baseUrl}/absences/teacher/${absenceId}/validate`;
     return this.http.patch(url, {}).pipe(
-      tap((response) => console.log('Absence validated:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -114,7 +110,6 @@ export class AbsenceService {
 
     const url = `${APP_API.baseUrl}/absences/student/absence-course?courseId=${courseId}`;
     return this.http.get<any[]>(url).pipe(
-      tap((response) => console.log('Student absences received:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -135,7 +130,6 @@ export class AbsenceService {
 
     const url = `${APP_API.baseUrl}/absences/student/${absenceId}/justify`;
     return this.http.patch(url, { justification }).pipe(
-      tap((response) => console.log('Absence justified:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);
@@ -156,7 +150,6 @@ export class AbsenceService {
   
     const url = `${APP_API.baseUrl}/absences/teacher/${absenceId}/reject`;
     return this.http.patch(url, {}).pipe(
-      tap((response) => console.log('Absence rejected:', response)),
       catchError((error) => {
         this.handleError(error);
         return throwError(() => error);

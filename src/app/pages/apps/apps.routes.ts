@@ -63,18 +63,18 @@ export const AppsRoutes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'flux',
+            redirectTo: 'Flux',
             pathMatch: 'full',
           },
           {
-            path: 'flux',
+            path: 'Flux',
             component: PostComponent,
             data: {
               title: 'Flux',
             },
           },
           {
-            path: 'homework',
+            path: 'Travaux et devoirs',
             component: HomeworkComponent,
             data: {
               title: 'Travaux et devoirs',
@@ -95,21 +95,21 @@ export const AppsRoutes: Routes = [
             component: HomeworkStudentSubmissionComponent,
           },
           {
-            path: 'absences',
+            path: 'Absences',
             component: AbsenceComponent,
             data: {
               title: 'Absences',
             },
           },
           {
-            path: 'grades',
+            path: 'Notes',
             component: GradeComponent,
             data: {
               title: 'Notes',
             },
           },
           {
-            path: 'people',
+            path: 'Personnes',
             component: PeopleComponent,
             data: {
               title: 'Personnes',

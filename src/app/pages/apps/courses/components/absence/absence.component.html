@@ -1,6 +1,6 @@
 <mat-card class="absence-card mt-3">
   <mat-card-content>
-    <h3 class="absence-title">Absences</h3>
+    <h3 class="absence-title">Absences  </h3>
 
     <!-- Barre de recherche (visible uniquement pour les enseignants) -->
     <div class="search-bar" *ngIf="authService.isTeacher()">
@@ -12,6 +12,19 @@
         />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
+    </div>
+
+    
+
+
+    <!-- Message d'élimination pour les étudiants -->
+    <div *ngIf="authService.isStudent() && isEliminatedFlag" class="elimination-message">
+      <mat-icon class="elimination-icon">warning</mat-icon>
+      <span class="elimination-text">
+        Vous avez été éliminé de l'examen de la session principale en raison d'un nombre excessif d'absences non justifiées ou rejetées.
+        <br>
+        <strong>Remarque :</strong> Si vous avez encore des absences non justifiées, vous devez les justifier dès que possible pour régulariser votre situation.
+      </span>
     </div>
 
     <!-- Tableau des absences -->
@@ -48,26 +61,6 @@
           </td>
         </ng-container>
 
-        <!-- Colonne Date d'absence (visible uniquement pour les étudiants) -->
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef class="header-cell">Date d'absence</th>
-          <td mat-cell *matCellDef="let element" class="cell">
-            <span *ngIf="authService.isStudent()">
-              {{ element.date | date: 'dd/MM/yyyy' }}
-            </span>
-          </td>
-        </ng-container>
-
-        <!-- Colonne Confirmer (visible uniquement pour les étudiants) -->
-        <ng-container matColumnDef="confirmed">
-          <th mat-header-cell *matHeaderCellDef class="header-cell">Confirmer</th>
-          <td mat-cell *matCellDef="let element" class="cell">
-            <span *ngIf="authService.isStudent()" [ngClass]="element.confirmed ? 'confirmed' : 'not-confirmed'">
-              {{ element.confirmed ? 'Oui' : 'Non' }}
-            </span>
-          </td>
-        </ng-container>
-
         <!-- Colonne Justifiée (visible uniquement pour les enseignants) -->
         <ng-container matColumnDef="justified">
           <th mat-header-cell *matHeaderCellDef class="header-cell">Justifiée</th>
@@ -84,6 +77,26 @@
           <td mat-cell *matCellDef="let element" class="cell">
             <span *ngIf="authService.isTeacher()" class="non-justified-count">
               {{ element.absenceCounts.nonJustifiedCount }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Justifications validées (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="validatedJustifications">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Validées</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()" class="validated-count">
+              {{ element.absenceCounts.validatedJustifications }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Justifications rejetées (visible uniquement pour les enseignants) -->
+        <ng-container matColumnDef="rejectedJustifications">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Rejetées</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isTeacher()" class="rejected-count">
+              {{ element.absenceCounts.rejectedJustifications }}
             </span>
           </td>
         </ng-container>
@@ -114,13 +127,39 @@
           </td>
         </ng-container>
 
+        <!-- Colonne Date d'absence (visible uniquement pour les étudiants) -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Date d'absence</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isStudent()">
+              {{ element.date | date: 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Colonne Confirmer (visible uniquement pour les étudiants) -->
+        <ng-container matColumnDef="confirmed">
+          <th mat-header-cell *matHeaderCellDef class="header-cell">Confirmer</th>
+          <td mat-cell *matCellDef="let element" class="cell">
+            <span *ngIf="authService.isStudent()" [ngClass]="element.confirmed ? 'confirmed' : 'not-confirmed'">
+              {{ element.confirmed ? 'Oui' : 'Non' }}
+            </span>
+          </td>
+        </ng-container>
+
         <!-- Colonne Justification (pour les étudiants) -->
         <ng-container matColumnDef="justification">
           <th mat-header-cell *matHeaderCellDef class="header-cell">Justification</th>
           <td mat-cell *matCellDef="let element" class="cell">
+            <div *ngIf="element.confirmed === true" class="justification-status">
+              <p class="confirmed-message">La justification a été confirmée.</p>
+            </div>
+            <div *ngIf="element.rejected === true" class="justification-status">
+              <p class="rejected-message">La justification a été rejetée.</p>
+            </div>
             <!-- Bouton pour créer une justification -->
             <button
-              *ngIf="authService.isStudent() && !element.justified"
+              *ngIf="authService.isStudent() && !element.justified "
               mat-button
               [ngStyle]="{ 'background': colorService.generateFancyDarkGradientFromId(courseId) }"
               (click)="openJustificationDialog(element)"
@@ -129,7 +168,7 @@
               <mat-icon>edit</mat-icon>
               Justifier
             </button>
-            <span *ngIf="authService.isStudent() && element.justification && !element.confirmed">
+            <span *ngIf="authService.isStudent() && !element.confirmed && !element.rejected">
               {{ element.justification }}
             </span>
             <span *ngIf="authService.isStudent() && element.confirmed && element.justified && !element.justification" class="confirmed-message">
@@ -161,9 +200,30 @@
         <!-- Ligne d'en-tête -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
         <!-- Lignes de données -->
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="data-row"></tr>
+        <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="data-row"
+        [ngClass]="{
+          'highlight-red': authService.isTeacher() && shouldHighlightRow(row),
+          'highlight-green': authService.isTeacher() && !shouldHighlightRow(row)
+        }"
+        ></tr>
       </table>
     </div>
+
+        <!-- Résumé des absences pour l'étudiant -->
+        <div *ngIf="authService.isStudent()" class="absence-summary">
+          <div class="summary-item confirmed">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ confirmedAbsencesCount }}  Absence(s) Confirmées</span>
+          </div>
+          <div class="summary-item unconfirmed">
+            <mat-icon>cancel</mat-icon>
+            <span>{{ unconfirmedAbsencesCount }}  Absence(s) Non confirmées</span>
+          </div>
+        </div>
+
 
     <!-- Pagination -->
     <mat-paginator
@@ -198,21 +258,21 @@
   <mat-dialog-content>
     <!-- Afficher uniquement les absences avec une justification -->
     <div *ngFor="let absence of data.absences">
-      <p><strong>Date:</strong> {{ absence.date | date: 'dd/MM/yyyy' }}</p>
+      <p  ><strong>Date:</strong> {{ absence.date | date: 'dd/MM/yyyy' }}</p>
       
       <!-- Afficher la justification ou le message de statut -->
-      <div *ngIf="!absence.status">
+      <div *ngIf="!absence.confirmed && !absence.rejected ">
         <p><strong>Justification:</strong> {{ absence.justification }}</p>
       </div>
-      <div *ngIf="absence.status === 'confirmée'" class="justification-status">
+      <div *ngIf="absence.confirmed === true" class="justification-status">
         <p class="confirmed-message">La justification a été confirmée.</p>
       </div>
-      <div *ngIf="absence.status === 'rejetée'" class="justification-status">
+      <div *ngIf="absence.rejected === true" class="justification-status">
         <p class="rejected-message">La justification a été rejetée.</p>
       </div>
       
       <!-- Boutons Confirmer et Rejeter -->
-      <div *ngIf="!absence.confirmed && !absence.status" class="justification-actions">
+      <div *ngIf="!absence.confirmed && !absence.rejected " class="justification-actions">
         <button mat-button color="primary" (click)="confirmJustification(absence)">
           <mat-icon>check</mat-icon>
           Confirmer

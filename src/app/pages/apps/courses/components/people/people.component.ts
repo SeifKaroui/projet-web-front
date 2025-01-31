@@ -30,7 +30,6 @@ export class PeopleComponent implements OnInit {
   ngOnInit(): void {
     // Récupérer les données du teacher passées via le routage
     const teacherData = history.state.teacher;
-    console.log('Données du teacher dans PeopleComponent:', teacherData);
   
     if (!teacherData) {
       console.error('Aucune donnée de teacher reçue dans PeopleComponent.');

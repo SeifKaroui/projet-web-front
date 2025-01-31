@@ -67,22 +67,19 @@ export class CourseListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Handle the created course (e.g., send it to the backend)
-        console.log('New Course:', result);
+        this.loadCourses();
       }
     });
   }
+  
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
 
     // Afficher le rôle de l'utilisateur dans la console
     const user = this.authService.getCurrentUser();
-    console.log('Utilisateur connecté :', user);
 
     if (this.authService.isStudent()) {
-      console.log('Utilisateur : Étudiant');
-      console.log('Fonction utilisée : getEnrolledCourses()');
 
       // Charger les cours auxquels l'étudiant est inscrit
       this.courseService.getEnrolledCourses().subscribe({
@@ -98,8 +95,6 @@ export class CourseListComponent implements OnInit {
         },
       });
     } else if (this.authService.isTeacher()) {
-      console.log('Utilisateur : Enseignant');
-      console.log('Fonction utilisée : getMyCourses()');
 
       // Charger les cours créés par l'enseignant
       this.courseService.getMyCourses().subscribe({
@@ -115,7 +110,6 @@ export class CourseListComponent implements OnInit {
         },
       });
     } else {
-      console.log('Rôle utilisateur non reconnu.');
       this.error = 'Rôle utilisateur non reconnu.';
       this.isLoading = false;
     }
@@ -145,9 +139,10 @@ export class CourseListComponent implements OnInit {
         );
         // Mettre à jour `courses` pour refléter la suppression
         this.courses = this.courses.filter((course) => course.id !== courseId);
-        // Réinitialiser la barre de recherche
-        this.searchInput.nativeElement.value = '';
-        console.log('Cours supprimé avec succès.');
+        // Réinitialiser la barre de recherche après la suppression
+        if (this.searchInput) {
+          this.searchInput.nativeElement.value = '';
+        }
       },
       error: (error: any) => {
         console.error('Erreur lors de la suppression du cours :', error);

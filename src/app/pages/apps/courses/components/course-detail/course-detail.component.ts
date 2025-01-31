@@ -42,11 +42,11 @@ export class CourseDetailComponent implements OnInit {
   isTeacher: boolean = false;
 
   tabs = [
-    { label: 'Flux', route: 'flux' },
-    { label: 'Travaux et devoirs', route: 'homework' },
-    { label: 'Absences', route: 'absences' },
-    { label: 'Notes', route: 'grades' },
-    { label: 'Personnes', route: 'people' },
+    { label: 'Flux', route: 'Flux' },
+    { label: 'Travaux et devoirs', route: 'Travaux et devoirs' },
+    { label: 'Absences', route: 'Absences' },
+    { label: 'Notes', route: 'Notes' },
+    { label: 'Personnes', route: 'Personnes' },
   ];
 
   constructor(
@@ -64,12 +64,10 @@ export class CourseDetailComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.courseDetail = navigation.extras.state['course'];
-      console.log('Course Detail dans CourseDetailComponent:', this.courseDetail);
     } else {
       const courseFromLocalStorage = localStorage.getItem('currentCourse');
       if (courseFromLocalStorage) {
         this.courseDetail = JSON.parse(courseFromLocalStorage);
-        console.log('Course Detail depuis localStorage:', this.courseDetail);
       } else {
         console.error('Aucune donnée de cours trouvée.');
       }
@@ -78,7 +76,6 @@ export class CourseDetailComponent implements OnInit {
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.titleService.setTitle('Course Detail - Angular 18');
-      console.log('Course Detail avec enseignant:', this.courseDetail.teacher);
     } else {
       console.error('CourseDetail est null ou undefined.');
     }
@@ -99,8 +96,7 @@ export class CourseDetailComponent implements OnInit {
   navigateToPeople(): void {
     if (this.courseDetail && this.courseDetail.teacher) {
       const teacherData = this.courseDetail.teacher; // Extraire uniquement les données du teacher
-      console.log('Données du teacher envoyées à PeopleComponent:', teacherData);
-      this.router.navigate(['people'], {
+      this.router.navigate(['Personnes'], {
         relativeTo: this.activatedRoute,
         state: { teacher: teacherData }, // Envoyer uniquement les données du teacher
       });
@@ -109,7 +105,7 @@ export class CourseDetailComponent implements OnInit {
     }
   }
   onTabClick(route: string): void {
-    if (route === 'people') {
+    if (route === 'Personnes') {
       this.navigateToPeople();
     }
   }

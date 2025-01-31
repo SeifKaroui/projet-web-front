@@ -1,8 +1,18 @@
 /* course-detail.component.scss */
 
+.active-tab {
+  border-bottom: 3px solid black;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.mat-tab-link {
+  border-bottom: 3px solid transparent; 
+}
+
 /* Conteneur principal */
 .course-detail-container {
-  max-width: 1060px;
+  max-width: 1450px;
   margin: 0 auto;
   padding: 16px;
 }
@@ -111,6 +121,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
 
   .modal-content {
     padding: 24px;

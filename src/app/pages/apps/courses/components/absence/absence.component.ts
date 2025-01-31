@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
@@ -22,6 +22,7 @@ export interface StudentAbsence {
   date: string;
   justified: boolean;
   confirmed: boolean;
+  rejected: boolean; // Nouveau champ pour suivre si la justification est rejetée
   justification: string | null;
   student: {
     id: string;
@@ -42,6 +43,8 @@ export interface StudentAbsence {
 export interface AbsenceCount {
   justifiedCount: number;
   nonJustifiedCount: number;
+  validatedJustifications: number;
+  rejectedJustifications: number;
   totalCount: number;
 }
 
@@ -80,17 +83,24 @@ export class AbsenceComponent implements OnInit {
     'email',
     'justified',
     'nonJustified',
+    'validatedJustifications',
+    'rejectedJustifications',
     'total',
     'addAbsence',
-    'justification',
+    'justifications',
   ];
+
+  isEliminatedFlag: boolean = false; // Variable pour suivre l'état d'élimination
+  confirmedAbsencesCount: number = 0; // Nombre d'absences confirmées
+  unconfirmedAbsencesCount: number = 0; // Nombre d'absences non confirmées
 
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private absenceService: AbsenceService,
     public authService: AuthService,
-    public colorService: ColorService
+    public colorService: ColorService,
+    private changeDetectorRef: ChangeDetectorRef // Injecter ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -109,10 +119,127 @@ export class AbsenceComponent implements OnInit {
         'email',
         'justified',
         'nonJustified',
+        'validatedJustifications',
+        'rejectedJustifications',
         'total',
         'addAbsence',
         'justifications',
       ];
+    }
+  }
+
+  // Méthode pour calculer les absences confirmées et non confirmées
+  calculateConfirmedAndUnconfirmedAbsences(): void {
+    if (!this.dataSource.data || this.dataSource.data.length === 0) {
+      this.confirmedAbsencesCount = 0;
+      this.unconfirmedAbsencesCount = 0;
+      return;
+    }
+
+    this.confirmedAbsencesCount = this.dataSource.data.filter(
+      (absence) => absence.confirmed
+    ).length;
+
+    this.unconfirmedAbsencesCount = this.dataSource.data.filter(
+      (absence) => !absence.confirmed
+    ).length;
+
+    console.log("Absences confirmées : ", this.confirmedAbsencesCount);
+    console.log("Absences non confirmées : ", this.unconfirmedAbsencesCount);
+  }
+
+  // Méthode pour vérifier si l'étudiant est éliminé
+  isEliminated(): boolean {
+    if (!this.authService.isStudent()) {
+      return false; // Seuls les étudiants peuvent être éliminés
+    }
+
+    // Vérifiez que les données sont bien chargées
+    if (!this.dataSource.data || this.dataSource.data.length === 0) {
+      console.log("Aucune donnée d'absence trouvée.");
+      return false;
+    }
+
+    // Calcul du total des absences non justifiées et rejetées
+    const totalRejectedAndNonJustified = this.dataSource.data.reduce((total, absence) => {
+      const isNonJustified = !absence.justified ? 1 : 0; // Absence non justifiée
+      const enAttente = absence.justified && !absence.confirmed && !absence.rejected ? 1 : 0; // Justification en attente
+      const isRejected = absence.rejected ? 1 : 0; // Justification rejetée
+      return total + isNonJustified + isRejected + enAttente;
+    }, 0);
+
+    console.log("Total des absences non justifiées et rejetées : ", totalRejectedAndNonJustified);
+    console.log("L'étudiant est éliminé : ", totalRejectedAndNonJustified > 3);
+
+    return totalRejectedAndNonJustified > 3;
+  }
+
+  // Méthode pour charger les absences
+  loadAbsences(): void {
+    if (!this.courseId) {
+      console.error('Course ID is not defined.');
+      return;
+    }
+
+    const courseId = this.courseId.toString();
+
+    if (this.authService.isStudent()) {
+      // Charger les absences pour un étudiant
+      this.absenceService.getStudentAbsences(courseId).subscribe({
+        next: (absences: any[]) => {
+          this.dataSource.data = absences.map((absence) => ({
+            ...absence,
+            justificationConfirmed: absence.justification && absence.confirmed,
+          }));
+
+          // Mettre à jour l'état d'élimination
+          this.isEliminatedFlag = this.isEliminated();
+
+          // Calculer les absences confirmées et non confirmées
+          this.calculateConfirmedAndUnconfirmedAbsences();
+
+          // Forcer la détection des changements
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (error) => {
+          console.error('Error fetching student absences:', error);
+        },
+      });
+    } else if (this.authService.isTeacher()) {
+      // Charger les absences pour un enseignant
+      this.absenceService.getAbsenceCounts(courseId).subscribe({
+        next: (absenceData: any[]) => {
+          // Mapper les données pour correspondre à la structure attendue par le tableau
+          const formattedData = absenceData.map((student) => ({
+            student: {
+              id: student.id,
+              firstName: student.firstName,
+              lastName: student.lastName,
+              email: student.email,
+            },
+            absenceCounts: {
+              justifiedCount: student.absenceCounts.justifiedCount,
+              nonJustifiedCount: student.absenceCounts.nonJustifiedCount,
+              validatedJustifications: student.absenceCounts.validatedJustifications,
+              rejectedJustifications: student.absenceCounts.rejectedJustifications,
+              totalCount: student.absenceCounts.totalCount,
+            },
+            absences: student.absences.map((absence: any) => ({
+              id: absence.id,
+              date: absence.date,
+              justified: absence.justified,
+              justification: absence.justification,
+              confirmed: absence.confirmed,
+              rejected: absence.rejected, // Nouveau champ
+            })),
+          }));
+
+          this.dataSource.data = formattedData;
+        },
+        error: (error) => {
+          console.error('Error fetching absence counts:', error);
+        },
+      });
     }
   }
 
@@ -144,12 +271,11 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.validateAbsence(absence.id).subscribe({
       next: (response) => {
-        console.log('Absence confirmed:', response);
 
         // Mettre à jour les données locales
         absence.confirmed = true;
         absence.justification = null;
-        absence.status = 'confirmée';
+        absence.rejected = false; // Réinitialiser le statut rejeté
 
         // Recharger les données pour refléter les changements
         this.loadAbsences();
@@ -169,13 +295,10 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.rejectAbsence(absence.id).subscribe({
       next: (response) => {
-        console.log('Absence rejected:', response);
-
         // Mettre à jour les données locales
         absence.confirmed = false;
         absence.justification = null;
-        absence.justified = true;
-        absence.status = 'rejetée';
+        absence.rejected = true; // Marquer comme rejeté
 
         // Recharger les données pour refléter les changements
         this.loadAbsences();
@@ -193,6 +316,7 @@ export class AbsenceComponent implements OnInit {
         element.justification = justification;
         element.confirmed = false;
         element.justified = true;
+        element.rejected = false; // Initialiser à false
 
         // Recharger les données pour refléter les changements
         this.loadAbsences();
@@ -206,82 +330,13 @@ export class AbsenceComponent implements OnInit {
   // Méthode pour ouvrir la boîte modale des détails des justifications (pour les enseignants)
   openJustificationDetailsDialog(element: any): void {
     const pendingAbsences = element.absences.filter(
-      (absence: any) => absence.justification && !absence.confirmed
+      (absence: any) => absence.justification && !absence.confirmed && !absence.rejected
     );
 
     this.dialog.open(this.justificationDetailsDialog, {
       width: '500px',
       data: { absences: pendingAbsences },
     });
-  }
-
-  loadAbsences(): void {
-    if (!this.courseId) {
-      console.error('Course ID is not defined.');
-      return;
-    }
-
-    const courseId = this.courseId.toString();
-
-    if (this.authService.isStudent()) {
-      // Charger les absences pour un étudiant
-      this.absenceService.getStudentAbsences(courseId).subscribe({
-        next: (absences: any[]) => {
-          this.dataSource.data = absences.map((absence) => ({
-            ...absence,
-            justificationConfirmed: absence.justification && absence.confirmed,
-          }));
-        },
-        error: (error) => {
-          console.error('Error fetching student absences:', error);
-        },
-      });
-    } else if (this.authService.isTeacher()) {
-      // Charger les absences pour un enseignant
-      this.absenceService.getAbsenceList(courseId).subscribe({
-        next: (absenceList: any[]) => {
-          this.absenceService.getAbsenceCounts(courseId).subscribe({
-            next: (absenceCounts: any[]) => {
-              const combinedData = absenceList.map((student) => {
-                const counts = absenceCounts.find(
-                  (count) => count.email === student.student.email
-                );
-
-                const absencesWithJustification = student.absences.map((absence: any) => {
-                  const countAbsence = counts?.absences.find(
-                    (countAbsence: any) => countAbsence.date === absence.date
-                  );
-
-                  return {
-                    ...absence,
-                    id: countAbsence?.id || absence.id,
-                    justification: countAbsence?.justification,
-                    confirmed: countAbsence?.confirmed || false,
-                    justified: countAbsence?.justified || false,
-                  };
-                });
-
-                return {
-                  ...student,
-                  absences: absencesWithJustification,
-                  absenceCounts: counts
-                    ? counts.absenceCounts
-                    : { justifiedCount: 0, nonJustifiedCount: 0, totalCount: 0 },
-                };
-              });
-
-              this.dataSource.data = combinedData;
-            },
-            error: (error) => {
-              console.error('Error fetching absence counts:', error);
-            },
-          });
-        },
-        error: (error) => {
-          console.error('Error fetching absence list:', error);
-        },
-      });
-    }
   }
 
   ngAfterViewInit(): void {
@@ -315,7 +370,6 @@ export class AbsenceComponent implements OnInit {
 
     this.absenceService.addAbsence(absenceData).subscribe({
       next: (response) => {
-        console.log('Absence added successfully:', response);
         this.loadAbsences();
       },
       error: (error) => {
@@ -331,5 +385,15 @@ export class AbsenceComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  // Méthode pour vérifier si la ligne doit être colorée en rouge
+  shouldHighlightRow(element: any): boolean {
+    if (!this.authService.isTeacher()) {
+      return false; // Pas de coloration si l'utilisateur n'est pas un enseignant
+    }
+    const totalRejectedAndNonJustified =
+      element.absenceCounts.rejectedJustifications + element.absenceCounts.nonJustifiedCount;
+    return totalRejectedAndNonJustified > 3;
   }
 }
