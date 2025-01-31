@@ -90,7 +90,13 @@ export class HomeworkDetailsComponent implements OnInit {
       error: (err) => { }
     })
   }
-
+  
+  openFile(fileId: number) {
+    window.open("http://localhost:3000/files/" + fileId, '_blank');
+  }
+  // viewStudentSubmissions() {
+  //   this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'students-submissions'])
+  // }
   // viewStudentSubmissions() {
   //   this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'students-submissions'])
   // }
