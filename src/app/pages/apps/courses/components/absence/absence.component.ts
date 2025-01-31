@@ -144,8 +144,6 @@ export class AbsenceComponent implements OnInit {
       (absence) => !absence.confirmed
     ).length;
 
-    console.log("Absences confirmées : ", this.confirmedAbsencesCount);
-    console.log("Absences non confirmées : ", this.unconfirmedAbsencesCount);
   }
 
   // Méthode pour vérifier si l'étudiant est éliminé
@@ -156,7 +154,6 @@ export class AbsenceComponent implements OnInit {
 
     // Vérifiez que les données sont bien chargées
     if (!this.dataSource.data || this.dataSource.data.length === 0) {
-      console.log("Aucune donnée d'absence trouvée.");
       return false;
     }
 
@@ -167,9 +164,6 @@ export class AbsenceComponent implements OnInit {
       const isRejected = absence.rejected ? 1 : 0; // Justification rejetée
       return total + isNonJustified + isRejected + enAttente;
     }, 0);
-
-    console.log("Total des absences non justifiées et rejetées : ", totalRejectedAndNonJustified);
-    console.log("L'étudiant est éliminé : ", totalRejectedAndNonJustified > 3);
 
     return totalRejectedAndNonJustified > 3;
   }

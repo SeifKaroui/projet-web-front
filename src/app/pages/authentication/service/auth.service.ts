@@ -34,7 +34,6 @@ export class AuthService {
     return this.http.get<LoginResponseDto>(`${APP_API.baseUrl}/auth/refresh`, { headers })
       .pipe(
         tap(response => {
-          console.log('AuthService => Refresh token successful:', response);
           // Store new access token
           localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
 
@@ -69,7 +68,6 @@ export class AuthService {
     }).pipe(
       tap({
         next: (response) => {
-          console.log('Login response:', response);
           // Store tokens and user data
           localStorage.setItem(APP_CONST.tokenLocalStorageKey, response.accessToken);
           localStorage.setItem(APP_CONST.refreshTokenLocalStorageKey, response.refreshToken);
