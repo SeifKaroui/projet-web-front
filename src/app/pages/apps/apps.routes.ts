@@ -10,14 +10,11 @@ import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
 import { AbsenceComponent } from './courses/components/absence/absence.component';
 import { PeopleComponent } from './courses/components/people/people.component';
-<<<<<<< HEAD
 import { HomeworkDetailsComponent } from './courses/components/homework/homework-details/homework-details.component';
 import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
 import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
 
-=======
 import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
->>>>>>> newabss
 export const AppsRoutes: Routes = [
   {
     path: '',
