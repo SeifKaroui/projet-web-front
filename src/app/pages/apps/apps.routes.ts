@@ -9,9 +9,8 @@ import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component'
 import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
 import { AbsenceComponent } from './courses/components/absence/absence.component';
-import { GradeComponent } from './courses/components/grade/grade.component';
 import { PeopleComponent } from './courses/components/people/people.component';
-
+import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
 export const AppsRoutes: Routes = [
   {
     path: '',
@@ -86,7 +85,7 @@ export const AppsRoutes: Routes = [
           },
           {
             path: 'Notes',
-            component: GradeComponent,
+            component: CourseMarkComponent,
             data: {
               title: 'Notes',
             },
