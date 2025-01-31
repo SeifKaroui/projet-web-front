@@ -1,4 +1,5 @@
 export interface Homework {
+<<<<<<< HEAD
     id: number;
     title: string;
     description: string;
@@ -8,3 +9,12 @@ export interface Homework {
     deletedAt: string | null;
     files: { id: number; originalname: string }[];
   }
+=======
+  id: number;
+  title: string;
+  description: string;
+  deadline: string; 
+  createdAt: string; 
+  updatedAt?: string; 
+}
+>>>>>>> newabss

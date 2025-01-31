@@ -9,12 +9,15 @@ import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component'
 import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
 import { AbsenceComponent } from './courses/components/absence/absence.component';
-import { GradeComponent } from './courses/components/grade/grade.component';
 import { PeopleComponent } from './courses/components/people/people.component';
+<<<<<<< HEAD
 import { HomeworkDetailsComponent } from './courses/components/homework/homework-details/homework-details.component';
 import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
 import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
 
+=======
+import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
+>>>>>>> newabss
 export const AppsRoutes: Routes = [
   {
     path: '',
@@ -63,18 +66,18 @@ export const AppsRoutes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'flux',
+            redirectTo: 'Flux',
             pathMatch: 'full',
           },
           {
-            path: 'flux',
+            path: 'Flux',
             component: PostComponent,
             data: {
               title: 'Flux',
             },
           },
           {
-            path: 'homework',
+            path: 'Travaux et devoirs',
             component: HomeworkComponent,
             data: {
               title: 'Travaux et devoirs',
@@ -95,21 +98,21 @@ export const AppsRoutes: Routes = [
             component: HomeworkStudentSubmissionComponent,
           },
           {
-            path: 'absences',
+            path: 'Absences',
             component: AbsenceComponent,
             data: {
               title: 'Absences',
             },
           },
           {
-            path: 'grades',
-            component: GradeComponent,
+            path: 'Notes',
+            component: CourseMarkComponent,
             data: {
               title: 'Notes',
             },
           },
           {
-            path: 'people',
+            path: 'Personnes',
             component: PeopleComponent,
             data: {
               title: 'Personnes',

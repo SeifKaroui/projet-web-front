@@ -57,17 +57,19 @@
     </div>
   </div>
 
-  <nav *ngIf="courseDetail" mat-tab-nav-bar>
+  <nav *ngIf="courseDetail" mat-tab-nav-bar [tabPanel]="tabPanel">
     <a
       mat-tab-link
       *ngFor="let tab of tabs"
       [routerLink]="tab.route"
-      routerLinkActive="active"
-      (click)="onTabClick(tab.route)" 
+      routerLinkActive="active-tab"
+      (click)="onTabClick(tab.route)"
     >
       {{ tab.label }}
     </a>
   </nav>
 
-  <router-outlet></router-outlet>
+  <mat-tab-nav-panel #tabPanel>
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
 </div>
