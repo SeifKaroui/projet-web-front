@@ -1,0 +1,41 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-16 p-x-24">
+    <div class="d-flex align-items-center">
+      <!-- Title -->
+      <mat-card-title class="m-b-0 title">My submissions</mat-card-title>
+    </div>
+    <div *ngIf="loading" class="spinner-container">
+      <mat-spinner diameter="30" strokeWidth="3"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+      <div *ngIf="studentSubmission">
+        <!-- Files -->
+        <div class="deadline m-t-16">
+          <p><strong>Files:</strong></p>
+        </div>
+
+        <!-- File List -->
+        <div class="file-list m-t-16">
+          <!-- <p *ngIf="studentSubmission?.submission">No files attached.</p> -->
+          <ul>
+            <li
+              *ngFor="let file of studentSubmission?.submission?.uploadsIds"
+              class="file-item"
+            >
+              <!-- <p class="file-name">{{ file.originalname }}</p>
+              <button mat-button color="primary">View</button> -->
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div *ngIf="!studentSubmission">
+        <p>No submissions yet.</p>
+      </div>
+    </div>
+    <button mat-raised-button (click)="goToSubmission()" color="primary">
+      Submit work
+    </button>
+  </mat-card-content>
+</mat-card>

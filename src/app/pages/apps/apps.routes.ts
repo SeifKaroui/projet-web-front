@@ -10,6 +10,10 @@ import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
 import { AbsenceComponent } from './courses/components/absence/absence.component';
 import { PeopleComponent } from './courses/components/people/people.component';
+import { HomeworkDetailsComponent } from './courses/components/homework/homework-details/homework-details.component';
+import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
+import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
+
 import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
 export const AppsRoutes: Routes = [
   {
@@ -75,6 +79,20 @@ export const AppsRoutes: Routes = [
             data: {
               title: 'Travaux et devoirs',
             },
+
+          },
+          {
+            path: 'homework/:homeworkId/details',
+            component: HomeworkDetailsComponent,
+            
+          }, 
+          {
+            path: 'homework/add',
+            component: HomeworkAddComponent,
+          },
+          {
+            path: 'homework/:homeworkId/student-submission',
+            component: HomeworkStudentSubmissionComponent,
           },
           {
             path: 'Absences',
