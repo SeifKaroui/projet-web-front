@@ -24,7 +24,7 @@ export interface StudentSubmission {
 
 @Injectable({ providedIn: 'root' })
 export class GradingService {
-  private apiUrl = '/api';
+  private apiUrl ='http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
