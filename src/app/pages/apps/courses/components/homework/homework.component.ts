@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HomeworkService } from '../../services/homework.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
-import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
-import { Homework } from '../../models/homework.model';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../../../authentication/service/auth.service';
 
 @Component({
   selector: 'app-homework',
@@ -27,17 +23,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     CommonModule,
     CustomDatePipe,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
   ],
   templateUrl: './homework.component.html',
   styleUrls: ['./homework.component.scss'],
 })
 export class HomeworkComponent implements OnInit {
-
-  loading = true;
-  courseId: number | null = null;
-  isTeacher: boolean = false;
+  courseId: number | null = null; // Récupérer l'ID du cours depuis l'URL
+  isTeacher: boolean = false; // Récupérer le statut de l'utilisateur
   homeworks: any[] = [];
   isHomeworkFormOpen = false;
   newHomework = {
@@ -53,30 +45,27 @@ export class HomeworkComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private homeworkService: HomeworkService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) { }
+    private authService: AuthService // Injectez AuthService pour vérifier le statut de l'utilisateur
+  ) {}
 
   ngOnInit(): void {
-    this.isTeacher = this.authService.isTeacher();
     this.route.parent?.params.subscribe((params) => {
-      this.courseId = +params['id'];
-      this.loadHomeworks(this.courseId);
+      this.courseId = +params['id']; // Récupérer l'ID du cours depuis l'URL
+      this.isTeacher = this.authService.isTeacher(); // Vérifier si l'utilisateur est un enseignant
+      this.loadHomeworks(this.courseId); // Charger les devoirs
     });
   }
 
   loadHomeworks(courseId: number): void {
-    this.homeworkService.getHomeworkByCourse(courseId).subscribe({
-      next: (homeworks: any[]) => {
-        this.loading = false;
+    this.homeworkService.getHomeworksByCourseId(courseId).subscribe(
+      (homeworks) => {
         this.homeworks = homeworks;
       },
-      error: (error: any) => {
-        this.showError(("Error getting homework list."))
+      (error) => {
+        console.error('Erreur lors de la récupération des devoirs :', error);
       }
-    });
+    );
   }
 
   toggleHomeworkForm(): void {
@@ -92,40 +81,5 @@ export class HomeworkComponent implements OnInit {
     this.isHomeworkFormOpen = false;
     this.isHomeworkSubmitting = false;
     this.newHomework = { title: '', description: '', day: null, month: null, year: null, time: '', courseId: 0 };
-  }
-
-  gotToAddHomework() {
-    this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', 'add'])
-  }
-
-  viewDetails(homework: Homework) {
-    this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', homework.id, 'details'])
-  }
-
-  deleteHomework(homework: Homework) {
-    this.homeworkService.deleteHomework(homework.id).subscribe({
-      next: (result) => {
-        this.showSuccess("Homework deleted successfully.")
-        this.loading = true;
-        this.loadHomeworks(this.courseId!);
-      },
-      error: (error: any) => {
-        this.showError(("Error deleting homework."))
-      }
-    });
-  }
-
-  showSuccess(message: string) {
-    this.snackBar.open(message, 'Close', {
-      duration: 2000,
-      panelClass: ['success-snackbar'],
-    });
-  }
-
-  showError(message: string) {
-    this.snackBar.open(message, 'Close', {
-      duration: 2000,
-      panelClass: ['error-snackbar'],
-    });
   }
 }

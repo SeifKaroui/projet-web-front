@@ -1,67 +1,66 @@
 <mat-card class="homework-card mt-3">
-  <mat-card-content>
-    <div class="homework-container">
+    <mat-card-content>
       <h3 class="homework-title">Devoirs</h3>
-
-      <div *ngIf="isTeacher" class="add-homework-button-container">
-        <button
-          mat-fab
-          color="primary"
-          class="homework-button"
-          (click)="gotToAddHomework()"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </div>
-
-    <!-- Show spinner when loading -->
-    <div *ngIf="loading; else content" class="spinner-container">
-      <mat-spinner diameter="30" strokeWidth="3"></mat-spinner>
-    </div>
-
-    <!-- Show content when not loading -->
-    <ng-template #content>
-      <div
-        class="homework-list mt-2"
-        *ngIf="homeworks.length > 0; else noHomeworks"
-      >
+  
+      <div class="homework-list mt-2" *ngIf="homeworks.length > 0; else noHomeworks">
         <div *ngFor="let homework of homeworks" class="homework-item">
           <h4>{{ homework.title }}</h4>
           <p>{{ homework.description }}</p>
-          <small class="homework-date">
-            À rendre pour le {{ homework.deadline | customDate }}
-          </small>
-          <small class="homework-date" *ngIf="homework.updatedAt">
-            Dernière mise à jour le
-            {{ homework.updatedAt | date : "dd/MM/yyyy à HH:mm" }}
-          </small>
-          <div class="actions m-t-16">
-            <button
-              *ngIf="isTeacher"
-              mat-icon-button
-              color="primary"
-              (click)="deleteHomework(homework)"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="viewDetails(homework)"
-            >
-              View Details
-            </button>
-          </div>
+          <small class="homework-date">À rendre pour le {{ homework.deadline | customDate }}</small>
+          <small class="homework-date">Créé le {{ homework.createdAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
+          <small class="homework-date" *ngIf="homework.updatedAt">Dernière mise à jour le {{ homework.updatedAt | date: 'dd/MM/yyyy à HH:mm' }}</small>
         </div>
       </div>
-    </ng-template>
-
-    <!-- Show message when no homeworks are available -->
-    <ng-template #noHomeworks>
-      <p class="no-homeworks-message">
-        Aucun devoir disponible pour le moment.
-      </p>
-    </ng-template>
-  </mat-card-content>
-</mat-card>
+      <ng-template #noHomeworks>
+        <p class="no-homeworks-message">Aucun devoir disponible pour le moment.</p>
+      </ng-template>
+  
+      <div *ngIf="isTeacher" class="add-homework-section" [class.open]="isHomeworkFormOpen">
+        <div class="homework-form-container">
+          <form (ngSubmit)="onHomeworkSubmit()" class="homework-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <input matInput [(ngModel)]="newHomework.title" name="title" placeholder="Titre du devoir" required />
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline" class="full-width">
+              <textarea matInput [(ngModel)]="newHomework.description" name="description" placeholder="Description du devoir" required></textarea>
+            </mat-form-field>
+  
+            <div class="date-time-container">
+              <mat-form-field appearance="outline" class="small-field">
+                <input matInput [(ngModel)]="newHomework.day" name="day" type="number" placeholder="Jour (JJ)" min="1" max="31" required />
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="small-field">
+                <input matInput [(ngModel)]="newHomework.month" name="month" type="number" placeholder="Mois (MM)" min="1" max="12" required />
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="small-field">
+                <input matInput [(ngModel)]="newHomework.year" name="year" type="number" placeholder="Année (AAAA)" min="2023" required />
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="small-field">
+                <input matInput [(ngModel)]="newHomework.time" name="time" type="time" placeholder="Heure (HH:MM)" required />
+              </mat-form-field>
+            </div>
+  
+            <div class="form-buttons-container">
+              <button mat-flat-button type="submit" color="primary" [disabled]="isHomeworkSubmitting">
+                {{ isHomeworkSubmitting ? 'En cours...' : 'Créer le devoir' }}
+              </button>
+  
+              <button mat-icon-button class="close-button" (click)="cancelHomeworkForm()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+  
+      <div *ngIf="isTeacher" class="add-homework-button-container">
+        <button mat-fab color="primary" class="add-homework-button" (click)="toggleHomeworkForm()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
