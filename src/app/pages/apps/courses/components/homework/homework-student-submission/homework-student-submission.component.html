@@ -1,9 +1,9 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Add New Homework</mat-card-title>
+    <mat-card-title>Déposer votre travail</mat-card-title>
   </mat-card-header>
   <mat-card-content class="flex flex-col space-y-4">
-    <p>Choose files:</p>
+    <p>Sélectionner les fichiers: </p>
     <div>
       <input
         type="file"
@@ -24,7 +24,7 @@
     </div>
 
     <div *ngIf="selectedFiles.length > 0" class="file-list">
-      <p>Selected Files:</p>
+      <p> Les fichiers sélectionnés:/p>
       <ul>
         <li *ngFor="let file of selectedFiles">
           {{ file.name }}
@@ -43,8 +43,8 @@
       (click)="onSubmit()"
       [disabled]="selectedFiles.length <= 0"
     >
-      Submit homework
+      Déposer
     </button>
-    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-button type="button" (click)="goBack()">Annuler</button>
   </mat-card-actions>
 </mat-card>

@@ -95,7 +95,7 @@ export class HomeworkAddComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'homework']);
+    this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'Homework']);
   }
 
   showSuccess(message: string): void {
