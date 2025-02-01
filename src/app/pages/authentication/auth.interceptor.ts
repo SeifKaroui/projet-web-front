@@ -20,7 +20,6 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Skip interception for the refresh token endpoint to prevent infinite loops
     if (request.url.endsWith('/auth/refresh')) {
-      console.log('AuthInterceptor => Skipping interception for:', request.url);
       return next.handle(request);
     }
 
@@ -40,7 +39,6 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.authService.refreshToken().pipe(
             switchMap(() => {
               const newToken = this.authService.getToken();
-              console.log('AuthInterceptor => Refresh successful, retrying request with new token');
               const cloned = request.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } });
               return next.handle(cloned);
             }),

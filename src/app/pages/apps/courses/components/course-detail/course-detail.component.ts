@@ -41,13 +41,7 @@ export class CourseDetailComponent implements OnInit {
   isCourseCodeVisible: boolean = false;
   isTeacher: boolean = false;
 
-  tabs = [
-    { label: 'Flux', route: 'Flux' },
-    { label: 'Travaux et devoirs', route: 'Homework' },
-    { label: 'Absences', route: 'Absences' },
-    { label: 'Notes', route: 'Notes' },
-    { label: 'Personnes', route: 'Personnes' },
-  ];
+  tabs: { label: string; route: string }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -61,6 +55,8 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.isTeacher = this.authService.isTeacher();
+    this.tabs = this.getTabsBasedOnRole(); // Définir les onglets en fonction du rôle
+
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.courseDetail = navigation.extras.state['course'];
@@ -72,13 +68,28 @@ export class CourseDetailComponent implements OnInit {
         console.error('Aucune donnée de cours trouvée.');
       }
     }
-  
+
     if (this.courseDetail) {
       this.headerGradient = this.colorService.generateFancyDarkGradientFromId(this.courseDetail.id);
       this.titleService.setTitle('Course Detail - Angular 18');
     } else {
       console.error('CourseDetail est null ou undefined.');
     }
+  }
+
+  getTabsBasedOnRole(): { label: string; route: string }[] {
+    const baseTabs = [
+      { label: 'Flux', route: 'Flux' },
+      { label: 'Travaux et devoirs', route: 'Homework' },
+      { label: 'Absences', route: 'Absences' },
+      { label: 'Personnes', route: 'Personnes' },
+    ];
+
+    if (this.isTeacher) {
+      baseTabs.push({ label: 'Notes', route: 'Notes' });
+    }
+
+    return baseTabs;
   }
 
   showCourseCode(): void {
@@ -95,15 +106,16 @@ export class CourseDetailComponent implements OnInit {
 
   navigateToPeople(): void {
     if (this.courseDetail && this.courseDetail.teacher) {
-      const teacherData = this.courseDetail.teacher; // Extraire uniquement les données du teacher
+      const teacherData = this.courseDetail.teacher;
       this.router.navigate(['Personnes'], {
         relativeTo: this.activatedRoute,
-        state: { teacher: teacherData }, // Envoyer uniquement les données du teacher
+        state: { teacher: teacherData },
       });
     } else {
       console.error('Aucune donnée de teacher à envoyer.');
     }
   }
+
   onTabClick(route: string): void {
     if (route === 'Personnes') {
       this.navigateToPeople();
