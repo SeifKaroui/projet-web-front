@@ -59,7 +59,9 @@ export class HomeworkStudentSubmissionComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private homeworkService: HomeworkService,
+
   ) { }
 
   ngOnInit(): void {
@@ -85,19 +87,19 @@ export class HomeworkStudentSubmissionComponent {
   onSubmit(): void {
 
 
-    // this.homeworkService.createHomework(formData, this.selectedFiles).subscribe({
-    //   next: (homework) => {
-    //     this.showSuccess('Homework created successfully');
-    //     this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'homework', homework.id, 'details']);
-    //   },
-    //   error: (err) => {
-    //     this.showError('Failed to create homework');
-    //   }
-    // });
+    this.homeworkService.createSubmission(this.homeworkId, this.selectedFiles).subscribe({
+      next: (homework) => {
+        this.showSuccess('Submission created successfully');
+        this.goBack()
+      },
+      error: (err) => {
+        this.showError('Failed to create Submission');
+      }
+    });
 
   }
 
-  onCancel(): void {
+  goBack(): void {
     this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'details']);
   }
 

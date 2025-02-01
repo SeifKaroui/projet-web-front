@@ -106,13 +106,12 @@ export class CourseMarkComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading data:', error);
-        this.snackBar.open('Failed to load data', 'OK', { duration: 2000 });
+        console.error('Erreur lors du chargement des données :', error);
+        this.snackBar.open('Échec du chargement des données', 'OK', { duration: 2000 });
         this.isLoading = false;
       }
     });
   }
-
 
   setMenuContext(studentId: string, homeworkId: number): void {
     this.menuStudentId = studentId;
@@ -132,9 +131,9 @@ export class CourseMarkComponent implements OnInit {
     if (submission && submission.grade !== undefined) {
       return submission.grade.toString();
     } else if (submission && submission.grade === undefined) {
-      return 'Not graded';
+      return 'Non noté';
     }
-    return 'Not submitted';
+    return 'Non soumis';
   }
 
   getFileUrlFromUploads(uploadsIds: number[]): string | undefined {
@@ -150,12 +149,12 @@ export class CourseMarkComponent implements OnInit {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'file';
+        link.download = 'fichier';
         link.click();
         URL.revokeObjectURL(url);
       });
     } else {
-      this.snackBar.open('No file available for download', 'OK', { duration: 2000 });
+      this.snackBar.open('Aucun fichier disponible pour le téléchargement', 'OK', { duration: 2000 });
     }
   }
 
@@ -173,7 +172,7 @@ export class CourseMarkComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           if (result.feedback.trim() === '') {
-            this.snackBar.open('Feedback cannot be empty.', 'OK', { duration: 2000 });
+            this.snackBar.open('Le retour ne peut pas être vide.', 'OK', { duration: 2000 });
             return;
           }
 
@@ -181,16 +180,16 @@ export class CourseMarkComponent implements OnInit {
             next: (updatedSubmission) => {
               submission.grade = updatedSubmission.grade;
               submission.feedback = updatedSubmission.feedback;
-              this.snackBar.open('Grade updated', 'OK', { duration: 2000 });
+              this.snackBar.open('Note mise à jour', 'OK', { duration: 2000 });
             },
             error: () => {
-              this.snackBar.open('Failed to update grade', 'OK', { duration: 2000 });
+              this.snackBar.open('Échec de la mise à jour de la note', 'OK', { duration: 2000 });
             }
           });
         }
       });
     } else {
-      this.snackBar.open('No submission available to provide feedback.', 'OK', { duration: 2000 });
+      this.snackBar.open('Aucune soumission disponible pour fournir un retour.', 'OK', { duration: 2000 });
     }
   }
 }

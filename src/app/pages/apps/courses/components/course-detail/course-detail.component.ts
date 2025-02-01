@@ -80,7 +80,7 @@ export class CourseDetailComponent implements OnInit {
   getTabsBasedOnRole(): { label: string; route: string }[] {
     const baseTabs = [
       { label: 'Flux', route: 'Flux' },
-      { label: 'Travaux et devoirs', route: 'Travaux et devoirs' },
+      { label: 'Travaux et devoirs', route: 'Homework' },
       { label: 'Absences', route: 'Absences' },
       { label: 'Personnes', route: 'Personnes' },
     ];

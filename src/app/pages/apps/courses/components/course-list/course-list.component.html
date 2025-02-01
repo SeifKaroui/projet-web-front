@@ -3,7 +3,7 @@
     <div class="col-sm-6 col-lg-8">
       <mat-card-content class="p-28">
         <mat-form-field appearance="outline" class="hide-hint search-field" color="primary">
-          <input matInput (keyup)="applyFilter($event)" placeholder="Search here" />
+          <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher ici" />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
@@ -15,7 +15,7 @@
         <div class="action-buttons">
           @if(this.authService.isTeacher()) {
             <button mat-flat-button color="primary" class="create-course-button" (click)="openCreateCourseDialog()">
-              Create Course
+              Créer un cours
             </button>
           } @else {
             <form #courseForm="ngForm" (ngSubmit)="onSubmit()" class="join-course-form">
@@ -25,7 +25,7 @@
                 ngModel
                 required
                 [(ngModel)]="courseCode"
-                placeholder="Enter course code"
+                placeholder="Entrez le code du cours"
                 class="course-code-input"
               />
               <a
@@ -36,7 +36,7 @@
                 class="join-course-button"
                 (click)="onSubmit()"
               >
-                Join Course
+                Rejoindre le cours
               </a>
             </form>
           }
