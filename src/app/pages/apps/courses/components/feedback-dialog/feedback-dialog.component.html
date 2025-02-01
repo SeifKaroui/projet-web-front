@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Provide Feedback and Grade</h2>
+<h2 mat-dialog-title>Fournir des commentaires et une note</h2>
 
 <mat-dialog-content>
   <mat-form-field appearance="fill" style="width: 100%;">
-    <mat-label>Grade</mat-label>
+    <mat-label>Note</mat-label>
     <input
       matInput
       type="number"
@@ -12,7 +12,7 @@
     />
   </mat-form-field>
   <mat-form-field appearance="fill" style="width: 100%;">
-    <mat-label>Feedback</mat-label>
+    <mat-label>Commentaires</mat-label>
     <textarea
       matInput
       rows="4"
@@ -22,13 +22,13 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onCancel()">Annuler</button>
   <button
     mat-button
     color="primary"
     [disabled]="!isValid()"
     (click)="onSave()"
   >
-    Save
+    Enregistrer
   </button>
 </mat-dialog-actions>
