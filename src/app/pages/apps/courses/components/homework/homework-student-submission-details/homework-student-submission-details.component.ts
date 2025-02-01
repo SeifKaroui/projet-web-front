@@ -14,7 +14,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeworkService } from '../../../services/homework.service';
 import { AuthService } from 'src/app/pages/authentication/service/auth.service';
-import { HomeworkSubmission } from '../../../models/homework-submission';
+import { HomeworkSubmissionDto } from '../../../models/homework-submission.dto';
 
 
 @Component({
@@ -39,34 +39,35 @@ import { HomeworkSubmission } from '../../../models/homework-submission';
   styleUrl: './homework-student-submission-details.component.scss'
 })
 export class HomeworkStudentSubmissionDetailsComponent {
-
   homeworkId!: number;
   courseId!: number;
   loading = true;
-  studentSubmission: HomeworkSubmission | null = null;
+  studentSubmission: HomeworkSubmissionDto | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private homeworkService: HomeworkService,
-    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
     this.homeworkId = +this.route.snapshot.paramMap.get('homeworkId')!;
     this.courseId = +this.route.parent?.snapshot.paramMap.get('id')!;
-    this.loadStudentSubmissions();
+    this.loadStudentSubmission();
 
   }
 
 
-  loadStudentSubmissions() {
-    this.homeworkService.fetchStudentSubmissions(this.homeworkId!).subscribe({
+  loadStudentSubmission() {
+    this.homeworkService.fetchStudentSubmission(this.homeworkId!).subscribe({
       next: (studentSubmission) => {
-        this.studentSubmission = studentSubmission.length > 0 ? studentSubmission[0] : null;
+        console.log("got submission:")
+        console.log(studentSubmission)
+        this.studentSubmission = studentSubmission ? studentSubmission : null;
         this.loading = false;
       },
       error: (err) => {
+        console.log("no got submission: " + err)
         this.loading = false;
       }
     })
@@ -74,5 +75,9 @@ export class HomeworkStudentSubmissionDetailsComponent {
 
   goToSubmission() {
     this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'student-submission']);
+  }
+
+  openFile(fileId: number) {
+    window.open("http://localhost:3000/files/" + fileId, '_blank');
   }
 }

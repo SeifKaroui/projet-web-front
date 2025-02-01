@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Homework } from '../models/homework.model';
 import { CreateHomeworkDTO } from '../models/create-homework-dto';
-import { HomeworkSubmission } from '../models/homework-submission';
+import { HomeworkSubmissionDto } from '../models/homework-submission.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -53,26 +53,24 @@ export class HomeworkService {
     return this.http.delete<any>(`${this.API_URL}/homework/${id}`);
   }
 
-  fetchAllStudentSubmissionsInHomework(homeworkId: number): Observable<HomeworkSubmission[]> {
-    return this.http.get<any>(`${this.API_URL}/homework-submissions/${homeworkId}/students-submissions`);
-  }
 
-  fetchStudentSubmissions(homeworkId: number): Observable<HomeworkSubmission[]> {
-    return this.http.get<any>(`${this.API_URL}/homework-submissions/student-work/${homeworkId}`);
+
+  fetchStudentSubmission(homeworkId: number): Observable<HomeworkSubmissionDto> {
+    return this.http.get<any>(`${this.API_URL}/homework-submissions/${homeworkId}`);
   }
 
   createSubmission(
+    homeworkId :number,
     files: File[],
   ): Observable<any> {
     const formData = new FormData();
 
+    formData.append('homeworkId', homeworkId.toString());
 
-    // Append files to FormData
     files.forEach((file) => {
       formData.append('files', file, file.name);
     });
 
-
-    return this.http.post<any>(`${this.API_URL}/homework`, formData);
+    return this.http.post<any>(`${this.API_URL}/homework-submissions`, formData);
   }
 }

@@ -16,8 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MaterialModule } from 'src/app/material.module';
-import { HomeworkSubmission } from '../../../models/homework-submission';
 import { HomeworkStudentSubmissionDetailsComponent } from "../homework-student-submission-details/homework-student-submission-details.component";
+import { HomeworkSubmission } from '../../../models/homeworkSubmission.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-homework-details',
@@ -35,6 +36,7 @@ import { HomeworkStudentSubmissionDetailsComponent } from "../homework-student-s
     MatInputModule,
     MatButtonModule,
     CommonModule,
+    MatSnackBarModule,
     MatProgressSpinnerModule,
     HomeworkStudentSubmissionDetailsComponent
   ],
@@ -54,9 +56,10 @@ export class HomeworkDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private homeworkService: HomeworkService,
     private authService: AuthService,
+    private snackBar: MatSnackBar
+
   ) { }
 
   ngOnInit(): void {
@@ -64,9 +67,6 @@ export class HomeworkDetailsComponent implements OnInit {
     this.courseId = +this.route.parent?.snapshot.paramMap.get('id')!;
     this.isTeacher = this.authService.isTeacher();
     this.loadHomework();
-    if (!this.isTeacher) {
-      this.loadStudentSubmissions();
-    }
   }
 
   loadHomework() {
@@ -74,30 +74,30 @@ export class HomeworkDetailsComponent implements OnInit {
       next: (homework) => {
         this.homework = homework;
         this.loadingHomework = false;
-        // console.log(homework)
       },
-      error: (err) => { }
+      error: (err) => {
+        this.showError(("Error getting homework details."))
+
+      }
     })
 
   }
 
-  loadStudentSubmissions() {
-    this.homeworkService.fetchStudentSubmissions(this.homeworkId!).subscribe({
-      next: (studentSubmission) => {
-        this.studentSubmission = studentSubmission.length > 0 ? studentSubmission[0] : null;
-        this.loadingStudentSubmissions = false;
-      },
-      error: (err) => { }
-    })
-  }
-  
+
   openFile(fileId: number) {
     window.open("http://localhost:3000/files/" + fileId, '_blank');
   }
-  // viewStudentSubmissions() {
-  //   this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'students-submissions'])
-  // }
-  // viewStudentSubmissions() {
-  //   this.router.navigate(['/apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'students-submissions'])
-  // }
+  showSuccess(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 2000,
+      panelClass: ['success-snackbar'],
+    });
+  }
+
+  showError(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 2000,
+      panelClass: ['error-snackbar'],
+    });
+  }
 }

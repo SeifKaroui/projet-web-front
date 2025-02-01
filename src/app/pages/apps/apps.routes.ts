@@ -74,7 +74,7 @@ export const AppsRoutes: Routes = [
             },
           },
           {
-            path: 'Travaux et devoirs',
+            path: 'Homework',
             component: HomeworkComponent,
             data: {
               title: 'Travaux et devoirs',
@@ -84,15 +84,23 @@ export const AppsRoutes: Routes = [
           {
             path: 'homework/:homeworkId/details',
             component: HomeworkDetailsComponent,
-            
+            data: {
+              title: 'Détails des travaux et devoirs',
+            },
           }, 
           {
             path: 'homework/add',
             component: HomeworkAddComponent,
+            data: {
+              title: 'Ajout d\'un devoir',
+            },
           },
           {
             path: 'homework/:homeworkId/student-submission',
             component: HomeworkStudentSubmissionComponent,
+            data: {
+              title: 'Dépot',
+            },
           },
           {
             path: 'Absences',

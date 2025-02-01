@@ -43,7 +43,7 @@ export class CourseDetailComponent implements OnInit {
 
   tabs = [
     { label: 'Flux', route: 'Flux' },
-    { label: 'Travaux et devoirs', route: 'Travaux et devoirs' },
+    { label: 'Travaux et devoirs', route: 'Homework' },
     { label: 'Absences', route: 'Absences' },
     { label: 'Notes', route: 'Notes' },
     { label: 'Personnes', route: 'Personnes' },
