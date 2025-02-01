@@ -2,9 +2,6 @@ import { Routes } from '@angular/router';
 
 import { CourseListComponent } from './courses/components/course-list/course-list.component';
 import { CourseDetailComponent } from './courses/components/course-detail/course-detail.component';
-import { AppNotesComponent } from './notes/notes.component';
-import { AppTodoComponent } from './todo/todo.component';
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
 import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
 import { PostComponent } from './courses/components/post/post.component';
 import { HomeworkComponent } from './courses/components/homework/homework.component';
@@ -24,27 +21,6 @@ export const AppsRoutes: Routes = [
         component: AppFullcalendarComponent,
         data: {
           title: 'Calendar',
-        },
-      },
-      {
-        path: 'notes',
-        component: AppNotesComponent,
-        data: {
-          title: 'Notes',
-        },
-      },
-      {
-        path: 'todo',
-        component: AppTodoComponent,
-        data: {
-          title: 'Todo',
-        },
-      },
-      {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
-        data: {
-          title: 'Taskboard',
         },
       },
       {
@@ -87,7 +63,7 @@ export const AppsRoutes: Routes = [
             data: {
               title: 'Détails des travaux et devoirs',
             },
-          }, 
+          },
           {
             path: 'homework/add',
             component: HomeworkAddComponent,
