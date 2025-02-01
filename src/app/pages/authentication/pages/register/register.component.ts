@@ -6,7 +6,7 @@ import { MaterialModule } from '../../../../material.module';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { APP_ROUTES } from '../../app-routes.config';
-import { RegisterDto } from '../../dto/register.dto';
+import { RegisterDto } from '../../DTO/register.dto';
 
 @Component({
   selector: 'app-boxed-register',

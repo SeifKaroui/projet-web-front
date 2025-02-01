@@ -2,13 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { APP_API } from '../app-api.config';
-import { CredentialsDto } from '../dto/credentials.dto';
-import { LoginResponseDto } from '../dto/login-response.dto';
 import { APP_CONST } from '../app-constantes.config';
-import { RegisterDto } from '../dto/register.dto';
-import { SignUpResponseDto } from '../dto/signup-response.dto';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginResponseDto } from '../DTO/login-response.dto';
+import { CredentialsDto } from '../DTO/credentials.dto';
+import { SignUpResponseDto } from '../DTO/signup-response.dto';
+import { RegisterDto } from '../DTO/register.dto';
 
 @Injectable({
   providedIn: 'root'

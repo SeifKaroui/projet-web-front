@@ -46,6 +46,8 @@ import {
 } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { HttpClient } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router';
 
 const colors: any = {
   red: {
@@ -101,7 +103,8 @@ export class CalendarDialogComponent {
     CalendarModule,
     CommonModule,
     MatDatepickerModule,
-    MatDialogModule, MatFormFieldModule
+    MatDialogModule,
+    MatFormFieldModule,
   ],
   providers: [provideNativeDateAdapter(), CalendarDateFormatter],
 })
@@ -133,62 +136,35 @@ export class AppFullcalendarComponent {
   view: any = 'month';
   viewDate: Date = new Date();
 
-  actions: CalendarEventAction[] = [
-    {
-      label: '<span class="text-white link m-l-5">: Edit</span>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edit', event);
-      },
-    },
-    {
-      label: '<span class="text-danger m-l-5">Delete</span>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
-  ];
-
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-      actions: this.actions,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.blue,
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: new Date(),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  events: CalendarEvent[] = [];
 
   activeDayIsOpen = true;
 
-  constructor(public dialog: MatDialog, @Inject(DOCUMENT) doc: any) { }
+  constructor(
+    public dialog: MatDialog,
+    @Inject(DOCUMENT) doc: any,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+  ngOnInit(): void {
+    this.fetchHomeworks();
+  }
 
+  fetchHomeworks(): void {
+    this.http.get<any[]>('http://localhost:3000/homework').subscribe((data) => {
+      this.events = data.map((hw) => ({
+        id: hw.id,
+        courseId: hw.course.id,
+        start: new Date(hw.deadline), // Using deadline as event start date
+        title: hw.title, // Title of the event
+        color: colors.blue, // Assign a color
+        meta: hw, // Store the full homework data
+      }));
+      this.refresh.next(this.events);
+    });
+  }
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -224,38 +200,9 @@ export class AppFullcalendarComponent {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.config.data = { event, action };
-    this.dialogRef = this.dialog.open(CalendarDialogComponent, this.config);
-
-    this.dialogRef.afterClosed().subscribe((result: string) => {
-      this.lastCloseResult = result;
-      this.dialogRef = Object.create(null);
-      this.refresh.next(result);
-    });
-  }
-
-  addEvent(): void {
-    this.dialogRef2 = this.dialog.open(CalendarFormDialogComponent, {
-      panelClass: 'calendar-form-dialog',
-      data: {
-        action: 'add',
-        date: new Date(),
-      },
-    });
-    this.dialogRef2.afterClosed().subscribe((res) => {
-      if (!res) {
-        return;
-      }
-      const dialogAction = res.action;
-      const responseEvent = res.event;
-      responseEvent.actions = this.actions;
-      this.events.push(responseEvent);
-      this.dialogRef2 = Object.create(null);
-      this.refresh.next(res);
-    });
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent): void {
-    this.events = this.events.filter((event) => event !== eventToDelete);
+    this.router.navigate([
+      `/apps/courses/coursesdetail/${event.courseId}/homework/${event.id}/details`,
+    ]);
   }
 
   setView(view: CalendarView): void {

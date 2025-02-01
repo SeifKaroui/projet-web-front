@@ -6,9 +6,9 @@ import { MaterialModule } from '../../../../material.module';
 import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 import { APP_CONST } from '../../app-constantes.config';
 import { APP_ROUTES } from '../../app-routes.config';
-import { LoginResponseDto } from '../../dto/login-response.dto';
-import { CredentialsDto } from '../../dto/credentials.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginResponseDto } from '../../DTO/login-response.dto';
+import { CredentialsDto } from '../../DTO/credentials.dto';
 
 @Component({
   selector: 'app-boxed-login',
