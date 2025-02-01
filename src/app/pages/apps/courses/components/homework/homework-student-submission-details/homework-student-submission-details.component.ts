@@ -13,7 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MaterialModule } from 'src/app/material.module';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeworkService } from '../../../services/homework.service';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 import { HomeworkSubmissionDto } from '../../../models/homework-submission.dto';
 
 
