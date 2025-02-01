@@ -13,7 +13,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 
 interface Profile {
   createdAt: string;
@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
     private settings: CoreService,
     public dialog: MatDialog,
     private authService: AuthService
-  ) {}
+  ) { }
   ngOnInit(): void {
     const data = localStorage.getItem('user'); // Retrieve the item using its key
     if (data) {

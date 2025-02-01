@@ -21,7 +21,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Importez l'interceptor de votre collègue
-import { AuthInterceptorProvider } from 'src/app/pages/authentication/auth.interceptor';
+import { AuthInterceptorProvider } from 'src/app/pages/authentication/interceptors/auth.interceptor';
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';

@@ -8,7 +8,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 import { APP_CONST } from 'src/app/pages/authentication/app-constantes.config';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -45,7 +45,7 @@ export class AuthInterceptor implements HttpInterceptor {
             catchError(refreshError => {
               console.error('AuthInterceptor => Refresh failed:', refreshError.message);
               this.authService.signOut();
-              
+
               // Display a user-friendly message
               this.snackBar.open('Session expired. Please log in again.', 'Close', {
                 duration: 5000,

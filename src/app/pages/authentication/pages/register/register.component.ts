@@ -2,17 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { MaterialModule } from '../../../material.module';
-import { AuthService } from '../service/auth.service';
+import { MaterialModule } from '../../../../material.module';
+import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { APP_ROUTES } from '../app-routes.config';
-import { RegisterDto } from '../DTO/register.dto';
+import { APP_ROUTES } from '../../app-routes.config';
+import { RegisterDto } from '../../dto/register.dto';
 
 @Component({
   selector: 'app-boxed-register',
   standalone: true,
   imports: [RouterModule, MaterialModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './boxed-register.component.html',
+  templateUrl: './register.component.html',
 })
 export class AppBoxedRegisterComponent {
   private settings = inject(CoreService);
@@ -27,7 +27,7 @@ export class AppBoxedRegisterComponent {
     lastName: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    type: new FormControl('student', [Validators.required]) // Set default to lowercase 'student'
+    type: new FormControl('student', [Validators.required])
   });
 
   get f() {
@@ -53,15 +53,15 @@ export class AppBoxedRegisterComponent {
       };
 
       this.authService.register(registerData).subscribe({
-        next: (response) => {
+        next: () => {
           this.snackBar.open('Registration successful!', 'Close', { duration: 3000 });
-          this.router.navigate([APP_ROUTES.login]);
+          this.router.navigate([APP_ROUTES.dashboard]);
         },
         error: (error) => {
           console.error('Register error:', error);
           this.snackBar.open(
-            error.error?.message || 'Registration failed', 
-            'Close', 
+            error.error?.message || 'Registration failed',
+            'Close',
             { duration: 3000 }
           );
         }

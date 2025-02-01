@@ -14,7 +14,7 @@ import { ColorService } from '../../services/color.service';
 import { CourseService } from '../../services/course.service';
 import { CustomDatePipe } from '../../pipes/custom-date.pipe';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AuthService } from '../../../../authentication/service/auth.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -51,7 +51,7 @@ export class CourseDetailComponent implements OnInit {
     private courseService: CourseService,
     private authService: AuthService,
     private titleService: Title
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isTeacher = this.authService.isTeacher();

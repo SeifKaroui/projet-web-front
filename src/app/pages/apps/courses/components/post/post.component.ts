@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AuthService } from '../../../../authentication/service/auth.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-post',
@@ -46,7 +46,7 @@ export class PostComponent implements OnInit {
     private fileService: FileService,
     public colorService: ColorService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.parent?.params.subscribe((params) => {
@@ -55,7 +55,7 @@ export class PostComponent implements OnInit {
       this.loadPosts(this.courseId); // Charger les posts
     });
   }
-  
+
   loadPosts(courseId: number): void {
     this.postService.getPostsByCourseId(courseId).subscribe(
       (posts) => {
@@ -74,21 +74,21 @@ export class PostComponent implements OnInit {
   onSubmit(): void {
     if (this.isSubmitting) return;
     this.isSubmitting = true;
-  
+
     if (!this.courseId) {
       throw new Error('Course ID is missing.');
     }
-  
+
     if (this.newPost.content || this.newPost.files.length > 0) {
       const formData = new FormData();
       formData.append('content', this.newPost.content);
-  
+
       if (this.newPost.files && this.newPost.files.length > 0) {
         for (const file of this.newPost.files) {
           formData.append('files', file);
         }
       }
-  
+
       this.postService.createPost(this.courseId, formData).subscribe(
         (response) => {
           this.posts.unshift(response);
@@ -186,7 +186,7 @@ export class PostComponent implements OnInit {
     return this.fileService.getFileUrl(fileId);
   }
 
-  
+
   downloadFile(fileId: number, fileName: string): void {
     this.fileService.getFileById(fileId).subscribe(
       (file: Blob) => {
@@ -204,5 +204,5 @@ export class PostComponent implements OnInit {
       }
     );
   }
-  
+
 }

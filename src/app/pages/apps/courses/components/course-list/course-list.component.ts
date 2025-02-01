@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { ColorService } from '../../services/color.service';
-import { AuthService } from '../../../../authentication/service/auth.service'; // Importez le service AuthService
+import { AuthService } from '../../../../authentication/services/auth.service'; // Importez le service AuthService
 import { CreateCourseDialogComponent } from '../create-course-dialog/create-course-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -55,7 +55,7 @@ export class CourseListComponent implements OnInit {
     public colorService: ColorService,
     public authService: AuthService,
     private dialog: MatDialog // Injectez le service AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCourses();
@@ -71,7 +71,7 @@ export class CourseListComponent implements OnInit {
       }
     });
   }
-  
+
   loadCourses(): void {
     this.isLoading = true;
     this.error = null;
