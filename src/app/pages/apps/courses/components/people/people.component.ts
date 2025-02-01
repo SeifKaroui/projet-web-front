@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ColorService } from '../../services/color.service';
 import { Course, Teacher } from '../../models/course.model';
 import { StudentService } from '../../services/student.service';
-import { AuthService } from '../../../../authentication/service/auth.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 
 @Component({
   selector: 'app-people',
@@ -25,19 +25,19 @@ export class PeopleComponent implements OnInit {
     private colorService: ColorService,
     private studentService: StudentService,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Récupérer les données du teacher passées via le routage
     const teacherData = history.state.teacher;
-  
+
     if (!teacherData) {
       console.error('Aucune donnée de teacher reçue dans PeopleComponent.');
     } else {
       // Stocker les données du teacher dans une propriété du composant
       this.teacher = teacherData;
     }
-  
+
     // Charger les étudiants
     this.route.parent?.params.subscribe((params) => {
       this.courseId = +params['id'];

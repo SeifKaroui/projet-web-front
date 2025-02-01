@@ -1,5 +1,5 @@
 export const APP_ROUTES = {
-  login: '/authentication/boxed-login',
+  login: '/authentication/login',
   dashboard: '/apps/courses',
   unauthorized: '/authentication/boxed-unauthorized'
 };

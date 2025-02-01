@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HomeworkService } from '../../../services/homework.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 import { Homework } from '../../../models/homework.model';
 import { MatCardModule } from '@angular/material/card';
 import { TablerIconsModule } from 'angular-tabler-icons';

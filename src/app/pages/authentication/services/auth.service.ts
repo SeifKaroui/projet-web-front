@@ -2,11 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { APP_API } from '../app-api.config';
-import { CredentialsDto } from '../DTO/credentials.dto';
-import { LoginResponseDto } from '../DTO/login-response.dto';
+import { CredentialsDto } from '../dto/credentials.dto';
+import { LoginResponseDto } from '../dto/login-response.dto';
 import { APP_CONST } from '../app-constantes.config';
-import { RegisterDto } from '../DTO/register.dto';
-import { SignUpResponseDto } from '../DTO/signup-response.dto';
+import { RegisterDto } from '../dto/register.dto';
+import { SignUpResponseDto } from '../dto/signup-response.dto';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -17,7 +17,7 @@ export class AuthService {
   http = inject(HttpClient);
   router = inject(Router);
   snackBar = inject(MatSnackBar);
-  constructor() {}
+  constructor() { }
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
@@ -83,7 +83,7 @@ export class AuthService {
   }
   register(data: RegisterDto): Observable<SignUpResponseDto> {
     const url = `${APP_API.baseUrl}${APP_API.register}`;
-    
+
     return this.http.post<SignUpResponseDto>(url, data, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -93,13 +93,13 @@ export class AuthService {
         error: (error) => console.error('Register error:', error)
       })
     );
-}
-getRefreshToken(): string | null {
-  return localStorage.getItem(APP_CONST.refreshTokenLocalStorageKey);
-}
-getToken(): string | null {
-  return localStorage.getItem(APP_CONST.tokenLocalStorageKey);
-}
+  }
+  getRefreshToken(): string | null {
+    return localStorage.getItem(APP_CONST.refreshTokenLocalStorageKey);
+  }
+  getToken(): string | null {
+    return localStorage.getItem(APP_CONST.tokenLocalStorageKey);
+  }
 
 
   signOut() {
@@ -112,4 +112,4 @@ getToken(): string | null {
       panelClass: ['info-snackbar']
     });
   }
-  }
+}

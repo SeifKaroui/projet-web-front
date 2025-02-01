@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { AuthService } from '../../../../authentication/service/auth.service';
+import { AuthService } from '../../../../authentication/services/auth.service';
 import { ColorService } from '../../services/color.service';
 import { FormsModule } from '@angular/forms';
 import { AbsenceService } from '../../services/absence.service';
@@ -101,7 +101,7 @@ export class AbsenceComponent implements OnInit {
     public authService: AuthService,
     public colorService: ColorService,
     private changeDetectorRef: ChangeDetectorRef // Injecter ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.parent?.params.subscribe((params) => {

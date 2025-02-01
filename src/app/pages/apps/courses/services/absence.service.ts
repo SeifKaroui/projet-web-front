@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { APP_ROUTES } from 'src/app/pages/authentication/app-routes.config';
 import { APP_API } from 'src/app/pages/authentication/app-api.config';
-import { AuthService } from 'src/app/pages/authentication/service/auth.service';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -82,12 +82,12 @@ export class AbsenceService {
       this.router.navigate([APP_ROUTES.login]);
       return throwError(() => new Error('Not authenticated'));
     }
-  
+
     if (!this.authService.isTeacher()) {
       this.router.navigate([APP_ROUTES.unauthorized]);
       return throwError(() => new Error('Unauthorized access'));
     }
-  
+
     const url = `${APP_API.baseUrl}/absences/teacher/${absenceId}/validate`;
     return this.http.patch(url, {}).pipe(
       catchError((error) => {
@@ -142,12 +142,12 @@ export class AbsenceService {
       this.router.navigate([APP_ROUTES.login]);
       return throwError(() => new Error('Not authenticated'));
     }
-  
+
     if (!this.authService.isTeacher()) {
       this.router.navigate([APP_ROUTES.unauthorized]);
       return throwError(() => new Error('Unauthorized access'));
     }
-  
+
     const url = `${APP_API.baseUrl}/absences/teacher/${absenceId}/reject`;
     return this.http.patch(url, {}).pipe(
       catchError((error) => {
