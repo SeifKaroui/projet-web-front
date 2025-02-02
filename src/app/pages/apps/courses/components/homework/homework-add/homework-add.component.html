@@ -1,0 +1,72 @@
+<form [formGroup]="homeworkForm" (ngSubmit)="onSubmit()" class="homework-form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Ajouter un devoir</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="flex flex-col space-y-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="homeworkForm.get('title')?.invalid"
+          >Titre is required</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+        <mat-error *ngIf="homeworkForm.get('description')?.invalid"
+          >Description is required</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Deadline</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="deadline" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <div>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          multiple
+          #fileInput
+          style="display: none"
+        />
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="fileInput.click()"
+        >
+          Upload Files
+        </button>
+      </div>
+
+      <div *ngIf="selectedFiles.length > 0" class="file-list">
+        <p>Selected Files:</p>
+        <ul>
+          <li *ngFor="let file of selectedFiles">
+            {{ file.name }}
+            <button mat-icon-button type="button" (click)="removeFile(file)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="homeworkForm.invalid"
+      >
+        Create Homework
+      </button>
+      <button mat-button type="button" (click)="onCancel()">Annuler</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

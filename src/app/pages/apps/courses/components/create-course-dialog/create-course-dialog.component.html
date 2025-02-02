@@ -1,0 +1,43 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="dialog-title">Créer un nouveau cours</h2>
+  <form #courseForm="ngForm" (ngSubmit)="onSubmit()" class="form-container">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titre</mat-label>
+      <mat-icon matPrefix>title</mat-icon>
+      <input matInput name="title" [(ngModel)]="course.title" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <mat-icon matPrefix>description</mat-icon>
+      <textarea
+        matInput
+        name="description"
+        [(ngModel)]="course.description"
+        required
+      ></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Type</mat-label>
+      <mat-icon matPrefix>category</mat-icon>
+      <mat-select name="type" [(ngModel)]="course.type" required>
+        <mat-option value="lecture">Cours magistral</mat-option>
+        <mat-option value="workshop">Atelier</mat-option>
+        <mat-option value="lab">Laboratoire</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div mat-dialog-actions class="dialog-actions">
+      <button mat-button [mat-dialog-close]="false">Annuler</button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!courseForm.valid"
+      >
+        Enregistrer
+      </button>
+    </div>
+  </form>
+</div>

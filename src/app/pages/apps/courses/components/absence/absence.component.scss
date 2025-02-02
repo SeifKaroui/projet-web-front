@@ -1,0 +1,301 @@
+.absence-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0px;
+  background-color: #ffffff;
+
+  .absence-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .absence-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 8px;
+  
+    .summary-item {
+      display: flex;
+      align-items: center;
+      justify-content: center; 
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      width: 48%; 
+      text-align: center;
+      padding: 12px;
+      border-radius: 8px;
+  
+      mat-icon {
+        font-size: 1.2rem;
+      }
+  
+      &.confirmed {
+        background-color: #e8f5e9;
+        color: #4caf50; 
+      }
+  
+      &.unconfirmed {
+        background-color: #ffebee; 
+        color: #f44336; 
+      }
+    }
+  }
+  .search-bar {
+    margin-bottom: 20px;
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  .elimination-message {
+    display: flex;
+    align-items: center;
+    background-color: #ffebee;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+
+    .elimination-icon {
+      color: #f44336;
+      margin-right: 8px;
+    }
+
+    .elimination-text {
+      color: #f44336;
+      font-weight: bold;
+    }
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+
+    .absence-table {
+      .justify-button {
+        background-color: #ff9800;
+        color: white;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    
+        &:hover {
+          background-color: #f57c00;
+        }
+      }
+    
+      mat-form-field {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    
+      button {
+        margin-right: 8px;
+      }
+      .confirmed {
+        color: #4caf50; // Couleur verte pour "Oui"
+        font-weight: bold;
+      }
+    
+      .not-confirmed {
+        color: #f44336; // Couleur rouge pour "Non"
+        font-weight: bold;
+      }
+    
+      .justify-button {
+        color: white;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+
+      .header-cell,
+      .cell {
+        text-align: center !important;
+        vertical-align: middle !important;
+        padding: 5px;
+      }
+
+      .header-cell {
+        font-weight: bold;
+        font-size: 0.9rem;
+        color: #555;
+        background-color: #f5f5f5;
+      }
+
+      .cell {
+        font-size: 0.9rem;
+        color: #333;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .student-column {
+        margin-left: 20px; // Décaler le contenu de la colonne "Étudiant" vers la droite
+      }
+
+      .student-info {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; // Aligner à gauche pour permettre le décalage
+
+        .student-icon {
+          margin-right: 8px;
+          color: #3f51b5;
+        }
+
+        .student-name {
+          font-weight: 500;
+        }
+      }
+
+      .justified-count {
+        color: #4caf50;
+        font-weight: bold;
+      }
+
+      .non-justified-count {
+        color: #f44336;
+        font-weight: bold;
+      }
+
+      .total-count {
+        color: #3f51b5;
+        font-weight: bold;
+      }
+
+      .add-button {
+        background-color: #3f51b5;
+        color: white;
+        border-radius: 50%;
+        transition: background-color 0.3s;
+
+        width: 35px; 
+        height: 35px; 
+        line-height: 35px;
+        min-width: 35px; 
+        padding: 0; 
+        mat-icon {
+          font-size: 18px; 
+          width: 18px;
+          height: 18px;
+          line-height: 18px; 
+        }
+
+        &:hover {
+          background-color: #303f9f;
+        }
+      }
+
+      .justify-button {
+        background-color: #ff9800;
+        color: white;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #f57c00;
+        }
+      }
+    }
+
+    .header-row {
+      background-color: #f5f5f5;
+    }
+
+    .data-row {
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #f9f9f9;
+      }
+    }
+  }
+
+  .absence-paginator {
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.justification-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  button[color="primary"] {
+    color: #2d8930;
+  }
+
+  button[color="warn"] {
+    color: #ab1f15;
+  }
+}
+/* Style pour les justifications validées */
+.validated-count {
+  color: green; 
+  font-weight: bold;
+}
+
+/* Style pour les justifications rejetées */
+.rejected-count {
+  color: red; 
+  font-weight: bold; 
+}
+
+/* Classe pour la ligne rouge claire */
+.highlight-red {
+  background-color: #ffebee; /* Rouge clair */
+}
+
+/* Classe pour la ligne verte claire */
+.highlight-green {
+  background-color: #e8f5e9; /* Vert clair */
+}
+
+.elimination-message {
+  display: flex;
+  align-items: center;
+  background-color: #ffebee;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  .elimination-icon {
+    width: 5%;
+    color: #f44336;
+    margin-right: 8px;
+  }
+
+  .elimination-text {
+    color: #f44336;
+    font-weight: bold;
+    width: 95%;
+  }
+}

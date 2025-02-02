@@ -1,0 +1,67 @@
+<mat-card class="homework-card mt-3">
+  <mat-card-content>
+    <div class="homework-container">
+      <h3 class="homework-title">Devoirs</h3>
+
+      <div *ngIf="isTeacher" class="add-homework-button-container">
+        <button
+          mat-fab
+          color="primary"
+          class="homework-button"
+          (click)="gotToAddHomework()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Show spinner when loading -->
+    <div *ngIf="loading; else content" class="spinner-container">
+      <mat-spinner diameter="30" strokeWidth="3"></mat-spinner>
+    </div>
+
+    <!-- Show content when not loading -->
+    <ng-template #content>
+      <div
+        class="homework-list mt-2"
+        *ngIf="homeworks.length > 0; else noHomeworks"
+      >
+        <div *ngFor="let homework of homeworks" class="homework-item">
+          <h4>{{ homework.title }}</h4>
+          <p>{{ homework.description }}</p>
+          <small class="homework-date">
+            À rendre pour le {{ homework.deadline | customDate }}
+          </small>
+          <small class="homework-date" *ngIf="homework.updatedAt">
+            Dernière mise à jour le
+            {{ homework.updatedAt | date : "dd/MM/yyyy à HH:mm" }}
+          </small>
+          <div class="actions m-t-16">
+            <button
+              *ngIf="isTeacher"
+              mat-icon-button
+              color="primary"
+              (click)="deleteHomework(homework)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="viewDetails(homework)"
+            >
+              Voir Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Show message when no homeworks are available -->
+    <ng-template #noHomeworks>
+      <p class="no-homeworks-message">
+        Aucun devoir disponible pour le moment.
+      </p>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

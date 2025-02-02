@@ -1,0 +1,152 @@
+.course-header {
+  padding: 12px !important;
+  color: #fff;
+  .mat-card-header-text {
+    width: 100% !important;
+  }
+  .mat-card-title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    .course-duration {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.mat-card-actions {
+  border-top: 1px solid rgba(120, 130, 140, 0.13);
+  padding: 8px 0 !important;
+}
+
+.course-app {
+  margin-bottom: 24px;
+}
+
+.cardWithShadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+
+}
+
+.p-24 {
+  padding: 24px;
+}
+
+.overflow-hidden{
+  &:hover {
+    transform: scale(1.08);
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.hide-hint {
+  .mat-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.mt-xs-12 {
+  margin-top: 12px;
+}
+
+.mt-lg-0 {
+  @media (min-width: 992px) {
+    margin-top: 0;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-y-24 {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.p-y-8 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.f-s-16 {
+  font-size: 16px;
+}
+
+.f-w-600 {
+  font-weight: 600;
+}
+
+.text-dark {
+  color: #333;
+}
+
+.mat-body-1 {
+  font-size: 14px;
+  color: #666;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+
+.icon-16 {
+  width: 16px;
+  height: 16px;
+}
+
+.icon-20 {
+  width: 20px;
+  height: 20px;
+}
+
+/* Styles pour la barre de recherche et les boutons */
+.search-field {
+  width: 100%;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.create-course-button {
+  margin-left: auto; /* Pousse le bouton à droite */
+}
+
+.join-course-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.course-code-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.join-course-button {
+  white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+}

@@ -5,8 +5,9 @@ import {
 } from '@angular/core';
 import {
   HttpClient,
-  provideHttpClient,
-  withInterceptorsFromDi,
+
+  provideHttpClient, // Importez provideHttpClient
+  withInterceptorsFromDi, // Importez withInterceptorsFromDi
 } from '@angular/common/http';
 import { routes } from './app.routes';
 import {
@@ -19,6 +20,8 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+// Importez l'interceptor de votre collègue
+import { AuthInterceptorProvider } from 'src/app/pages/authentication/interceptors/auth.interceptor';
 // icons
 import { TablerIconsModule } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
@@ -26,7 +29,7 @@ import * as TablerIcons from 'angular-tabler-icons/icons';
 // perfect scrollbar
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgxPermissionsModule } from 'ngx-permissions';
-//Import all material modules
+// Import all material modules
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -49,10 +52,10 @@ export const appConfig: ApplicationConfig = {
       }),
       withComponentInputBinding()
     ),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi()), // Fournissez HttpClient avec les intercepteurs
     provideClientHydration(),
     provideAnimationsAsync(),
-
+    AuthInterceptorProvider, // Interceptor de votre collègue
     importProvidersFrom(
       FormsModule,
       ReactiveFormsModule,
@@ -75,5 +78,6 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
+    
   ],
 };

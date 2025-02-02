@@ -1,161 +1,105 @@
 import { Routes } from '@angular/router';
 
-import { AppChatComponent } from './chat/chat.component';
-import { AppEmailComponent } from './email/email.component';
-import { DetailComponent } from './email/detail/detail.component';
-import { AppCoursesComponent } from './courses/courses.component';
-import { AppCourseDetailComponent } from './courses/course-detail/course-detail.component';
-import { AppEmployeeComponent } from './employee/employee.component';
-import { AppBlogsComponent } from './blogs/blogs.component';
-import { AppBlogDetailsComponent } from './blogs/details/details.component';
-import { AppContactComponent } from './contact/contact.component';
-import { AppNotesComponent } from './notes/notes.component';
-import { AppTodoComponent } from './todo/todo.component';
-import { AppPermissionComponent } from './permission/permission.component';
-import { AppTaskboardComponent } from './taskboard/taskboard.component';
+import { CourseListComponent } from './courses/components/course-list/course-list.component';
+import { CourseDetailComponent } from './courses/components/course-detail/course-detail.component';
 import { AppFullcalendarComponent } from './fullcalendar/fullcalendar.component';
-import { AppTicketlistComponent } from './ticketlist/ticketlist.component';
-import { AppInvoiceListComponent } from './invoice/invoice-list/invoice-list.component';
-import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
-import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
-import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
+import { PostComponent } from './courses/components/post/post.component';
+import { HomeworkComponent } from './courses/components/homework/homework.component';
+import { AbsenceComponent } from './courses/components/absence/absence.component';
+import { PeopleComponent } from './courses/components/people/people.component';
+import { HomeworkDetailsComponent } from './courses/components/homework/homework-details/homework-details.component';
+import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
+import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
 
+import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
 export const AppsRoutes: Routes = [
   {
     path: '',
     children: [
       {
-        path: 'chat',
-        component: AppChatComponent,
-        data: {
-          title: 'Chat',
-        }
-      },
-      {
         path: 'calendar',
         component: AppFullcalendarComponent,
         data: {
           title: 'Calendar',
-        }
-      },
-      {
-        path: 'notes',
-        component: AppNotesComponent,
-        data: {
-          title: 'Notes',
-        }
-      },
-      { path: 'email', redirectTo: 'email/inbox', pathMatch: 'full' },
-      {
-        path: 'email/:type',
-        component: AppEmailComponent,
-        data: {
-          title: 'Email',
         },
-        children: [
-          {
-            path: ':id',
-            component: DetailComponent,
-          },
-        ],
-      },
-      {
-        path: 'permission',
-        component: AppPermissionComponent,
-        data: {
-          title: 'Permission',
-        }
-      },
-      {
-        path: 'todo',
-        component: AppTodoComponent,
-        data: {
-          title: 'Todo',
-        }
-      },
-      {
-        path: 'taskboard',
-        component: AppTaskboardComponent,
-        data: {
-          title: 'Taskboard',
-        }
-      },
-      {
-        path: 'tickets',
-        component: AppTicketlistComponent,
-        data: {
-          title: 'Tickets',
-        }
-      },
-      {
-        path: 'contacts',
-        component: AppContactComponent,
-        data: {
-          title: 'Contacts',
-        }
       },
       {
         path: 'courses',
-        component: AppCoursesComponent,
+        component: CourseListComponent,
         data: {
           title: 'Courses',
-        }
+        },
       },
       {
         path: 'courses/coursesdetail/:id',
-        component: AppCourseDetailComponent,
+        component: CourseDetailComponent,
         data: {
           title: 'Course Detail',
-        }
-      },
-      {
-        path: 'blog/post',
-        component: AppBlogsComponent,
-        data: {
-          title: 'Blog',
-        }
-      },
-      {
-        path: 'blog/detail/:id',
-        component: AppBlogDetailsComponent,
-        data: {
-          title: 'Blog Detail',
-        }
-      },
-      {
-        path: 'employee',
-        component: AppEmployeeComponent,
-        data: {
-          title: 'Employee',
-        }
-      },
-      {
-        path: 'invoice',
-        component: AppInvoiceListComponent,
-        data: {
-          title: 'Invoice',
-        }
-      },
-      {
-        path: 'addInvoice',
-        component: AppAddInvoiceComponent,
-        data: {
-          title: 'Add Invoice',
-        }
-      },
-      {
-        path: 'viewInvoice/:id',
-        component: AppInvoiceViewComponent,
-        data: {
-          title: 'View Invoice',
-        }
-      },
-      {
-        path: 'editinvoice/:id',
-        component: AppEditInvoiceComponent,
-        data: {
-          title: 'Edit Invoice',
-        }
+        },
+        children: [
+          {
+            path: '',
+            redirectTo: 'Flux',
+            pathMatch: 'full',
+          },
+          {
+            path: 'Flux',
+            component: PostComponent,
+            data: {
+              title: 'Flux',
+            },
+          },
+          {
+            path: 'Homework',
+            component: HomeworkComponent,
+            data: {
+              title: 'Travaux et devoirs',
+            },
+
+          },
+          {
+            path: 'homework/:homeworkId/details',
+            component: HomeworkDetailsComponent,
+            data: {
+              title: 'Détails des travaux et devoirs',
+            },
+          },
+          {
+            path: 'homework/add',
+            component: HomeworkAddComponent,
+            data: {
+              title: 'Ajout d\'un devoir',
+            },
+          },
+          {
+            path: 'homework/:homeworkId/student-submission',
+            component: HomeworkStudentSubmissionComponent,
+            data: {
+              title: 'Dépot',
+            },
+          },
+          {
+            path: 'Absences',
+            component: AbsenceComponent,
+            data: {
+              title: 'Absences',
+            },
+          },
+          {
+            path: 'Notes',
+            component: CourseMarkComponent,
+            data: {
+              title: 'Notes',
+            },
+          },
+          {
+            path: 'Personnes',
+            component: PeopleComponent,
+            data: {
+              title: 'Personnes',
+            },
+          },
+        ],
       },
     ],
   },

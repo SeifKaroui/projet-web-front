@@ -1,0 +1,159 @@
+/* course-detail.component.scss */
+
+.active-tab {
+  border-bottom: 3px solid black;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.mat-tab-link {
+  border-bottom: 3px solid transparent; 
+}
+
+/* Conteneur principal */
+.course-detail-container {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Carte d'en-tête du cours */
+.course-header-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+
+  .header-content {
+    padding: 16px;
+    margin-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    /* Bouton Retour */
+    .back-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    /* Titre du cours */
+    .course-title {
+      h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+        color: #fff;
+      }
+
+      p {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 4px 0 0;
+      }
+    }
+
+    /* Informations supplémentaires */
+    .course-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .info-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        span {
+          font-size: 0.875rem;
+          color: rgba(255, 255, 255, 0.9);
+        }
+      }
+    }
+  }
+}
+
+/* Bouton pour afficher le code du cours */
+.course-code-button {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  color: #fff; /* Texte blanc pour contraster avec le fond */
+  transition: background-color 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 25px;
+    color: #fff; /* Icône blanche pour contraster avec le fond */
+  }
+}
+
+/* Boîte modale pour afficher le code du cours */
+.course-code-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+
+  .modal-content {
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: #fff; /* Texte blanc pour contraster avec le fond */
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      color:  #fff;
+    }
+
+    p {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+    }
+
+    button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}

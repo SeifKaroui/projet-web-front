@@ -1,0 +1,73 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-16 p-x-24">
+    <div class="d-flex align-items-center">
+      <!-- Title -->
+      <mat-card-title class="m-b-0 title">Dépot</mat-card-title>
+    </div>
+    <div *ngIf="loading" class="spinner-container">
+      <mat-spinner diameter="30" strokeWidth="3"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading">
+      <div *ngIf="studentSubmission">
+        <!-- Description -->
+        <div class="m-t-16">
+          <p><strong>Grade:</strong></p>
+          <p>{{ studentSubmission.grade || "Not graded yet." }}</p>
+        </div>
+        <div class="m-t-16">
+          <p><strong>Feedback:</strong></p>
+          <p>{{ studentSubmission.feedback || "No feedback given yet." }}</p>
+        </div>
+        <!-- Deadline -->
+        <div *ngIf="studentSubmission.submissionDate" class="deadline m-t-16">
+          <p>
+            <strong>Submission Date:</strong>
+            {{ studentSubmission.submissionDate | date : "shortDate" }}
+          </p>
+        </div>
+
+        <!-- Files -->
+        <div class="deadline m-t-16">
+          <p><strong>Files:</strong></p>
+        </div>
+        <!-- File List -->
+        <div class="file-list m-t-16">
+          <p *ngIf="!studentSubmission.uploads">No files attached.</p>
+          <ul>
+            <li
+              *ngFor="let file of studentSubmission.uploads"
+              class="file-item"
+            >
+              <p class="file-name">{{ file.originalname }}</p>
+              <div>
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="downloadFile(file.id, file.originalname)"
+                >
+                  Download
+                </button>
+                <button mat-button color="primary" (click)="openFile(file.id)">
+                  Open
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div *ngIf="!studentSubmission">
+        <p>No submissions yet.</p>
+      </div>
+    </div>
+    <button
+      mat-raised-button
+      (click)="goToSubmission()"
+      color="primary"
+      [disabled]="studentSubmission"
+    >
+      {{ studentSubmission ? "Déjà déposé" : "Déposer votre travail" }}
+    </button>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,44 @@
+.people-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+  }
+  
+  .teacher-section,
+  .students-section {
+    margin-bottom: 24px;
+  }
+  
+  .teacher-info,
+  .student-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    margin-right: 12px;
+  }
+  
+  .teacher-name,
+  .student-name {
+    font-weight: 500;
+  }
+  
+  .student-email {
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  .student-list {
+    max-height: 300px;
+    overflow-y: auto;
+  }
