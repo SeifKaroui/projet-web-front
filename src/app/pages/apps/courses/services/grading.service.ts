@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { Homework } from '../models/homework.model';
 import { Student } from '../models/Student.model';
 import { HomeworkSubmission } from '../models/homeworkSubmission.model';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 
 export interface StudentSubmission {
   student: {
@@ -13,20 +14,23 @@ export interface StudentSubmission {
     email: string;
   };
   submission:
-    | 'Not submitted'
-    | {
-        submissionID: number;
-        uploadsIds: number[];
-        grade: number | 'Not graded';
-        feedback: string | 'Not graded';
-      };
+  | 'Not submitted'
+  | {
+    submissionID: number;
+    uploadsIds: number[];
+    grade: number | 'Not graded';
+    feedback: string | 'Not graded';
+  };
 }
 
 @Injectable({ providedIn: 'root' })
 export class GradingService {
-  private apiUrl ='http://localhost:3000';
+  private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
   getHomeworksByCourse(courseId: number): Observable<Homework[]> {
     return this.http.get<Homework[]>(`${this.apiUrl}/homework/course/${courseId}`);
@@ -38,7 +42,7 @@ export class GradingService {
         map(response => response.students)
       );
   }
-  
+
 
   getSubmissionsByHomework(homeworkId: number): Observable<StudentSubmission[]> {
     return this.http.get<StudentSubmission[]>(
@@ -55,7 +59,10 @@ export class GradingService {
       data
     );
   }
-  getFileUrl(uploadId: number): string { return `${this.apiUrl}/files/${uploadId}`; }
+  getFileUrl(uploadId: number): string { 
+    const token = this.authService.getToken();
+    return `${this.apiUrl}/files/${uploadId}?token=${token}`; }
+
   downloadFile(fileUrl: string): Observable<Blob> {
     return this.http.get(fileUrl, { responseType: 'blob' });
   }

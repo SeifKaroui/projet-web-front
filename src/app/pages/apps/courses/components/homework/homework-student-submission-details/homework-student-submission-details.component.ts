@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HomeworkService } from '../../../services/homework.service';
 import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 import { HomeworkSubmissionDto } from '../../../models/homework-submission.dto';
+import { FileService } from '../../../services/file.service';
 
 
 @Component({
@@ -48,6 +49,7 @@ export class HomeworkStudentSubmissionDetailsComponent {
     private route: ActivatedRoute,
     private router: Router,
     private homeworkService: HomeworkService,
+    private fileService: FileService
   ) { }
 
   ngOnInit(): void {
@@ -77,7 +79,25 @@ export class HomeworkStudentSubmissionDetailsComponent {
     this.router.navigate(['apps/courses/coursesdetail/', this.courseId, 'homework', this.homeworkId, 'student-submission']);
   }
 
+  downloadFile(fileId: number, filename: string): void {
+    this.fileService.downloadFileBlob(fileId).subscribe({
+      next: (file: Blob) => {
+        const url = window.URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Erreur lors du téléchargement du fichier :', error);
+      }
+    }
+    );
+  }
   openFile(fileId: number) {
-    window.open("http://localhost:3000/files/" + fileId, '_blank');
+    window.open(this.fileService.getFileUrl(fileId), '_blank');
   }
 }

@@ -40,19 +40,21 @@
         <ul>
           <li *ngFor="let file of homework?.files" class="file-item">
             <p class="file-name">{{ file.originalname }}</p>
-            <button mat-button color="primary" (click)="openFile(file.id)">View</button>
+            <div>
+              <button
+                mat-button
+                color="primary"
+                (click)="downloadFile(file.id, file.originalname)"
+              >
+                Download
+              </button>
+              <button mat-button color="primary" (click)="openFile(file.id)">
+                Open
+              </button>
+            </div>
           </li>
         </ul>
       </div>
-
-      <!-- <button
-        *ngIf="isTeacher"
-        mat-raised-button
-        color="primary"
-        (click)="viewStudentSubmissions()"
-      >
-        View Student Submissions
-      </button> -->
     </div>
   </mat-card-content>
 </mat-card>
