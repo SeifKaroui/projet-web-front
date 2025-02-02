@@ -88,7 +88,9 @@ export class CalendarDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 }
-
+interface CalendarEvent2 extends CalendarEvent {
+  courseId?: string | number;
+}
 @Component({
   selector: 'app-fullcalendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,7 +140,7 @@ export class AppFullcalendarComponent {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [];
+  events: CalendarEvent2[] = [];
 
   activeDayIsOpen = true;
 
@@ -165,7 +167,7 @@ export class AppFullcalendarComponent {
       this.refresh.next(this.events);
     });
   }
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent2[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -198,7 +200,7 @@ export class AppFullcalendarComponent {
     this.handleEvent('Dropped or resized', event);
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
+  handleEvent(action: string, event: CalendarEvent2): void {
     this.config.data = { event, action };
     this.router.navigate([
       `/apps/courses/coursesdetail/${event.courseId}/homework/${event.id}/details`,
