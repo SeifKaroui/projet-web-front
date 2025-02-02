@@ -182,27 +182,27 @@ export class PostComponent implements OnInit {
     );
   }
 
-  getFileUrl(fileId: number): string {
-    return this.fileService.getFileUrl(fileId);
-  }
-
-
-  downloadFile(fileId: number, fileName: string): void {
-    this.fileService.getFileById(fileId).subscribe(
-      (file: Blob) => {
+  downloadFile(fileId: number, filename: string): void {
+    this.fileService.downloadFileBlob(fileId).subscribe({
+      next: (file: Blob) => {
         const url = window.URL.createObjectURL(file);
         const a = document.createElement('a');
         a.href = url;
-        a.download = fileName;
+        a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
       },
-      (error) => {
+      error: (error) => {
         console.error('Erreur lors du téléchargement du fichier :', error);
       }
+    }
     );
+  }
+
+  getFileUrl(fileId: number): string {
+    return this.fileService.getFileUrl(fileId)
   }
 
 }

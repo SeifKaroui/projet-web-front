@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/pages/authentication/services/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,9 @@ import { Observable } from 'rxjs';
 export class FileService {
   private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
   uploadFiles(files: File[]): Observable<any[]> {
     const formData = new FormData();
@@ -18,11 +21,13 @@ export class FileService {
     return this.http.post<any[]>(`${this.apiUrl}/files/upload`, formData);
   }
 
-  getFileById(fileId: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/files/${fileId}`, { responseType: 'blob' });
+  getFileUrl(fileId: number): string {
+    const token = this.authService.getToken();
+    return `${this.apiUrl}/files/${fileId}?token=${token}`;
   }
 
-  getFileUrl(fileId: number): string {
-    return `${this.apiUrl}/files/${fileId}`;
+  downloadFileBlob(fileId: number): Observable<Blob> {
+    const fileUrl = this.getFileUrl(fileId);
+    return this.http.get(fileUrl, { responseType: 'blob' });
   }
 }
