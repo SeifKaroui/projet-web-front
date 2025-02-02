@@ -1,7 +1,7 @@
 <mat-sidenav-container>
   <mat-sidenav-content class="">
     <!-- ------------------------------------------------------------------
-    Header
+    En-tête
     ------------------------------------------------------------------ -->
     <mat-toolbar class="topbar topbar-xl m-auto">
       <div class="container full-width p-xs-6">
@@ -21,17 +21,16 @@
         <span class="flex-1-auto"></span>
 
         <div class="d-none d-lg-flex">
-
           <a
             mat-flat-button
             color="primary"
             class="m-l-10"
             [routerLink]="['/authentication/login']"
-            >Login</a
+            >Connexion</a
           >
         </div>
 
-        <!-- Mobile Menu -->
+        <!-- Menu Mobile -->
         <button
           mat-icon-button
           (click)="filterNavRight.toggle()"
@@ -43,11 +42,11 @@
     </mat-toolbar>
 
     <!-- ------------------------------------------------------------------
-   End Header
+   Fin de l'en-tête
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Banner
+    Bannière
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section bg-light">
       <div class="container">
@@ -56,32 +55,15 @@
             <div>
               <span class="f-s-16 f-w-600 m-b-16 d-flex align-items-center"
                 ><i-tabler name="rocket" class="text-accent m-r-8"></i-tabler
-                >Kick start your project with</span
+                >Commencez votre parcours d'apprentissage avec</span
               >
               <h1 class="banner-title m-0">
-                Enhance
-                <span class="text-primary">Developer's Productivity </span> with a MatDash Angular
+                Améliorez
+                <span class="text-primary">Votre Expérience d'Apprentissage </span> avec Notre Plateforme Éducative
               </h1>
               <p class="f-s-18 p-y-24 m-t-12 m-0 banner-subtitle">
-                MatDash comes with light & dark color skins, well designed
-                dashboards, applications and pages.
+                Notre plateforme offre une suite complète d'outils pour que les étudiants et les enseignants collaborent, apprennent et grandissent ensemble.
               </p>
-              <div class="m-t-24 hstack">
-                <a
-                  mat-flat-button
-                  color="primary"
-                  [routerLink]="['/authentication/login']"
-                  class="btn-custom"
-                  >Login</a
-                >
-                <a
-                  mat-stroked-button
-                  color="primary"
-                  (click)="gotoDemos()"
-                  class="btn-custom border-primary"
-                  >Live Preview</a
-                >
-              </div>
             </div>
           </div>
           <div class="col-lg-6 d-none d-lg-flex">
@@ -90,13 +72,13 @@
                 <div>
                   <div class="slider-img">
                     <img
-                      src="assets/images/landingpage/bannerimg1.svg"
+                      src="assets/images/landingpage/img1.png"
                       alt="img1"
                     />
                   </div>
                   <div class="slider-img">
                     <img
-                      src="assets/images/landingpage/bannerimg1.svg"
+                      src="assets/images/landingpage/img1.png"
                       alt="img1"
                     />
                   </div>
@@ -104,13 +86,13 @@
                 <div>
                   <div class="slider-img2">
                     <img
-                      src="assets/images/landingpage/bannerimg2.svg"
+                      src="assets/images/landingpage/img2.png"
                       alt="img1"
                     />
                   </div>
                   <div class="slider-img2">
                     <img
-                      src="assets/images/landingpage/bannerimg2.svg"
+                      src="assets/images/landingpage/img2.png"
                       alt="img1"
                     />
                   </div>
@@ -122,36 +104,13 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Banner
+    Fin de la bannière
     ------------------------------------------------------------------ -->
 
-
-    <!-- ------------------------------------------------------------------
-    footer
-    ------------------------------------------------------------------ -->
-    <footer class="p-y-30">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-sm-5 col-lg-4 text-center">
-            <span>
-              <img src="assets/images/logos/logo-icon.svg" alt="logo" />
-            </span>
-            <div class="f-s-14 m-t-8">
-              All rights reserved by MatDash. Designed & Developed by
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- ------------------------------------------------------------------
-    end footer
-    ------------------------------------------------------------------ -->
   </mat-sidenav-content>
 
   <!-- ------------------------------------------------------------------
-    Mobile Sidebar
+    Barre latérale mobile
     ------------------------------------------------------------------ -->
   <mat-sidenav
     #filterNavRight
@@ -170,96 +129,4 @@
         </a>
       </div>
 
-      <mat-accordion>
-        <mat-expansion-panel class="shadow-none">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="f-s-16 f-w-500"> Demos </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div>
-            <h5 class="f-s-18 mat-subtitle-1 f-w-600">Different Demos</h5>
-            <span>Included with the package</span>
-            <div class="row m-t-24">
-              @for(demo of demos; track demo.url) {
-              <div class="col-lg-3 m-b-16">
-                <div>
-                  <div class="img-overlay rounded">
-                    <img
-                      [src]="demo.imgSrc"
-                      alt="demos"
-                      class="rounded w-100"
-                    />
-                    <div class="overlay-content">
-                      <a href="{{ demo.url }}" mat-flat-button color="primary">
-                        Live preview
-                      </a>
-                    </div>
-                  </div>
-                  <span class="f-s-14 d-block text-center m-t-8">{{
-                    demo.name
-                  }}</span>
-                </div>
-              </div>
-              }
-            </div>
-            <!-- apps -->
-            <h5 class="f-s-18 mat-subtitle-1 f-w-600 m-t-24">Different Apps</h5>
-            <div class="row m-t-24">
-              @for(app of appdemos; track app.url) {
-              <div class="col-lg-3 m-t-16">
-                <div>
-                  <div class="img-overlay rounded">
-                    <img [src]="app.imgSrc" alt="apps" class="rounded w-100" />
-                    <div class="overlay-content">
-                      <a href="{{ app.url }}" mat-flat-button color="primary">
-                        Live preview
-                      </a>
-                    </div>
-                  </div>
-                  <span class="f-s-14 d-block text-center m-t-8">{{
-                    app.name
-                  }}</span>
-                </div>
-              </div>
-              }
-            </div>
-          </div>
-        </mat-expansion-panel>
-        <mat-expansion-panel class="shadow-none">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="f-s-16 f-w-500"> Pages </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div>
-            <div class="row">
-              @for(appdd of apps; track appdd.link) {
-              <div class="col-12 text-hover-primary">
-                <a
-                  [routerLink]="[appdd.link]"
-                  class="d-flex align-items-center text-decoration-none m-b-24"
-                >
-                  <button
-                    mat-mini-fab
-                    class="text-primary bg-light-primary shadow-none rounded"
-                  >
-                    <span
-                      class="iconify icon-20"
-                      [attr.data-icon]="appdd.icon"
-                    ></span>
-                  </button>
-
-                  <div class="m-l-16">
-                    <h5 class="f-s-14 f-w-600 m-0 hover-text">
-                      {{ appdd.title }}
-                    </h5>
-                    <span class="mat-body-1 f-s-12">{{ appdd.subtitle }}</span>
-                  </div>
-                </a>
-              </div>
-              }
-            </div>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
-
-    </div>
-  </mat-sidenav>
-</mat-sidenav-container>
+      
