@@ -16,6 +16,7 @@ import { ColorService } from '../../services/color.service';
 import { AuthService } from '../../../../authentication/services/auth.service'; // Importez le service AuthService
 import { CreateCourseDialogComponent } from '../create-course-dialog/create-course-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-courses',
@@ -40,7 +41,21 @@ import { MatDialog } from '@angular/material/dialog';
 export class CourseListComponent implements OnInit {
   courseCode: string;
   onSubmit() {
-    this.courseService.joinCourse(this.courseCode).subscribe();
+    if (this.courseCode) {
+      this.courseService.joinCourse(this.courseCode).subscribe({
+        next: (response) => {
+          this.snackBar.open('Vous avez rejoint le cours avec succès', 'Fermer', {
+            duration: 3000,
+          });
+          this.loadCourses();
+        },
+        error: (error) => {
+          this.snackBar.open('Erreur lors de la tentative de rejoindre le cours', 'Fermer', {
+            duration: 3000,
+          });
+        }
+      });
+    }
   }
   courses: Course[] = []; // Liste filtrée
   allCourses: Course[] = []; // Liste complète
@@ -54,7 +69,8 @@ export class CourseListComponent implements OnInit {
     private courseService: CourseService,
     public colorService: ColorService,
     public authService: AuthService,
-    private dialog: MatDialog // Injectez le service AuthService
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar 
   ) { }
 
   ngOnInit(): void {

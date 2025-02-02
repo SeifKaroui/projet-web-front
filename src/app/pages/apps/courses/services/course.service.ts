@@ -33,11 +33,8 @@ export class CourseService {
     const url = `${this.apiUrl}/courses/${courseId}`;
     return this.http.delete<void>(url);
   }
-  joinCourse(joinCode: String) {
-    return this.http.post(
-      `${this.apiUrl}/courses/join`,
-      JSON.stringify(joinCode)
-    );
+  joinCourse(joinCode: string) {
+    return this.http.post(`${this.apiUrl}/courses/join`, { code: joinCode });
   }
   createCourse(courseDto:AddCourseDTO){
     return this.http.post(`${this.apiUrl}/courses`,courseDto);

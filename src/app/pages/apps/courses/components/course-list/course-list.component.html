@@ -28,16 +28,15 @@
                 placeholder="Entrez le code du cours"
                 class="course-code-input"
               />
-              <a
+              <button
                 type="submit"
                 [disabled]="!courseForm.valid"
                 mat-flat-button
                 color="primary"
                 class="join-course-button"
-                (click)="onSubmit()"
               >
                 Rejoindre le cours
-              </a>
+              </button>
             </form>
           }
         </div>
