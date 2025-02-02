@@ -2,16 +2,16 @@ import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
   {
-    navCap: 'Dashboard',
+    navCap: 'Tableau de bord',
   },
   {
-    displayName: 'Calendar',
+    displayName: 'Calendrier',
     iconName: 'solar:calendar-mark-line-duotone',
     route: 'apps/calendar',
   },
 
   {
-    displayName: 'Courses',
+    displayName: 'Cours',
     iconName: 'solar:book-bookmark-line-duotone',
     route: 'apps/courses',
   }

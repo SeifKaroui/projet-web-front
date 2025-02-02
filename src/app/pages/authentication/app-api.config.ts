@@ -1,6 +1,6 @@
 export const APP_API = {
     baseUrl: 'http://localhost:3000',
-    login: '/auth/signin',
+    login: '/authentication/login',
     absenceList: '/absences/teacher/count-absence-list',
     register: '/auth/signup',
     absences: '/absences',
