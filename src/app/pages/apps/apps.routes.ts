@@ -11,7 +11,7 @@ import { HomeworkDetailsComponent } from './courses/components/homework/homework
 import { HomeworkAddComponent } from './courses/components/homework/homework-add/homework-add.component';
 import { HomeworkStudentSubmissionComponent } from './courses/components/homework/homework-student-submission/homework-student-submission.component';
 
-import { CourseMarkComponent } from './courses/components/course-mark/course-mark.component';
+import { CourseMarkComponent } from './courses/components/marking/course-mark/course-mark.component';
 export const AppsRoutes: Routes = [
   {
     path: '',
