@@ -39,7 +39,7 @@ export class FeedbackDialogComponent {
 
   onSave(): void {
     if (!this.isValid()) {
-      // Do not close the dialog, show an error or disable the save button
+      
       return;
     }
     this.dialogRef.close(this.data);

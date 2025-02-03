@@ -14,11 +14,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { GradingService } from '../../services/grading.service';
-import { Student } from '../../models/Student.model';
-import { Homework } from '../../models/homework.model';
-import { HomeworkSubmission } from '../../models/homeworkSubmission.model';
+import { GradingService } from '../../../services/grading.service';
+import { Student } from '../../../models/Student.model';
+import { Homework } from '../../../models/homework.model';
+import { HomeworkSubmission } from '../../../models/homeworkSubmission.model';
 import { FeedbackDialogComponent } from '../feedback-dialog/feedback-dialog.component';
+import { CourseMarkFileDialogComponent, FileItem } from '../course-mark-file-dialog/course-mark-file-dialog.component';
 
 @Component({
   selector: 'app-course-mark',
@@ -56,7 +57,7 @@ export class CourseMarkComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Similar to PostComponent, use parent params
+    
     this.route.parent?.params.subscribe((params) => {
       this.courseId = +params['id'];
       if (this.courseId) {
@@ -123,6 +124,7 @@ export class CourseMarkComponent implements OnInit {
   }
 
   getSubmission(studentId: string, homeworkId: number): HomeworkSubmission | null {
+    
     return this.submissions[studentId]?.[homeworkId] || null;
   }
 
@@ -142,21 +144,21 @@ export class CourseMarkComponent implements OnInit {
     }
     return undefined;
   }
-
-  onDownloadClick(fileUrl: string | undefined): void {
-    if (fileUrl) {
-      this.gradingService.downloadFile(fileUrl).subscribe(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'fichier';
-        link.click();
-        URL.revokeObjectURL(url);
+  openDownloadDialog(submission: HomeworkSubmission | 'Not submitted' | null): void {
+    if (submission !== 'Not submitted' && submission?.uploadIds && submission.uploadIds.length > 0) {
+      const files: FileItem[] = submission.uploadIds.map((id: number) => ({
+        id,
+        originalname: `Fichier ${id}` 
+      }));
+      this.dialog.open(CourseMarkFileDialogComponent, {
+        width: '400px',
+        data: { files }
       });
     } else {
       this.snackBar.open('Aucun fichier disponible pour le téléchargement', 'OK', { duration: 2000 });
     }
   }
+  
 
   openFeedbackDialog(submission: HomeworkSubmission | null): void {
     if (submission) {
