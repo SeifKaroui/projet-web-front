@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Fichiers de la soumission</h2>
+<mat-dialog-content>
+  <div *ngIf="data.files?.length; else noFiles">
+    <mat-list>
+      <mat-list-item *ngFor="let file of data.files">
+        <span>{{ file.originalname }}</span>
+        <span class="dialog-actions">
+          <button mat-button color="primary" (click)="downloadFile(file)">Télécharger</button>
+          <button mat-button color="accent" (click)="openFile(file)">Ouvrir</button>
+        </span>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <ng-template #noFiles>
+    <p>Aucun fichier n'est disponible.</p>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Fermer</button>
+</mat-dialog-actions>
