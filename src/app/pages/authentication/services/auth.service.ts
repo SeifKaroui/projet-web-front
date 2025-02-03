@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { APP_API } from '../app-api.config';
+import { APP_ROUTES } from '../app-api.config';
 import { APP_CONST } from '../app-constantes.config';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -106,7 +107,13 @@ export class AuthService {
     localStorage.removeItem(APP_CONST.tokenLocalStorageKey);
     localStorage.removeItem(APP_CONST.refreshTokenLocalStorageKey);
     localStorage.removeItem('user');
-    this.router.navigate([APP_API.login]);
+  
+    this.router.navigate([APP_ROUTES.login]).then(() => {
+      console.log('Navigation successful');
+    }).catch((error) => {
+      console.error('Navigation failed:', error);
+    });
+  
     this.snackBar.open('You have been logged out.', 'Close', {
       duration: 3000,
       panelClass: ['info-snackbar']
